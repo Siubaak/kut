@@ -1,0 +1,30 @@
+{
+  "name": "kut",
+  "version": "0.0.1",
+  "description": "A Simple React-Like MVVM JavaScript Library",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Siubaak/kut.git"
+  },
+  "keywords": [
+    "react-like",
+    "mvvm",
+    "js"
+  ],
+  "author": "Siubaak",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Siubaak/kut/issues"
+  },
+  "homepage": "https://github.com/Siubaak/kut#readme",
+  "devDependencies": {
+    "ts-loader": "^3.4.0",
+    "typescript": "^2.7.1",
+    "webpack": "^3.10.0"
+  }
+}
