@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack"
+    "start": "webpack --config config/webpack.dev.js --watch",
+    "build": "webpack --config config/webpack.prod.js"
   },
   "repository": {
     "type": "git",
@@ -25,6 +26,8 @@
   "devDependencies": {
     "ts-loader": "^3.4.0",
     "typescript": "^2.7.1",
-    "webpack": "^3.10.0"
+    "uglifyjs-webpack-plugin": "^1.1.8",
+    "webpack": "^3.10.0",
+    "webpack-merge": "^4.1.1"
   }
 }
