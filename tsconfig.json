@@ -2,7 +2,7 @@
   "compilerOptions": {
     "outDir": "./dist/",
     "module": "es6",
-    "target": "es5",
+    "target": "es6",
     "allowJs": true,
     "sourceMap": true,
     "noImplicitAny": true,
@@ -10,6 +10,8 @@
     "jsxFactory": "Kut.createElement",
   },
   "exclude": [
-    "node_modules"
+    "dist",
+    "config",
+    "node_modules",
   ]
 }

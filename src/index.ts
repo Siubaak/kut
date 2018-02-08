@@ -1,3 +1,3 @@
-import kut from './kut/index';
+import kut from './kut/index'
 
-export default kut;
+export default kut

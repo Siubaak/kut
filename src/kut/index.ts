@@ -1,6 +1,19 @@
-import { createElement } from './element';
-const kut = {
-  createElement
-};
+import {
+  createElement,
+  cloneElement,
+  createFactory,
+  isValidElement,
+} from './element'
+import {
+  Component,
+} from './component'
 
-export default kut;
+const kut = {
+  createElement,
+  cloneElement,
+  createFactory,
+  isValidElement,
+  Component,
+}
+
+export default kut
