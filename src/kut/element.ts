@@ -1,26 +1,27 @@
-import { KutElement } from './interface'
+import { KUT_ELEMENT_TYPE, KUT_RESERVED_PROPS } from './constant'
+import { Component } from './component'
 
-const RESERVED_PROPS: string[] = [ 'key', 'ref' ]
-const ELEMENT_TYPE =
-  (
-    typeof Symbol === 'function'
-    && Symbol.for
-    && Symbol.for('kut.element')
-  )
-  || 0xeac7
-
-interface Factory {
-  (config: any, ...children: KutElement[]): KutElement
-  type: any
+export interface Element {
+  __typeof: Symbol | number
+  type: string | Component
+  key: string
+  ref: string
+  props: any
 }
 
-export function createElement(type: any, config: any, ...children: KutElement[]): KutElement {
+/**
+ * 创建element并返回该element
+ * @param type 
+ * @param config 
+ * @param children 
+ */
+export function createElement(type: any, config: any, ...children: Element[]): Element {
   const props: any = {}
   let key: string = null
-  let ref: HTMLElement = null
+  let ref: string = null
   if (config !== null) {
     if (config.ref !== undefined) {
-      ref = config.ref as HTMLElement
+      ref = '' + (config.ref as string)
     }
     if (config.key !== undefined) {
       key = '' + (config.key as string)
@@ -29,7 +30,7 @@ export function createElement(type: any, config: any, ...children: KutElement[])
     for (let prop in config) {
       if (
         Object.hasOwnProperty.call(config, prop)
-        && !~RESERVED_PROPS.indexOf(prop)
+        && !~KUT_RESERVED_PROPS.indexOf(prop)
       ) {
         props[prop] = config[prop]
       }
@@ -46,7 +47,7 @@ export function createElement(type: any, config: any, ...children: KutElement[])
     }
   }
   return {
-    __typeof: ELEMENT_TYPE,
+    __typeof: KUT_ELEMENT_TYPE,
     type,
     key,
     ref,
@@ -54,15 +55,29 @@ export function createElement(type: any, config: any, ...children: KutElement[])
   }
 }
 
+interface Factory {
+  (config: any, ...children: Element[]): Element
+  type: any
+}
+
+/**
+ * 创建对应type的element工厂函数
+ * @param type 
+ */
 export function createFactory(type: any): Factory {
   const factory: Factory = createElement.bind(null, type)
   factory.type = type
   return factory
 }
 
-export function cloneAndReplaceKey(oldElement: KutElement, newKey: string): KutElement {
+/**
+ * 替换element的key
+ * @param oldElement 
+ * @param newKey 
+ */
+export function cloneAndReplaceKey(oldElement: Element, newKey: string): Element {
   return {
-    __typeof: ELEMENT_TYPE,
+    __typeof: KUT_ELEMENT_TYPE,
     type: oldElement.type,
     key: newKey,
     ref: oldElement.ref,
@@ -70,27 +85,33 @@ export function cloneAndReplaceKey(oldElement: KutElement, newKey: string): KutE
   }
 }
 
-export function cloneElement(element: KutElement, config: any, ...children: KutElement[]): KutElement {
+/**
+ * 克隆一个新的element并返回该element
+ * @param element 
+ * @param config 
+ * @param children 
+ */
+export function cloneElement(element: Element, config: any, ...children: Element[]): Element {
   const props: any = Object.assign({}, element.props)
-  const type: any = element.type
+  const type: string | Component = element.type
   let key: string = element.key
-  let ref: HTMLElement = element.ref
+  let ref: string = element.ref
   if (config !== null) {
     if (config.ref !== undefined) {
-      ref = config.ref as HTMLElement
+      ref = '' + (config.ref as string)
     }
     if (config.key !== undefined) {
       key = '' + (config.key as string)
     }
 
     let defaultProps: any
-    if (element.type && element.type.defaultProps) {
-      defaultProps = element.type.defaultProps
+    if (element.type && (element.type as Component).defaultProps) {
+      defaultProps = (element.type as Component).defaultProps
     }
     for (let prop in config) {
       if (
         Object.hasOwnProperty.call(config, prop)
-        && !~RESERVED_PROPS.indexOf(prop)
+        && !~KUT_RESERVED_PROPS.indexOf(prop)
       ) {
         if (
           config[prop] === undefined
@@ -107,7 +128,7 @@ export function cloneElement(element: KutElement, config: any, ...children: KutE
     props.children = children
   }
   return {
-    __typeof: ELEMENT_TYPE,
+    __typeof: KUT_ELEMENT_TYPE,
     type,
     key,
     ref,
@@ -115,10 +136,14 @@ export function cloneElement(element: KutElement, config: any, ...children: KutE
   }
 }
 
-export function isValidElement(element: KutElement): boolean {
+/**
+ * 验证该element是否为Kut有效element
+ * @param element 
+ */
+export function isValidElement(element: Element): boolean {
   return (
     typeof element === 'object'
     && element !== null
-    && element.__typeof === ELEMENT_TYPE
+    && element.__typeof === KUT_ELEMENT_TYPE
   )
 }

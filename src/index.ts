@@ -1,3 +1,4 @@
-import kut from './kut/index'
+import Kut from './kut/index'
+import KutDOM from './kut-dom/index'
 
-export default kut
+export { Kut, KutDOM }

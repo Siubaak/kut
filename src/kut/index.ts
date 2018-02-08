@@ -8,12 +8,17 @@ import {
   Component,
 } from './component'
 
-const kut = {
+const Kut = {
+  version: '0.0.1',
+
   createElement,
   cloneElement,
   createFactory,
   isValidElement,
+  
   Component,
+
+
 }
 
-export default kut
+export default Kut
