@@ -7,9 +7,12 @@ import {
 import {
   Component,
 } from './component'
+import {
+  version
+} from '../shared/version'
 
 const Kut = {
-  version: '0.0.1',
+  version,
 
   createElement,
   cloneElement,

@@ -3,7 +3,7 @@ import { Component } from './component'
 
 export interface Element {
   __typeof: Symbol | number
-  type: string | Component
+  type: string | typeof Component
   key: string
   ref: string
   props: any
@@ -15,7 +15,7 @@ export interface Element {
  * @param config 
  * @param children 
  */
-export function createElement(type: any, config: any, ...children: Element[]): Element {
+export function createElement(type: string | typeof Component, config: any, ...children: Element[]): Element {
   const props: any = {}
   let key: string = null
   let ref: string = null
@@ -26,7 +26,6 @@ export function createElement(type: any, config: any, ...children: Element[]): E
     if (config.key !== undefined) {
       key = '' + (config.key as string)
     }
-
     for (let prop in config) {
       if (
         Object.hasOwnProperty.call(config, prop)
@@ -39,10 +38,10 @@ export function createElement(type: any, config: any, ...children: Element[]): E
   if (children.length > 0) {
     props.children = children
   }
-  if (type && type.defaultProps) {
-    for (let prop in type.defaultProps) {
+  if (type && (type as typeof Component).defaultProps) {
+    for (let prop in (type as typeof Component).defaultProps) {
       if (props[prop] === undefined) {
-        props[prop] = type.defaultProps[prop]
+        props[prop] = (type as typeof Component).defaultProps[prop]
       }
     }
   }
@@ -57,14 +56,14 @@ export function createElement(type: any, config: any, ...children: Element[]): E
 
 interface Factory {
   (config: any, ...children: Element[]): Element
-  type: any
+  type: string | typeof Component
 }
 
 /**
  * 创建对应type的element工厂函数
  * @param type 
  */
-export function createFactory(type: any): Factory {
+export function createFactory(type: string | typeof Component): Factory {
   const factory: Factory = createElement.bind(null, type)
   factory.type = type
   return factory
@@ -93,7 +92,7 @@ export function cloneAndReplaceKey(oldElement: Element, newKey: string): Element
  */
 export function cloneElement(element: Element, config: any, ...children: Element[]): Element {
   const props: any = Object.assign({}, element.props)
-  const type: string | Component = element.type
+  const type: string | typeof Component = element.type
   let key: string = element.key
   let ref: string = element.ref
   if (config !== null) {
@@ -103,10 +102,9 @@ export function cloneElement(element: Element, config: any, ...children: Element
     if (config.key !== undefined) {
       key = '' + (config.key as string)
     }
-
     let defaultProps: any
-    if (element.type && (element.type as Component).defaultProps) {
-      defaultProps = (element.type as Component).defaultProps
+    if (element.type && (element.type as typeof Component).defaultProps) {
+      defaultProps = (element.type as typeof Component).defaultProps
     }
     for (let prop in config) {
       if (
