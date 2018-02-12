@@ -36,9 +36,13 @@ function createHTMLElement(element) {
             node.setAttribute(prop, props[prop]);
         }
     }
-    element.props.children
-        .forEach(function (child) {
-        return node.appendChild(render(child));
+    props.children.forEach(function (child) {
+        if (Array.isArray(child)) {
+            child.forEach(function (c) { return node.appendChild(render(c)); });
+        }
+        else {
+            node.appendChild(render(child));
+        }
     });
     return node;
 }

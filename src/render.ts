@@ -1,4 +1,4 @@
-import { KutProps, KutElement, createElement } from './element'
+import { KutProps, KutElement, createElement, KutChild } from './element'
 import { Component } from './component'
 import { KUT_SUPPORTED_EVENT_HANDLERS } from  './constant'
 
@@ -45,10 +45,14 @@ function createHTMLElement(element: KutElement): HTMLElement {
       node.setAttribute(prop, props[prop])
     }
   }
-  element.props.children
-    .forEach(
-      (child: number | string | KutElement) =>
-      node.appendChild(render(child))
+  props.children.forEach(
+      (child: KutChild | KutChild[]) => {
+        if (Array.isArray(child)) {
+          child.forEach((c: KutChild) => node.appendChild(render(c)))
+        } else {
+          node.appendChild(render(child))
+        }
+      }
     )
   return node
 }
@@ -59,7 +63,7 @@ function createHTMLElement(element: KutElement): HTMLElement {
  * @param container 
  */
 export function render(
-  element: number | string | KutElement,
+  element: KutChild,
   container?: HTMLElement,
 ): Text | HTMLElement {
   let node: Text | HTMLElement

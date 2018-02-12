@@ -3,6 +3,10 @@ import React from '../dist/lib/kut'
 class App extends React.Component {
   constructor(props) {
     super(props)
+    this.test = [
+      <button onClick={this.handleClick}>1</button>,
+      <button onClick={this.handleClick}>2</button>,
+    ]
   }
   handleClick() {
     alert('成功')
@@ -10,7 +14,7 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <button onClick={this.handleClick}>测试</button>
+        {this.test}
       </div>
     )
   }

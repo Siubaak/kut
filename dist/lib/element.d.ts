@@ -1,6 +1,7 @@
 import { Component } from './component';
+export declare type KutChild = number | string | KutElement;
 export interface KutProps {
-    children: (number | string | KutElement)[];
+    children: (KutChild | KutChild[])[];
     [prop: string]: any;
 }
 export interface KutElement {
@@ -8,4 +9,4 @@ export interface KutElement {
     key: string;
     props: KutProps;
 }
-export declare function createElement(type: string | typeof Component, config: any, ...children: (number | string | KutElement)[]): KutElement;
+export declare function createElement(type: string | typeof Component, config: any, ...children: (KutChild | KutChild[])[]): KutElement;

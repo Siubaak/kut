@@ -1,8 +1,10 @@
 import { Component } from './component'
 import { KUT_RESERVED_PROPS } from './constant'
 
+export type KutChild = number | string | KutElement
+
 export interface KutProps {
-  children: (number | string | KutElement)[]
+  children: (KutChild | KutChild[])[]
   [prop: string]: any
 }
 
@@ -21,7 +23,7 @@ export interface KutElement {
 export function createElement(
   type: string | typeof Component,
   config: any,
-  ...children: (number | string | KutElement)[],
+  ...children: (KutChild | KutChild[])[],
 ): KutElement {
   const props: KutProps = { children }
   let key: string = null
@@ -38,5 +40,6 @@ export function createElement(
       }
     }
   }
+  
   return { type, key, props }
 }
