@@ -1,4 +1,3 @@
-import Kut from './kut/index'
-import KutDOM from './kut-dom/index'
+import Kut from './kut'
 
-export { Kut, KutDOM }
+;(window as any).Kut = Kut

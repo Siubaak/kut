@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <title>Kut</title>
+  </head>
+
+  <body>
+    <div id="root"></div>
+  </body>
+
+  <script type="text/javascript" src="../dist/dev/kut.js"></script>
+  <script type="text/javascript">
+    const i =
+      Kut.createElement(
+        'div',
+        { className: 'hahaha', ref: 0,
+          style: {
+            height: '100px',
+            backgroundColor: '#bbb'
+          }
+        },
+        Kut.createElement(
+          'p',
+          { key: 0 },
+          '123'
+        ),
+        Kut.createElement(
+          'p',
+          { key: 2 },
+          '456'
+        ),
+      )
+    class A extends Kut.Component {
+      constructor(props) {
+        super(props)
+      }
+      render() {
+        return Kut.createElement(
+          'div',
+          null,
+          Kut.createElement(
+            'h2',
+            { key: 0 },
+            'hahaha'
+          ),
+          i,
+      )
+      }
+    }
+    const b = Kut.createElement(A)
+  </script>
+</html>

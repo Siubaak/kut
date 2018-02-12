@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack --config config/webpack.dev.js --watch --progress",
-    "build": "webpack --config config/webpack.prod.js --progress"
+    "start": "tsc --declaration --watch",
+    "webpack": "webpack --config config/webpack.dev.js --watch --progress",
+    "build": "tsc --declaration && webpack --config config/webpack.prod.js --progress"
   },
   "repository": {
     "type": "git",
