@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var component_1 = require("./component");
+var constant_1 = require("./constant");
 function instantiateComponent(element) {
     var instance = new element.type(element.props);
     var renderElement = instance.render(element.props);
@@ -14,22 +15,25 @@ function createHTMLElement(element) {
         node.setAttribute('key', element.key);
     }
     for (var prop in props) {
-        switch (prop) {
-            case 'children':
-                break;
-            case 'className':
-                node.className = props.className;
-                break;
-            case 'style':
-                for (var key in props.style) {
-                    if (node.style[key] !== undefined
-                        && Object.hasOwnProperty.call(props.style, key)) {
-                        node.style[key] = props.style[key];
-                    }
+        if (prop === 'children') {
+        }
+        else if (prop === 'className') {
+            node.className = props.className;
+        }
+        else if (prop === 'style') {
+            for (var key in props.style) {
+                if (node.style[key] !== undefined
+                    && Object.hasOwnProperty.call(props.style, key)) {
+                    node.style[key] = props.style[key];
                 }
-                break;
-            default:
-                node.setAttribute(prop, props[prop]);
+            }
+        }
+        else if (~constant_1.KUT_SUPPORTED_EVENT_HANDLERS.indexOf(prop.toLowerCase())
+            && typeof props[prop] === 'function') {
+            node[prop.toLowerCase()] = props[prop];
+        }
+        else {
+            node.setAttribute(prop, props[prop]);
         }
     }
     element.props.children

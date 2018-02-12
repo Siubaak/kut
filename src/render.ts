@@ -1,5 +1,6 @@
 import { KutProps, KutElement, createElement } from './element'
 import { Component } from './component'
+import { KUT_SUPPORTED_EVENT_HANDLERS } from  './constant'
 
 /**
  * 实例化Componenet，并调用render函数渲染Component返回HTMLElement
@@ -23,24 +24,25 @@ function createHTMLElement(element: KutElement): HTMLElement {
     node.setAttribute('key', element.key)
   }
   for (let prop in props) {
-    switch (prop) {
-      case 'children':
-        break
-      case 'className':
-        node.className = props.className
-        break
-      case 'style':
-        for (let key in props.style) {
-          if (
-            (node.style as any)[key] !== undefined
-            && Object.hasOwnProperty.call(props.style, key)
-          ) {
-            (node.style as any)[key] = props.style[key]
-          }
+    if (prop === 'children') {
+    } else if (prop === 'className') {
+      node.className = props.className
+    } else if (prop === 'style') {
+      for (let key in props.style) {
+        if (
+          (node.style as any)[key] !== undefined
+          && Object.hasOwnProperty.call(props.style, key)
+        ) {
+          (node.style as any)[key] = props.style[key]
         }
-        break
-      default:
-        node.setAttribute(prop, props[prop])
+      }
+    } else if (
+      ~KUT_SUPPORTED_EVENT_HANDLERS.indexOf(prop.toLowerCase())
+      && typeof props[prop] === 'function'
+    ) {
+      (node as any)[prop.toLowerCase()] = props[prop]
+    } else {
+      node.setAttribute(prop, props[prop])
     }
   }
   element.props.children

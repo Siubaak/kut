@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var KUT_RESERVED_PROPS = ['key'];
+var constant_1 = require("./constant");
 function createElement(type, config) {
     var children = [];
     for (var _i = 2; _i < arguments.length; _i++) {
@@ -14,7 +14,7 @@ function createElement(type, config) {
         }
         for (var prop in config) {
             if (Object.hasOwnProperty.call(config, prop)
-                && !~KUT_RESERVED_PROPS.indexOf(prop)) {
+                && !~constant_1.KUT_RESERVED_PROPS.indexOf(prop)) {
                 props[prop] = config[prop];
             }
         }

@@ -5,7 +5,7 @@
     "lib": [ "es6", "dom" ],
     "sourceMap": true,
     "noImplicitAny": true,
-    "removeComments": true
+    "removeComments": true,
   },
   "include": [
     "src"

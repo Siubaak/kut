@@ -1,0 +1,29 @@
+{
+  "name": "kut-demo",
+  "version": "0.0.1",
+  "description": "A Demo of Kut",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "parcel index.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Siubaak/kut.git"
+  },
+  "keywords": [
+    "demo",
+    "kut"
+  ],
+  "author": "Siubaak",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Siubaak/kut/issues"
+  },
+  "homepage": "https://github.com/Siubaak/kut#readme",
+  "devDependencies": {
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-react": "^6.24.1",
+    "parcel-bundler": "^1.5.1"
+  }
+}

@@ -1,6 +1,5 @@
 import { Component } from './component'
-
-const KUT_RESERVED_PROPS: string[] = [ 'key' ]
+import { KUT_RESERVED_PROPS } from './constant'
 
 export interface KutProps {
   children: (number | string | KutElement)[]
