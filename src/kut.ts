@@ -1,6 +1,6 @@
 import { createElement } from './element'
 import { Component } from './component'
-import { render } from './render'
+import { render } from './renderer'
 
 const Kut = {
   createElement,

@@ -1,6 +1,6 @@
 import { createElement } from './element';
 import { Component } from './component';
-import { render } from './render';
+import { render } from './renderer';
 declare const Kut: {
     createElement: typeof createElement;
     Component: typeof Component;

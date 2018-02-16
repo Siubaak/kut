@@ -6,4 +6,4 @@ function render(element, container) {
     instance.mount();
 }
 exports.render = render;
-//# sourceMappingURL=render.js.map
+//# sourceMappingURL=renderer.js.map

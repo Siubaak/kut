@@ -1,12 +1,15 @@
 import { KutProps, KutElement } from './element';
-export interface KutUpdater {
-    enqueueSetState(instance: Component, state: any): void;
-    enqueueForceUpdate(instance: Component): void;
-}
+import { ComponentInstance } from './instance';
 export declare class Component {
+    protected state: any;
     protected props: KutProps;
-    updater: KutUpdater;
-    constructor(props: KutProps, updater?: KutUpdater);
+    instance: ComponentInstance;
+    constructor(props: KutProps);
     protected setState(state: any): void;
     render(props?: KutProps): KutElement;
+    componentWillMount(): void;
+    componentDidMount(): void;
+    componentWillUpdate(): void;
+    componentDidUpdate(): void;
+    shouldComponentUpdate(): boolean;
 }

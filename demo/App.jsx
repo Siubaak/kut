@@ -1,20 +1,24 @@
 import React from '../dist/lib/kut'
 
+let index = 0
+
 class App extends React.Component {
   constructor(props) {
     super(props)
-    this.test = [
-      <button onClick={this.handleClick}>1</button>,
-      <button onClick={this.handleClick}>2</button>,
-    ]
+    this.state = {
+      text: []
+    }
   }
   handleClick() {
-    alert('成功')
+    const text = [...this.state.text]
+    text.push(index++)
+    this.setState({ text })
   }
   render() {
     return (
       <div>
-        {this.test}
+        { this.state.text.map(t => <p>{t}</p>) }
+        <button onClick={this.handleClick.bind(this)}>+</button>
       </div>
     )
   }

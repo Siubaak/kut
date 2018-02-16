@@ -1,5 +1,6 @@
 import { Component } from './component'
 import { KUT_RESERVED_PROPS } from './constant'
+import { TextInstance, DOMInstance, ComponentInstance } from './instance'
 
 export type KutChild = number | string | KutElement
 
@@ -12,6 +13,7 @@ export interface KutElement {
   type: string | typeof Component
   key: string
   props: KutProps
+  instance: TextInstance | DOMInstance | ComponentInstance
 }
 
 /**
@@ -34,12 +36,11 @@ export function createElement(
     for (let prop in config) {
       if (
         Object.hasOwnProperty.call(config, prop)
-        && !~KUT_RESERVED_PROPS.indexOf(prop)
+        && !KUT_RESERVED_PROPS[prop]
       ) {
         props[prop] = config[prop]
       }
     }
   }
-  
-  return { type, key, props }
+  return { type, key, props, instance: null }
 }

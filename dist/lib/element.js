@@ -14,12 +14,12 @@ function createElement(type, config) {
         }
         for (var prop in config) {
             if (Object.hasOwnProperty.call(config, prop)
-                && !~constant_1.KUT_RESERVED_PROPS.indexOf(prop)) {
+                && !constant_1.KUT_RESERVED_PROPS[prop]) {
                 props[prop] = config[prop];
             }
         }
     }
-    return { type: type, key: key, props: props };
+    return { type: type, key: key, props: props, instance: null };
 }
 exports.createElement = createElement;
 //# sourceMappingURL=element.js.map

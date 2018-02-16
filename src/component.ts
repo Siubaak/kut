@@ -1,26 +1,16 @@
 import { KutProps, KutElement } from './element'
-
-export interface KutUpdater {
-  enqueueSetState(instance: Component, state: any): void
-  enqueueForceUpdate(instance: Component,): void 
-}
-
-const defaultUpdater: KutUpdater = {
-  enqueueSetState(instance: Component, state: any): void {},
-  enqueueForceUpdate(instance: Component): void {},
-}
+import { ComponentInstance } from './instance'
 
 /**
  * Component基类，编写Component件时进行继承
  */
 export class Component {
+  protected state: any
   protected props: KutProps
-  updater: KutUpdater
+  instance: ComponentInstance
 
-  constructor(props: KutProps, updater: KutUpdater = defaultUpdater) {
+  constructor(props: KutProps) {
     this.props = props
-    // 虽然提供了缺省updater，但render将给Component注入一个可用的updater
-    this.updater = updater
   }
 
   /**
@@ -32,14 +22,24 @@ export class Component {
    * @protected
    */
   protected setState(state: any): void {
-    this.updater.enqueueSetState(this, state)
+    this.state = Object.assign({}, this.state, state)
+    const renderElement = this.render()
+    this.instance.update(renderElement)
   }
 
   /**
    * Component渲染函数，返回其包含element
    * @param props 
    */
-  public render(props: KutProps = this.props): KutElement {
+  render(props: KutProps = this.props): KutElement {
     return null
+  }
+
+  componentWillMount() {}
+  componentDidMount() {}
+  componentWillUpdate() {}
+  componentDidUpdate() {}
+  shouldComponentUpdate() {
+    return true
   }
 }
