@@ -5,9 +5,9 @@ import { ComponentInstance } from './instance'
  * Component基类，编写Component件时进行继承
  */
 export class Component {
-  protected state: any
-  protected props: KutProps
-  instance: ComponentInstance
+  state: any
+  props: KutProps
+  _instance: ComponentInstance
 
   constructor(props: KutProps) {
     this.props = props
@@ -23,8 +23,16 @@ export class Component {
    */
   protected setState(state: any): void {
     this.state = Object.assign({}, this.state, state)
-    const renderElement = this.render()
-    this.instance.update(renderElement)
+    this._instance.update(null, this.state)
+  }
+
+  /**
+   * 强制更新Component
+   * @final
+   * @protected
+   */
+  protected forceUpdate(): void {
+    this._instance.update(null, this.state)
   }
 
   /**
@@ -35,11 +43,14 @@ export class Component {
     return null
   }
 
+  // 一堆生命周期函数
   componentWillMount() {}
   componentDidMount() {}
-  componentWillUpdate() {}
-  componentDidUpdate() {}
-  shouldComponentUpdate() {
+  componentWillReceiveProps(nextProps: KutProps) {}
+  shouldComponentUpdate(nextProps: KutProps, nextState: any) {
     return true
   }
+  componentWillUpdate(nextProps: KutProps, nextState: any) {}
+  componentDidUpdate() {}
+  componentWillUnmount() {}
 }

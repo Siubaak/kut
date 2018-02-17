@@ -1,5 +1,21 @@
-import { KutChild } from './element'
-import { instantiate } from './instance'
+import { Component } from './component'
+import { KutChild, KutElement } from './element'
+import { KutInstance, TextInstance, DOMInstance, ComponentInstance } from './instance'
+
+export function instantiate(element: KutChild) {
+  let instance: KutInstance = null
+  if (typeof element === 'number' || typeof element === 'string') {
+    // 如果是number或string，证明VDOM树到根节点了
+    instance = new TextInstance(element as string)
+  } else if (typeof (element as KutElement).type === 'string') {
+    // 如果element.type是string，证明是div、p等内置DOM节点类型
+    instance = new DOMInstance(element as KutElement)
+  } else if (typeof (element as KutElement).type === typeof Component) {
+    // 如果element.type是function，证明是Component
+    instance = new ComponentInstance(element as KutElement)
+  }
+  return instance
+}
 
 /** 渲染并挂载DOM，container可选，若存在container则挂载
  * @param element 
@@ -9,6 +25,10 @@ export function render(
   element: KutChild,
   container: HTMLElement,
 ): void {
-  const instance = instantiate(element, container)
-  instance.mount()
+  const instance: KutInstance = instantiate(element)
+  const node: Text | HTMLElement = instance.mount(container)
+  while(container.lastChild) {
+    container.removeChild(container.lastChild)
+  }
+  container.appendChild(node)
 }

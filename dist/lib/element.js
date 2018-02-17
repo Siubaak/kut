@@ -2,10 +2,11 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var constant_1 = require("./constant");
 function createElement(type, config) {
-    var children = [];
+    var rawChildren = [];
     for (var _i = 2; _i < arguments.length; _i++) {
-        children[_i - 2] = arguments[_i];
+        rawChildren[_i - 2] = arguments[_i];
     }
+    var children = [].concat.apply([], rawChildren);
     var props = { children: children };
     var key = null;
     if (config) {
@@ -19,7 +20,7 @@ function createElement(type, config) {
             }
         }
     }
-    return { type: type, key: key, props: props, instance: null };
+    return { type: type, key: key, props: props };
 }
 exports.createElement = createElement;
 //# sourceMappingURL=element.js.map

@@ -6,8 +6,10 @@ var Component = (function () {
     }
     Component.prototype.setState = function (state) {
         this.state = Object.assign({}, this.state, state);
-        var renderElement = this.render();
-        this.instance.update(renderElement);
+        this._instance.update(null, this.state);
+    };
+    Component.prototype.forceUpdate = function () {
+        this._instance.update(null, this.state);
     };
     Component.prototype.render = function (props) {
         if (props === void 0) { props = this.props; }
@@ -15,11 +17,13 @@ var Component = (function () {
     };
     Component.prototype.componentWillMount = function () { };
     Component.prototype.componentDidMount = function () { };
-    Component.prototype.componentWillUpdate = function () { };
-    Component.prototype.componentDidUpdate = function () { };
-    Component.prototype.shouldComponentUpdate = function () {
+    Component.prototype.componentWillReceiveProps = function (nextProps) { };
+    Component.prototype.shouldComponentUpdate = function (nextProps, nextState) {
         return true;
     };
+    Component.prototype.componentWillUpdate = function (nextProps, nextState) { };
+    Component.prototype.componentDidUpdate = function () { };
+    Component.prototype.componentWillUnmount = function () { };
     return Component;
 }());
 exports.Component = Component;

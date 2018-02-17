@@ -5,7 +5,7 @@ import { TextInstance, DOMInstance, ComponentInstance } from './instance'
 export type KutChild = number | string | KutElement
 
 export interface KutProps {
-  children: (KutChild | KutChild[])[]
+  children: KutChild[]
   [prop: string]: any
 }
 
@@ -13,7 +13,6 @@ export interface KutElement {
   type: string | typeof Component
   key: string
   props: KutProps
-  instance: TextInstance | DOMInstance | ComponentInstance
 }
 
 /**
@@ -25,8 +24,9 @@ export interface KutElement {
 export function createElement(
   type: string | typeof Component,
   config: any,
-  ...children: (KutChild | KutChild[])[],
+  ...rawChildren: (KutChild | KutChild[])[],
 ): KutElement {
+  const children: KutChild[] = [].concat(...rawChildren)
   const props: KutProps = { children }
   let key: string = null
   if (config) {
@@ -42,5 +42,5 @@ export function createElement(
       }
     }
   }
-  return { type, key, props, instance: null }
+  return { type, key, props }
 }

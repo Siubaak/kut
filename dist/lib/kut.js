@@ -8,5 +8,8 @@ var Kut = {
     Component: component_1.Component,
     render: renderer_1.render,
 };
+if (window) {
+    window.Kut = Kut;
+}
 exports.default = Kut;
 //# sourceMappingURL=kut.js.map

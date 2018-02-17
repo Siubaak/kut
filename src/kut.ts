@@ -8,4 +8,8 @@ const Kut = {
   render,
 }
 
+if (window) {
+  (window as any).Kut = Kut
+}
+
 export default Kut
