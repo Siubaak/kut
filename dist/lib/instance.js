@@ -12,16 +12,13 @@ var TextInstance = (function () {
         return this._node;
     };
     TextInstance.prototype.update = function (nextElement) {
-        nextElement = nextElement || this._element;
-        if (nextElement === this._element) {
-            return;
-        }
-        else {
+        nextElement = nextElement == null ? this._element : nextElement;
+        if (nextElement !== this._element) {
             var prevNode = this._node;
-            this._element = nextElement;
             this._node = document.createTextNode(nextElement);
             this._container.replaceChild(this._node, prevNode);
         }
+        this._element = nextElement;
     };
     TextInstance.prototype.unmount = function () {
         this._container.removeChild(this._node);
@@ -55,7 +52,7 @@ var DOMInstance = (function () {
     };
     DOMInstance.prototype.update = function (nextElement) {
         var _this = this;
-        nextElement = nextElement || this._element;
+        nextElement = nextElement == null ? this._element : nextElement;
         if (nextElement.type === this._element.type
             && nextElement.key === this._element.key) {
             utils_1.setProps(this._node, nextElement.props, this._element.props);
@@ -76,17 +73,18 @@ var DOMInstance = (function () {
             });
         }
         else {
-            this._element = nextElement;
             var prevNode = this._node;
             this._node = this.mount(this._container);
             this._container.replaceChild(this._node, prevNode);
         }
+        this._element = nextElement;
     };
     DOMInstance.prototype.unmount = function () {
         this._container.removeChild(this._node);
         this._element = null;
         this._container = null;
         this._node = null;
+        this._childInstances = [];
     };
     return DOMInstance;
 }());
@@ -110,7 +108,7 @@ var ComponentInstance = (function () {
     };
     ComponentInstance.prototype.update = function (nextElement, nextState) {
         if (nextState === void 0) { nextState = this._component.state; }
-        nextElement = nextElement || this._element;
+        nextElement = nextElement == null ? this._element : nextElement;
         this._component.props = nextElement.props;
         this._component.state = nextState;
         if (this._component.shouldComponentUpdate(nextElement.props, nextState)) {
@@ -131,6 +129,7 @@ var ComponentInstance = (function () {
         this._element = nextElement;
     };
     ComponentInstance.prototype.unmount = function () {
+        this._component.componentWillUnmount();
         this._container.removeChild(this._node);
         this._element = null;
         this._container = null;

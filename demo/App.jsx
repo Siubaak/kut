@@ -1,35 +1,37 @@
 import React from '../dist/lib/kut'
 
-let index = 0
-
 class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      text: []
+      text: '',
+      list: []
     }
   }
-  handleAdd() {
-    const text = [...this.state.text]
-    text.push(index++)
-    this.setState({ text, show: !this.state.show })
+  handleChange(e) {
+    this.setState({ text: e.target.value })
   }
-  handleMinus() {
-    const text = [...this.state.text]
-    text.pop()
-    index--
-    this.setState({ text, show: !this.state.show })
+  handleAdd() {
+    const list = [ ...this.state.list ]
+    list.push(this.state.text)
+    this.setState({ text: '', list })
+  }
+  handleDel() {
+    const list = [ ...this.state.list ]
+    list.pop()
+    this.setState({ list })
   }
   render() {
     return (
       <div>
         <div>
-          { this.state.text.map(t => <p>{t}</p>) }
-        </div>
-        <div>
+          <input onInput={this.handleChange.bind(this)} value={this.state.text}></input>
           <button onClick={this.handleAdd.bind(this)}>+</button>
-          <button onClick={this.handleMinus.bind(this)}>-</button>
+          <button onClick={this.handleDel.bind(this)}>-</button>
         </div>
+        <ul>
+          { this.state.list.map(t => <li>{t}</li>) }
+        </ul>
       </div>
     )
   }

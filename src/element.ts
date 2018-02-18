@@ -1,6 +1,5 @@
 import { Component } from './component'
 import { KUT_RESERVED_PROPS } from './constant'
-import { TextInstance, DOMInstance, ComponentInstance } from './instance'
 
 export type KutChild = number | string | KutElement
 

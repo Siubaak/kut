@@ -37,6 +37,11 @@ export function setProps(node: HTMLElement, props: KutProps, comparedProps?: Kut
         node.setAttribute('style', props.style.toString())
       }
     } else if (
+      prop === 'value'
+      && (!comparedProps || comparedProps.value !== props.value)
+    ) {
+      (node as any).value = props.value
+    } else if (
       KUT_SUPPORTED_EVENT_HANDLERS[prop.toLowerCase()]
       && typeof props[prop] === 'function'
       && (!comparedProps || comparedProps[prop] !== props[prop])

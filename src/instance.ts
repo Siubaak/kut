@@ -18,15 +18,14 @@ export class TextInstance {
     return this._node
   }
   update(nextElement: KutChild): void {
-    nextElement = (nextElement as (number | string)) || this._element
-    if (nextElement === this._element) {
-      return
-    } else {
+    // 使用==以判断undefined和null
+    nextElement = nextElement == null ? this._element : (nextElement as (number | string))
+    if (nextElement !== this._element) {
       const prevNode = this._node
-      this._element = nextElement as (number | string)
       this._node = document.createTextNode(nextElement as string)
       this._container.replaceChild(this._node, prevNode)
     }
+    this._element = nextElement
   }
   unmount() {
     this._container.removeChild(this._node)
@@ -61,7 +60,8 @@ export class DOMInstance {
     return this._node
   }
   update(nextElement: KutChild): void {
-    nextElement = (nextElement as KutElement) || this._element
+    // 使用==以判断undefined和null
+    nextElement = nextElement == null ? this._element : (nextElement as KutElement)
     if (
       nextElement.type === this._element.type
       && nextElement.key === this._element.key
@@ -82,17 +82,18 @@ export class DOMInstance {
         }
       })
     } else {
-      this._element = nextElement as KutElement
       const prevNode = this._node
       this._node = this.mount(this._container)
       this._container.replaceChild(this._node, prevNode)
     }
+    this._element = nextElement
   }
   unmount() {
     this._container.removeChild(this._node)
     this._element = null
     this._container = null
     this._node = null
+    this._childInstances = []
   }
 }
 
@@ -119,7 +120,8 @@ export class ComponentInstance {
     return this._node
   }
   update(nextElement: KutChild, nextState: any = this._component.state): void {
-    nextElement = (nextElement as KutElement) || this._element
+    // 使用==以判断undefined和null
+    nextElement = nextElement == null ? this._element : (nextElement as KutElement)
     this._component.props = nextElement.props
     this._component.state = nextState
     if (this._component.shouldComponentUpdate(nextElement.props, nextState)) {
@@ -141,6 +143,7 @@ export class ComponentInstance {
     this._element = nextElement
   }
   unmount() {
+    this._component.componentWillUnmount()
     this._container.removeChild(this._node)
     this._element = null
     this._container = null

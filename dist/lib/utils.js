@@ -36,6 +36,10 @@ function setProps(node, props, comparedProps) {
                 node.setAttribute('style', props.style.toString());
             }
         }
+        else if (prop === 'value'
+            && (!comparedProps || comparedProps.value !== props.value)) {
+            node.value = props.value;
+        }
         else if (constant_1.KUT_SUPPORTED_EVENT_HANDLERS[prop.toLowerCase()]
             && typeof props[prop] === 'function'
             && (!comparedProps || comparedProps[prop] !== props[prop])) {

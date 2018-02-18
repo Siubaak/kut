@@ -2,6 +2,10 @@ import { Component } from './component'
 import { KutChild, KutElement } from './element'
 import { KutInstance, TextInstance, DOMInstance, ComponentInstance } from './instance'
 
+/**
+ * element实例化工厂函数
+ * @param element 
+ */
 export function instantiate(element: KutChild) {
   let instance: KutInstance = null
   if (typeof element === 'number' || typeof element === 'string') {
