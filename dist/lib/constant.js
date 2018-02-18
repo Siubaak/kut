@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.KUT_RESERVED_PROPS = {
-    key: true
+    key: true,
+    ref: true,
 };
 exports.KUT_SUPPORTED_EVENT_HANDLERS = {
     onclick: true,

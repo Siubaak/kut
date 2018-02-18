@@ -9,9 +9,13 @@ function createElement(type, config) {
     var children = [].concat.apply([], rawChildren);
     var props = { children: children };
     var key = null;
+    var ref = null;
     if (config) {
         if (config.key !== undefined) {
             key = '' + config.key;
+        }
+        if (typeof config.ref === 'function') {
+            ref = config.ref;
         }
         for (var prop in config) {
             if (Object.hasOwnProperty.call(config, prop)
@@ -20,7 +24,7 @@ function createElement(type, config) {
             }
         }
     }
-    return { type: type, key: key, props: props };
+    return { type: type, key: key, ref: ref, props: props };
 }
 exports.createElement = createElement;
 //# sourceMappingURL=element.js.map

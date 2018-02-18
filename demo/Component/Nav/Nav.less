@@ -1,0 +1,31 @@
+@mainColor: #0089a7;
+@navHeight: 50px;
+
+.Nav {
+  .nav {
+    height: @navHeight;
+    width: 100%;
+    transition: all .2s;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    .tab {
+      color: @mainColor;
+      flex: 1;
+      text-align: center;
+      text-decoration: none;
+      &:hover {
+        cursor: pointer;
+      }
+    }
+    .color {
+      color: #fff;
+    }
+  }
+  .fix {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    background-color: @mainColor;
+  }
+}

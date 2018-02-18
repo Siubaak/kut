@@ -2,15 +2,16 @@
  * element保留属性
  */
 export const KUT_RESERVED_PROPS: { [prop: string]: boolean } = {
-  key: true
+  key: true,
+  ref: true,
 }
 
 /**
  * html内置event handler集合
  * 参考：https://www.w3schools.com/jsref/dom_obj_event.asp
- * 过滤用正则，\t[A-Z|a-z|\s|/|'|0-9|,|.|(|)|<|>|=|"]*
  */
 export const KUT_SUPPORTED_EVENT_HANDLERS: { [handler: string]: boolean } = {
+  // 过滤用正则，\t[A-Z|a-z|\s|/|'|0-9|,|.|(|)|<|>|=|"]*
   // 鼠标
   onclick: true,
   oncontextmenu: true,

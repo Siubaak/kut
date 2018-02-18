@@ -1,9 +1,8 @@
-import { KutProps, KutElement } from './element';
-import { ComponentInstance } from './instance';
+import { KutProps, KutElement, KutChild } from './element';
 export declare class Component {
     state: any;
     props: KutProps;
-    _instance: ComponentInstance;
+    update: (nextElement: KutChild, nextState?: any) => void;
     constructor(props: KutProps);
     protected setState(state: any): void;
     protected forceUpdate(): void;

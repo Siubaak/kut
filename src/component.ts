@@ -1,5 +1,4 @@
-import { KutProps, KutElement } from './element'
-import { ComponentInstance } from './instance'
+import { KutProps, KutElement, KutChild } from './element'
 
 /**
  * Component基类，编写Component件时进行继承
@@ -7,15 +6,16 @@ import { ComponentInstance } from './instance'
 export class Component {
   state: any
   props: KutProps
-  _instance: ComponentInstance
+  update: (nextElement: KutChild, nextState?: any) => void
 
   constructor(props: KutProps) {
+    this.state = {}
     this.props = props
+    this.update = (nextElement: KutChild, nextState?: any) => {}
   }
 
   /**
    * 为state创建副本，并以此修改state，应该把state当作不可变对象
-   * state更新是异步的，setState也是异步的
    * 子类中不应进行override
    * @param state 
    * @final
@@ -23,7 +23,7 @@ export class Component {
    */
   protected setState(state: any): void {
     this.state = Object.assign({}, this.state, state)
-    this._instance.update(null, this.state)
+    this.update(null, this.state)
   }
 
   /**
@@ -32,7 +32,7 @@ export class Component {
    * @protected
    */
   protected forceUpdate(): void {
-    this._instance.update(null, this.state)
+    this.update(null, this.state)
   }
 
   /**

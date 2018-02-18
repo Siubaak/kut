@@ -47,8 +47,11 @@ export class DOMInstance {
     this._childInstances = []
     this._container = container
     this._node = document.createElement(this._element.type as string)
-    if (this._element.key) {
+    if (this._element.key !== undefined) {
       this._node.setAttribute('key', this._element.key)
+    }
+    if (typeof this._element.ref === 'function') {
+      this._element.ref(this._node)
     }
     setProps(this._node, this._element.props)
     this._element.props.children.forEach((child: KutChild) => {
@@ -87,6 +90,9 @@ export class DOMInstance {
       this._container.replaceChild(this._node, prevNode)
     }
     this._element = nextElement
+    if (typeof this._element.ref === 'function') {
+      this._element.ref(this._node)
+    }
   }
   unmount() {
     this._container.removeChild(this._node)
@@ -112,10 +118,13 @@ export class ComponentInstance {
     const ComponentConstructor: typeof Component = type as typeof Component
     this._component = new ComponentConstructor(this._element.props)
     this._component.componentWillMount()
-    this._component._instance = this
+    this._component.update = this.update.bind(this)
     const renderedElement: KutElement = this._component.render()
     this._renderedInstance = instantiate(renderedElement)
     this._node = this._renderedInstance.mount(this._container)
+    if (typeof this._element.ref === 'function') {
+      this._element.ref(this._node)
+    }
     this._component.componentDidMount()
     return this._node
   }
@@ -141,6 +150,9 @@ export class ComponentInstance {
       }
     }
     this._element = nextElement
+    if (typeof this._element.ref === 'function') {
+      this._element.ref(this._node)
+    }
   }
   unmount() {
     this._component.componentWillUnmount()

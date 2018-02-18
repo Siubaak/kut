@@ -31,8 +31,6 @@ export function render(
 ): void {
   const instance: KutInstance = instantiate(element)
   const node: Text | HTMLElement = instance.mount(container)
-  while(container.lastChild) {
-    container.removeChild(container.lastChild)
-  }
+  container.innerHTML = ''
   container.appendChild(node)
 }

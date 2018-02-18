@@ -38,8 +38,11 @@ var DOMInstance = (function () {
         this._childInstances = [];
         this._container = container;
         this._node = document.createElement(this._element.type);
-        if (this._element.key) {
+        if (this._element.key !== undefined) {
             this._node.setAttribute('key', this._element.key);
+        }
+        if (typeof this._element.ref === 'function') {
+            this._element.ref(this._node);
         }
         utils_1.setProps(this._node, this._element.props);
         this._element.props.children.forEach(function (child) {
@@ -78,6 +81,9 @@ var DOMInstance = (function () {
             this._container.replaceChild(this._node, prevNode);
         }
         this._element = nextElement;
+        if (typeof this._element.ref === 'function') {
+            this._element.ref(this._node);
+        }
     };
     DOMInstance.prototype.unmount = function () {
         this._container.removeChild(this._node);
@@ -99,10 +105,13 @@ var ComponentInstance = (function () {
         var ComponentConstructor = type;
         this._component = new ComponentConstructor(this._element.props);
         this._component.componentWillMount();
-        this._component._instance = this;
+        this._component.update = this.update.bind(this);
         var renderedElement = this._component.render();
         this._renderedInstance = renderer_1.instantiate(renderedElement);
         this._node = this._renderedInstance.mount(this._container);
+        if (typeof this._element.ref === 'function') {
+            this._element.ref(this._node);
+        }
         this._component.componentDidMount();
         return this._node;
     };
@@ -127,6 +136,9 @@ var ComponentInstance = (function () {
             }
         }
         this._element = nextElement;
+        if (typeof this._element.ref === 'function') {
+            this._element.ref(this._node);
+        }
     };
     ComponentInstance.prototype.unmount = function () {
         this._component.componentWillUnmount();

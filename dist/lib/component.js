@@ -2,14 +2,16 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var Component = (function () {
     function Component(props) {
+        this.state = {};
         this.props = props;
+        this.update = function (nextElement, nextState) { };
     }
     Component.prototype.setState = function (state) {
         this.state = Object.assign({}, this.state, state);
-        this._instance.update(null, this.state);
+        this.update(null, this.state);
     };
     Component.prototype.forceUpdate = function () {
-        this._instance.update(null, this.state);
+        this.update(null, this.state);
     };
     Component.prototype.render = function (props) {
         if (props === void 0) { props = this.props; }
