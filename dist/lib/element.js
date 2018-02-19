@@ -6,12 +6,13 @@ function createElement(type, config) {
     for (var _i = 2; _i < arguments.length; _i++) {
         rawChildren[_i - 2] = arguments[_i];
     }
-    var children = [].concat.apply([], rawChildren);
+    var children = rawChildren.length
+        ? [].concat.apply([], rawChildren) : [''];
     var props = { children: children };
     var key = null;
     var ref = null;
     if (config) {
-        if (config.key !== undefined) {
+        if (config.key != null) {
             key = '' + config.key;
         }
         if (typeof config.ref === 'function') {

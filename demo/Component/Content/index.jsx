@@ -9,7 +9,6 @@ class Content extends React.Component {
     return (
       <div className="Content">
         <div className={{
-          content: true,
           top: this.props.fix,
         }}>
           {this.props.children}
