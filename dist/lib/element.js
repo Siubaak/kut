@@ -13,7 +13,7 @@ function createElement(type, config) {
     var ref = null;
     if (config) {
         if (config.key != null) {
-            key = '' + config.key;
+            key = ('' + config.key).replace(/:/g, '.');
         }
         if (typeof config.ref === 'function') {
             ref = config.ref;

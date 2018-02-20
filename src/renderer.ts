@@ -30,7 +30,6 @@ export function render(
   container: HTMLElement,
 ): void {
   const instance: KutInstance = instantiate(element)
-  const node: Text | HTMLElement = instance.mount(container)
-  container.innerHTML = ''
-  container.appendChild(node)
+  const rootId: string = Math.random().toString(36).substring(11)
+  container.innerHTML = instance.mount(rootId)
 }

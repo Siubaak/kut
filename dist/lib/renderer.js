@@ -18,9 +18,8 @@ function instantiate(element) {
 exports.instantiate = instantiate;
 function render(element, container) {
     var instance = instantiate(element);
-    var node = instance.mount(container);
-    container.innerHTML = '';
-    container.appendChild(node);
+    var rootId = Math.random().toString(36).substring(11);
+    container.innerHTML = instance.mount(rootId);
 }
 exports.render = render;
 //# sourceMappingURL=renderer.js.map

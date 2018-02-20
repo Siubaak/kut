@@ -35,7 +35,7 @@ export function createElement(
   let ref: (node: Text | HTMLElement) => void = null
   if (config) {
     if (config.key != null) {
-      key = '' + (config.key as string)
+      key = ('' + (config.key as string)).replace(/:/g, '.')
     }
     if (typeof config.ref === 'function') {
       ref = config.ref

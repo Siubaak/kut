@@ -10,4 +10,4 @@ export interface Patches {
     dir: 'forward' | 'backward';
 }
 export declare function diff(prevInstances: KutInstance[], nextChildren: KutChild[]): Patches;
-export declare function patch(container: HTMLElement, patches: Patches): void;
+export declare function patch(parentId: string, patches: Patches): void;

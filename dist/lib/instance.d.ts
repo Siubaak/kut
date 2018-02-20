@@ -1,40 +1,40 @@
 import { KutChild } from './element';
 export declare type KutInstance = TextInstance | DOMInstance | ComponentInstance;
 export declare class TextInstance {
-    _index: number;
-    _node: Text;
+    kutId: string;
+    index: number;
     private _element;
-    private _container;
     constructor(element: KutChild);
     readonly key: string;
-    mount(container: HTMLElement): Text;
+    readonly node: HTMLElement;
+    mount(kutId: string): string;
     shouldReceive(nextElement: KutChild): boolean;
     update(nextElement: KutChild): void;
     unmount(): void;
 }
 export declare class DOMInstance {
-    _index: number;
-    _node: HTMLElement;
+    kutId: string;
+    index: number;
     private _element;
-    private _container;
     private _childInstances;
     constructor(element: KutChild);
     readonly key: string;
-    mount(container: HTMLElement): HTMLElement;
+    readonly node: HTMLElement;
+    mount(kutId: string): string;
     shouldReceive(nextElement: KutChild): boolean;
     update(nextElement: KutChild): void;
     unmount(): void;
 }
 export declare class ComponentInstance {
-    _index: number;
-    _node: Text | HTMLElement;
+    kutId: string;
+    index: number;
     private _element;
-    private _container;
     private _component;
     private _renderedInstance;
     constructor(element: KutChild);
     readonly key: string;
-    mount(container: HTMLElement): Text | HTMLElement;
+    readonly node: HTMLElement;
+    mount(kutId: string): string;
     shouldReceive(nextElement: KutChild): boolean;
     update(nextElement: KutChild, nextState?: any): void;
     unmount(): void;

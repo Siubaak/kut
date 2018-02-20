@@ -1,6 +1,7 @@
 import { KutChild, KutElement } from './element'
 import { KutInstance } from './instance'
 import { instantiate } from './renderer'
+import { getNode, createNode } from './util'
 
 export interface PatchOp {
   type: 'insert' | 'move' | 'remove'
@@ -36,8 +37,8 @@ export function diff(
   nextChildren.forEach((nextChild: KutChild, index: number) => {
     // 获取key，如果有则使用key，没有则赋予一个index
     const key = (nextChild as KutElement).key != null
-      ? '_key_' + (nextChild as KutElement).key
-      : '_index_' + index
+      ? 'k_' + (nextChild as KutElement).key
+      : 'i_' + index
     // 获取prevInstance
     const prevInstance: KutInstance = prevInstanceMap[key]
     // 如果prevInstance存在且调用shouldReceive判断是否为相同节点
@@ -49,7 +50,7 @@ export function diff(
     } else {
       const nextInstance = instantiate(nextChild)
       // 赋予默认index
-      nextInstance._index = index
+      nextInstance.index = index
       nextInstances.push(nextInstance)
     }
   })
@@ -68,7 +69,7 @@ export function diff(
     // 判断是否为复用节点
     if (forwardPrevInstance === forwardNextInstance) {
       // 为复用节点，如果在固定位置前则需要move到固定位置后
-      if (forwardPrevInstance._index < lastForwardIndex) {
+      if (forwardPrevInstance.index < lastForwardIndex) {
         forwardOps.push({
           type: 'move',
           index: lastForwardIndex,
@@ -76,7 +77,7 @@ export function diff(
         })
       }
       // 更新固定位置
-      lastForwardIndex = Math.max(forwardPrevInstance._index, lastForwardIndex)
+      lastForwardIndex = Math.max(forwardPrevInstance.index, lastForwardIndex)
     } else {
       // 不是复用节点，需要insert新节点，若存在就节点则remove掉
       if (forwardPrevInstance) {
@@ -97,14 +98,14 @@ export function diff(
     const backwardPrevInstance: KutInstance = prevInstanceMap[backwardNextInstance.key]
     // 过程同前向diff，但固定位置判断以及更新与前向相反
     if (backwardPrevInstance === backwardNextInstance) {
-      if (backwardPrevInstance._index > lastBackwardIndex) {
+      if (backwardPrevInstance.index > lastBackwardIndex) {
         backwardOps.push({
           type: 'move',
           index: lastBackwardIndex,
           inst: backwardPrevInstance,
         })
       }
-      lastBackwardIndex = Math.min(backwardPrevInstance._index, lastBackwardIndex)
+      lastBackwardIndex = Math.min(backwardPrevInstance.index, lastBackwardIndex)
     } else {
       if (backwardPrevInstance) {
         backwardOps.push({
@@ -142,7 +143,7 @@ export function diff(
     }
   }
   // 更新_index
-  nextInstances.forEach((nextInstance: KutInstance, index: number) => nextInstance._index = index)
+  nextInstances.forEach((nextInstance: KutInstance, index: number) => nextInstance.index = index)
   // 替换_childInstances，直接赋值会丢失引用
   prevInstances.length = 0
   prevInstances.push(...nextInstances)
@@ -154,13 +155,14 @@ export function diff(
 
 /**
  * 对container下的节点进行修改
- * @param container 
+ * @param parentId 
  * @param patches 
  */
-export function patch(container: HTMLElement, patches: Patches): void {
+export function patch(parentId: string, patches: Patches): void {
+  const container: HTMLElement = getNode(parentId)
   const { ops, dir } = patches
   // 用于前向patch时insert引起的before节点后移，后向patch无此问题
-  let insertNum = 0
+  let insertNum: number = 0
   ops.forEach((op: PatchOp) => {
     // 确定insertBefore的节点index
     const beforeIndex: number =
@@ -170,7 +172,8 @@ export function patch(container: HTMLElement, patches: Patches): void {
     switch(op.type) {
       case 'insert':{
         const beforeNode = container.children[beforeIndex]
-        const node: Text | HTMLElement = op.inst.mount(container)
+        const markup: string = op.inst.mount(`${parentId}:${op.inst.key}`)
+        const node: Text | HTMLElement = createNode(markup)
         if (beforeNode !== undefined) {
           container.insertBefore(node, beforeNode)
         } else {
@@ -183,10 +186,10 @@ export function patch(container: HTMLElement, patches: Patches): void {
       case 'move': {
         const beforeNode = container.children[beforeIndex]
         if (beforeNode !== undefined) {
-          container.insertBefore(op.inst._node, beforeNode)
+          container.insertBefore(op.inst.node, beforeNode)
         } else {
           // 若不存在beforeNode，即数组尾，则直接append即可
-          container.appendChild(op.inst._node)
+          container.appendChild(op.inst.node)
         }
         break
       }

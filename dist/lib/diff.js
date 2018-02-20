@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var renderer_1 = require("./renderer");
+var util_1 = require("./util");
 function diff(prevInstances, nextChildren) {
     var prevInstanceMap = {};
     prevInstances.forEach(function (inst, index) {
@@ -9,8 +10,8 @@ function diff(prevInstances, nextChildren) {
     var nextInstances = [];
     nextChildren.forEach(function (nextChild, index) {
         var key = nextChild.key != null
-            ? '_key_' + nextChild.key
-            : '_index_' + index;
+            ? 'k_' + nextChild.key
+            : 'i_' + index;
         var prevInstance = prevInstanceMap[key];
         if (prevInstance && prevInstance.shouldReceive(nextChild)) {
             prevInstance.update(nextChild);
@@ -18,7 +19,7 @@ function diff(prevInstances, nextChildren) {
         }
         else {
             var nextInstance = renderer_1.instantiate(nextChild);
-            nextInstance._index = index;
+            nextInstance.index = index;
             nextInstances.push(nextInstance);
         }
     });
@@ -30,14 +31,14 @@ function diff(prevInstances, nextChildren) {
         var forwardNextInstance = nextInstances[index];
         var forwardPrevInstance = prevInstanceMap[forwardNextInstance.key];
         if (forwardPrevInstance === forwardNextInstance) {
-            if (forwardPrevInstance._index < lastForwardIndex) {
+            if (forwardPrevInstance.index < lastForwardIndex) {
                 forwardOps.push({
                     type: 'move',
                     index: lastForwardIndex,
                     inst: forwardPrevInstance,
                 });
             }
-            lastForwardIndex = Math.max(forwardPrevInstance._index, lastForwardIndex);
+            lastForwardIndex = Math.max(forwardPrevInstance.index, lastForwardIndex);
         }
         else {
             if (forwardPrevInstance) {
@@ -56,14 +57,14 @@ function diff(prevInstances, nextChildren) {
         var backwardNextInstance = nextInstances[nextInstances.length - index - 1];
         var backwardPrevInstance = prevInstanceMap[backwardNextInstance.key];
         if (backwardPrevInstance === backwardNextInstance) {
-            if (backwardPrevInstance._index > lastBackwardIndex) {
+            if (backwardPrevInstance.index > lastBackwardIndex) {
                 backwardOps.push({
                     type: 'move',
                     index: lastBackwardIndex,
                     inst: backwardPrevInstance,
                 });
             }
-            lastBackwardIndex = Math.min(backwardPrevInstance._index, lastBackwardIndex);
+            lastBackwardIndex = Math.min(backwardPrevInstance.index, lastBackwardIndex);
         }
         else {
             if (backwardPrevInstance) {
@@ -98,7 +99,7 @@ function diff(prevInstances, nextChildren) {
             });
         }
     }
-    nextInstances.forEach(function (nextInstance, index) { return nextInstance._index = index; });
+    nextInstances.forEach(function (nextInstance, index) { return nextInstance.index = index; });
     prevInstances.length = 0;
     prevInstances.push.apply(prevInstances, nextInstances);
     return forwardOps.length < backwardOps.length
@@ -106,7 +107,8 @@ function diff(prevInstances, nextChildren) {
         : { ops: backwardOps, dir: 'backward' };
 }
 exports.diff = diff;
-function patch(container, patches) {
+function patch(parentId, patches) {
+    var container = util_1.getNode(parentId);
     var ops = patches.ops, dir = patches.dir;
     var insertNum = 0;
     ops.forEach(function (op) {
@@ -116,7 +118,8 @@ function patch(container, patches) {
         switch (op.type) {
             case 'insert': {
                 var beforeNode = container.children[beforeIndex];
-                var node = op.inst.mount(container);
+                var markup = op.inst.mount(parentId + ":" + op.inst.key);
+                var node = util_1.createNode(markup);
                 if (beforeNode !== undefined) {
                     container.insertBefore(node, beforeNode);
                 }
@@ -129,10 +132,10 @@ function patch(container, patches) {
             case 'move': {
                 var beforeNode = container.children[beforeIndex];
                 if (beforeNode !== undefined) {
-                    container.insertBefore(op.inst._node, beforeNode);
+                    container.insertBefore(op.inst.node, beforeNode);
                 }
                 else {
-                    container.appendChild(op.inst._node);
+                    container.appendChild(op.inst.node);
                 }
                 break;
             }

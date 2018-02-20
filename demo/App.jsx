@@ -4,11 +4,29 @@ import Nav from './Component/Nav'
 import Content from './Component/Content'
 import './App.less'
 
+const todo1 = [
+  { key: 1, text: 'A' },
+  { key: 2, text: 'B' },
+  { key: 3, text: 'C' },
+  { key: 4, text: 'D' },
+  { key: 5, text: 'E' },
+]
+
+const todo2 = [
+  { key: 4, text: 'D' },
+  { key: 1, text: 'A' },
+  { key: 6, text: 'F' },
+  { key: 7, text: 'G' },
+  { key: 5, text: 'E' },
+  { key: 3, text: 'C' },
+]
+
 class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       fix: false,
+      todos: todo1
     }
   }
   componentDidMount() {
@@ -30,7 +48,12 @@ class App extends React.Component {
         </Nav>
         <Content fix={this.state.fix}>
           <div id="demo">
-            demo
+            <ul>
+              {
+                this.state.todos.map(todo => <li key={todo.key}>{todo.text}</li>)
+              }
+            </ul>
+            <button onClick={e => this.setState({ todos: todo2 })}>Change</button>
           </div>
           <div id="docu">
             docu
