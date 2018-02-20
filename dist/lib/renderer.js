@@ -18,7 +18,7 @@ function instantiate(element) {
 exports.instantiate = instantiate;
 function render(element, container) {
     var instance = instantiate(element);
-    var rootId = Math.random().toString(36).substring(11);
+    var rootId = Math.random().toString(36).substring(2, 4);
     container.innerHTML = instance.mount(rootId);
 }
 exports.render = render;

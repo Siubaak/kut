@@ -11,7 +11,7 @@ function diff(prevInstances, nextChildren) {
     nextChildren.forEach(function (nextChild, index) {
         var key = nextChild.key != null
             ? 'k_' + nextChild.key
-            : 'i_' + index;
+            : '' + index;
         var prevInstance = prevInstanceMap[key];
         if (prevInstance && prevInstance.shouldReceive(nextChild)) {
             prevInstance.update(nextChild);

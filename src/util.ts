@@ -42,6 +42,8 @@ export function getStyleString(style: any): string {
     for (let key in style) {
       if (Object.hasOwnProperty.call(style, key)) {
         markup += 
+          // 驼峰式转换，如backgroundColor转换为background-color
+          // 同时支持backgroundColor和background-color命名
           key.replace(/[A-Z]/g, letter => `-${letter.toLowerCase()}`)
           + `: ${style[key]}; `
       }

@@ -30,6 +30,6 @@ export function render(
   container: HTMLElement,
 ): void {
   const instance: KutInstance = instantiate(element)
-  const rootId: string = Math.random().toString(36).substring(11)
+  const rootId: string = Math.random().toString(36).substring(2, 4)
   container.innerHTML = instance.mount(rootId)
 }

@@ -38,7 +38,7 @@ export function diff(
     // 获取key，如果有则使用key，没有则赋予一个index
     const key = (nextChild as KutElement).key != null
       ? 'k_' + (nextChild as KutElement).key
-      : 'i_' + index
+      : '' + index
     // 获取prevInstance
     const prevInstance: KutInstance = prevInstanceMap[key]
     // 如果prevInstance存在且调用shouldReceive判断是否为相同节点

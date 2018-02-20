@@ -10,13 +10,9 @@ function createElement(type, config) {
         ? [].concat.apply([], rawChildren) : [''];
     var props = { children: children };
     var key = null;
-    var ref = null;
     if (config) {
         if (config.key != null) {
-            key = ('' + config.key).replace(/:/g, '.');
-        }
-        if (typeof config.ref === 'function') {
-            ref = config.ref;
+            key = ('' + config.key).replace(/:/g, '_');
         }
         for (var prop in config) {
             if (Object.hasOwnProperty.call(config, prop)
@@ -25,7 +21,7 @@ function createElement(type, config) {
             }
         }
     }
-    return { type: type, key: key, ref: ref, props: props };
+    return { type: type, key: key, props: props };
 }
 exports.createElement = createElement;
 //# sourceMappingURL=element.js.map

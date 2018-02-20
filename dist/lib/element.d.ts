@@ -7,7 +7,6 @@ export interface KutProps {
 export interface KutElement {
     type: string | typeof Component;
     key: string;
-    ref: (node: Text | HTMLElement) => void;
     props: KutProps;
 }
 export declare function createElement(type: string | typeof Component, config: any, ...rawChildren: (KutChild | KutChild[])[]): KutElement;

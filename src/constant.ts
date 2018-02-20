@@ -10,17 +10,16 @@ export const KUT_RESERVED_PROPS: {
   [prop: string]: boolean
 } = {
   key: true,
-  ref: true,
 }
 
-const regex: RegExp = /^on/
+export const CUT_ON_REGEX: RegExp = /^on/
 const eventHandlers: string[] =
-  Object.keys(window || {}).filter(key => regex.test(key))
+  Object.keys(window || {}).filter(key => CUT_ON_REGEX.test(key))
 
 /**
  * html内置event集合
  */
-export const KUT_SUPPORTED_EVENTS: string[] = eventHandlers.map(key => key.replace(regex, ''))
+export const KUT_SUPPORTED_EVENTS: string[] = eventHandlers.map(key => key.replace(CUT_ON_REGEX, ''))
 
 /**
  * html内置event handler集合

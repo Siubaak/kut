@@ -12,7 +12,7 @@ var TextInstance = (function () {
     }
     Object.defineProperty(TextInstance.prototype, "key", {
         get: function () {
-            return 'i_' + this.index;
+            return '' + this.index;
         },
         enumerable: true,
         configurable: true
@@ -57,7 +57,7 @@ var DOMInstance = (function () {
         get: function () {
             return this._element.key != null
                 ? 'k_' + this._element.key
-                : 'i_' + this.index;
+                : '' + this.index;
         },
         enumerable: true,
         configurable: true
@@ -76,9 +76,6 @@ var DOMInstance = (function () {
         if (this._element.key != null) {
             markup += "key=\"" + this._element.key + "\" ";
         }
-        if (typeof this._element.ref === 'function') {
-            this._element.ref(util_1.getNode(kutId));
-        }
         var props = this._element.props;
         for (var prop in props) {
             if (prop === 'children') {
@@ -91,7 +88,7 @@ var DOMInstance = (function () {
             }
             else if (constant_1.KUT_SUPPORTED_EVENT_HANDLERS[prop.toLowerCase()]
                 && typeof props[prop] === 'function') {
-                event_1.setEventListener(kutId, prop.toLowerCase().replace(/^on/, ''), props[prop]);
+                event_1.setEventListener(kutId, prop.toLowerCase().replace(constant_1.CUT_ON_REGEX, ''), props[prop]);
             }
             else {
                 markup += prop + "=\"" + props[prop] + "\" ";
@@ -133,7 +130,7 @@ var DOMInstance = (function () {
             }
             else if (constant_1.KUT_SUPPORTED_EVENT_HANDLERS[prop.toLowerCase()]
                 && typeof nextProps[prop] === 'function') {
-                event_1.setEventListener(this.kutId, prop.toLowerCase().replace(/^on/, ''), nextProps[prop]);
+                event_1.setEventListener(this.kutId, prop.toLowerCase().replace(constant_1.CUT_ON_REGEX, ''), nextProps[prop]);
             }
             else {
                 node.setAttribute(prop, nextProps[prop]);
@@ -143,10 +140,10 @@ var DOMInstance = (function () {
             if (nextProps[prop] == null) {
                 if (constant_1.KUT_SUPPORTED_EVENT_HANDLERS[prop.toLowerCase()]
                     && typeof nextProps[prop] === 'function') {
-                    event_1.removeEventListener(this.kutId, prop.toLowerCase().replace(/^on/, ''));
+                    event_1.removeEventListener(this.kutId, prop.toLowerCase().replace(constant_1.CUT_ON_REGEX, ''));
                 }
                 else {
-                    node.setAttribute(prop, null);
+                    node.removeAttribute(prop);
                 }
             }
         }
@@ -161,13 +158,11 @@ var DOMInstance = (function () {
             var patches = diff_1.diff(prevChildInstances, nextChildren);
             diff_1.patch(this.kutId, patches);
         }
-        if (typeof nextElement.ref === 'function') {
-            nextElement.ref(util_1.getNode(this.kutId));
-        }
         this._element = nextElement;
     };
     DOMInstance.prototype.unmount = function () {
         event_1.removeAllEventListener(this.kutId);
+        this._childInstances.forEach(function (child) { return child.unmount(); });
         util_1.getNode(this.kutId).remove();
         delete this.kutId;
         delete this.index;
@@ -186,7 +181,7 @@ var ComponentInstance = (function () {
         get: function () {
             return this._element.key != null
                 ? 'k_' + this._element.key
-                : 'i_' + this.index;
+                : '' + this.index;
         },
         enumerable: true,
         configurable: true
@@ -208,9 +203,6 @@ var ComponentInstance = (function () {
         var renderedElement = this._component.render();
         this._renderedInstance = renderer_1.instantiate(renderedElement);
         var markup = this._renderedInstance.mount(kutId);
-        if (typeof this._element.ref === 'function') {
-            this._element.ref(util_1.getNode(kutId));
-        }
         this._component.componentDidMount();
         return markup;
     };
@@ -229,15 +221,13 @@ var ComponentInstance = (function () {
             var nextRenderedElement = this._component.render();
             this._renderedInstance.update(nextRenderedElement);
             this._component.componentDidUpdate();
-            if (typeof nextElement.ref === 'function') {
-                nextElement.ref(util_1.getNode(this.kutId));
-            }
         }
         this._element = nextElement;
     };
     ComponentInstance.prototype.unmount = function () {
         this._component.componentWillUnmount();
         event_1.removeAllEventListener(this.kutId);
+        this._renderedInstance.unmount();
         util_1.getNode(this.kutId).remove();
         delete this.kutId;
         delete this.index;

@@ -2,7 +2,7 @@ import { KutElement, KutChild, KutProps } from './element'
 import { instantiate } from './renderer'
 import { Component } from './component'
 import { Patches, diff, patch } from './diff'
-import { KUT_ID, KUT_SUPPORTED_EVENT_HANDLERS } from './constant'
+import { KUT_ID, KUT_SUPPORTED_EVENT_HANDLERS, CUT_ON_REGEX } from './constant'
 import { setEventListener, removeEventListener, removeAllEventListener } from './event'
 import { getNode, getClassString, getStyleString } from './util'
 
@@ -19,7 +19,7 @@ export class TextInstance {
     this._element = '' + element as (number | string)
   }
   get key(): string {
-    return 'i_' + this.index
+    return '' + this.index
   }
   get node(): HTMLElement {
     return getNode(this.kutId)
@@ -62,7 +62,7 @@ export class DOMInstance {
   get key(): string {
     return this._element.key != null
       ? 'k_' + this._element.key
-      : 'i_' + this.index
+      : '' + this.index
   }
   get node(): HTMLElement {
     return getNode(this.kutId)
@@ -72,9 +72,6 @@ export class DOMInstance {
     let markup = `<${this._element.type} ${KUT_ID}="${kutId}" `
     if (this._element.key != null) {
       markup += `key="${this._element.key}" `
-    }
-    if (typeof this._element.ref === 'function') {
-      this._element.ref(getNode(kutId))
     }
     const props = this._element.props
     for (let prop in props) {
@@ -89,7 +86,7 @@ export class DOMInstance {
       ) {
         setEventListener(
           kutId,
-          prop.toLowerCase().replace(/^on/, ''),
+          prop.toLowerCase().replace(CUT_ON_REGEX, ''),
           props[prop],
         )
       } else {
@@ -127,13 +124,13 @@ export class DOMInstance {
         node.style.cssText = getStyleString(nextProps.style)
       } else if (prop === 'value') {
         (node as any).value = nextProps.value
-      }else if (
+      } else if (
         KUT_SUPPORTED_EVENT_HANDLERS[prop.toLowerCase()]
         && typeof nextProps[prop] === 'function'
       ) {
         setEventListener(
           this.kutId,
-          prop.toLowerCase().replace(/^on/, ''),
+          prop.toLowerCase().replace(CUT_ON_REGEX, ''),
           nextProps[prop],
         )
       } else {
@@ -148,10 +145,10 @@ export class DOMInstance {
         ) {
           removeEventListener(
             this.kutId,
-            prop.toLowerCase().replace(/^on/, ''),
+            prop.toLowerCase().replace(CUT_ON_REGEX, ''),
           )
         } else {
-          node.setAttribute(prop, null)
+          node.removeAttribute(prop)
         }
       }
     }
@@ -170,9 +167,6 @@ export class DOMInstance {
       // diff会更新this._childInstances
       const patches: Patches = diff(prevChildInstances, nextChildren)
       patch(this.kutId, patches)
-    }
-    if (typeof nextElement.ref === 'function') {
-      nextElement.ref(getNode(this.kutId))
     }
     this._element = nextElement
   }
@@ -202,7 +196,7 @@ export class ComponentInstance {
   get key(): string {
     return this._element.key != null
       ? 'k_' + this._element.key
-      : 'i_' + this.index
+      : '' + this.index
   }
   get node(): HTMLElement {
     return getNode(this.kutId)
@@ -217,9 +211,6 @@ export class ComponentInstance {
     const renderedElement: KutElement = this._component.render()
     this._renderedInstance = instantiate(renderedElement)
     const markup = this._renderedInstance.mount(kutId)
-    if (typeof this._element.ref === 'function') {
-      this._element.ref(getNode(kutId))
-    }
     this._component.componentDidMount()
     return markup
   }
@@ -238,9 +229,6 @@ export class ComponentInstance {
       const nextRenderedElement: KutElement = this._component.render()
       this._renderedInstance.update(nextRenderedElement)
       this._component.componentDidUpdate()
-      if (typeof nextElement.ref === 'function') {
-        nextElement.ref(getNode(this.kutId))
-      }
     }
     this._element = nextElement
   }
