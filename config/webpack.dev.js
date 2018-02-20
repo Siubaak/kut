@@ -5,7 +5,7 @@ const common = require('./webpack.common.js')
 module.exports = merge(common, {
   devtool: 'inline-source-map',
   output: {
-    path: path.resolve(__dirname, '..', 'dist', 'dev'),
+    path: path.resolve(__dirname, '../dist/dev'),
     filename: 'kut.js',
   },
 })

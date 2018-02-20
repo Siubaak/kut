@@ -8,7 +8,7 @@ module.exports = merge(common, {
     new UglifyJSPlugin(),
   ],
   output: {
-    path: path.resolve(__dirname, '..', 'dist', 'min'),
+    path: path.resolve(__dirname, '../dist/min'),
     filename: 'kut.min.js',
   },
 })

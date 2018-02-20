@@ -1,7 +1,7 @@
 {
   "name": "kut",
-  "version": "0.0.1",
-  "description": "A Simple React-Like MVVM JavaScript Library",
+  "version": "0.1.2",
+  "description": "A simple react-like javascript mvvm library",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
