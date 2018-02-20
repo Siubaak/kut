@@ -1,0 +1,30 @@
+@import (reference) "../../App.less";
+
+.Content {
+  .top {
+    margin-top: @navHeight;
+  }
+  .anchor {
+    height: @navHeight;
+  }
+  .item {
+    margin: 24px 184px;
+    transition: all .2s;
+    .title {
+      color: @mainColor;
+      margin: 0;
+    }
+    .desc {
+      color: @mainColor;
+      line-height: 26px;
+    }
+    .indent {
+      text-indent: 2em;
+    }
+  }
+  @media screen and (max-width: 768px) {
+    .item {
+      margin: 24px;
+    }
+  }
+}

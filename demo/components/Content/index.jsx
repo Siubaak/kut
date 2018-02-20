@@ -1,4 +1,4 @@
-import React from '../../../dist/lib/kut'
+import React from '../../../index'
 import './Content.less'
 
 class Content extends React.Component {

@@ -1,0 +1,31 @@
+@import (reference) "../../App.less";
+
+.Banner {
+  height: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: @mainColor;
+  box-shadow: 0 5px 10px #00000033;
+  text-align: center;
+  .title {
+    color: #eee;
+    font-size: 72px;
+    margin: 0;
+  }
+  .desc {
+    color: #ddd;
+    font-size: 18px;
+    margin: 0;
+  }
+  .link {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    transition: all .2s;
+    a + a {
+      margin-left: 12px;
+    }
+  }
+}

@@ -1,4 +1,4 @@
-import React from '../../../dist/lib/kut'
+import React from '../../../index'
 import './Nav.less'
 
 class Nav extends React.Component {
@@ -7,14 +7,14 @@ class Nav extends React.Component {
   }
   render() {
     return (
-      <div className="Nav">
+      <nav className="Nav">
         <div className={{
           nav: true,
           fix: this.props.fix,
         }}>
           {this.props.children}
         </div>
-      </div>
+      </nav>
     )
   }
 }

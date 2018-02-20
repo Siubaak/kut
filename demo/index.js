@@ -1,4 +1,4 @@
-import React from '../dist/lib/kut'
+import React from '../index'
 import App from './App'
 import './index.less'
 

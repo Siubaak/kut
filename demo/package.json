@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/Siubaak/kut#readme",
   "devDependencies": {
+    "autoprefixer": "^8.0.0",
     "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.24.1",
     "less": "^3.0.1",
