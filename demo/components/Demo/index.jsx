@@ -58,7 +58,7 @@ class Demo extends React.Component {
             ? this.state.todos.map((todo, index) => 
               <li class="item" key={todo.key}>
                 {todo.item}
-                <button class="del" onClick={() => this.handleDel(index)}>删除</button>
+                <button class="del" onClick={() => this.handleDel(index)}>完成</button>
               </li>
             )
             : <li class="item">无</li>

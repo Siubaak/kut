@@ -1,5 +1,21 @@
 import { KUT_ID } from './constant'
 
+export function assign(...objects: any[]): any {
+  if (objects.length === 0) {
+    return null
+  } else {
+    let obj = objects[0]
+    for (let i = 1; i < objects.length; ++i) {
+      for (let key in objects[i]) {
+        if (Object.hasOwnProperty.call(objects[i], key)) {
+          obj[key] = objects[i][key]
+        }
+      }
+    }
+    return obj
+  }
+}
+
 export function getParentID(childID: string): string {
   const regex = /[:]\w+$/
   return regex.test(childID) && childID.replace(regex, '')

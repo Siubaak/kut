@@ -2,7 +2,6 @@
   "compilerOptions": {
     "outDir": "./dist/lib",
     "target": "es5",
-    "lib": [ "es6", "dom" ],
     "sourceMap": true,
     "noImplicitAny": true,
     "removeComments": true,

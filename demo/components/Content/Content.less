@@ -8,7 +8,8 @@
     height: @navHeight;
   }
   .item {
-    margin: 24px 184px;
+    margin: 24px auto;
+    width: 712px;
     transition: all .2s;
     .title {
       color: @mainColor;
@@ -24,7 +25,9 @@
   }
   @media screen and (max-width: 768px) {
     .item {
+      width: auto;
       margin: 24px;
+      max-width: 712px;
     }
   }
 }

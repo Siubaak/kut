@@ -1,6 +1,27 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var constant_1 = require("./constant");
+function assign() {
+    var objects = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        objects[_i] = arguments[_i];
+    }
+    if (objects.length === 0) {
+        return null;
+    }
+    else {
+        var obj = objects[0];
+        for (var i = 1; i < objects.length; ++i) {
+            for (var key in objects[i]) {
+                if (Object.hasOwnProperty.call(objects[i], key)) {
+                    obj[key] = objects[i][key];
+                }
+            }
+        }
+        return obj;
+    }
+}
+exports.assign = assign;
 function getParentID(childID) {
     var regex = /[:]\w+$/;
     return regex.test(childID) && childID.replace(regex, '');
