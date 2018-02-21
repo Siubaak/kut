@@ -2,6 +2,8 @@ import React from '../../../index'
 import './Demo.less'
 
 let uniqueKey = 0
+let holding = false
+let pos = { x: 0, y: 0 }
 
 class Demo extends React.Component {
   constructor(props) {
@@ -43,6 +45,27 @@ class Demo extends React.Component {
     todos.splice(index, 1)
     this.setState({ todos })
   }
+  handleHold(e) {
+    if (e.target.tagName.toLowerCase() === 'li') {
+      holding = true
+      pos.x = e.x
+      pos.y = e.y
+      e.target.style.position = 'relative'
+    }
+  }
+  handleMove(e) {
+    if (holding) {
+      e.target.style.left = e.x - pos.x
+      e.target.style.top = e.y - pos.y
+      console.log(e.x, e.y)
+    }
+  }
+  handleRelease(e) {
+    e.target.style.position = ''
+    e.target.style.left = 0
+    e.target.style.top = 0
+    holding = false
+  }
   render() {
     return (
       <div className="Demo">
@@ -56,7 +79,12 @@ class Demo extends React.Component {
           {
             this.state.todos.length
             ? this.state.todos.map((todo, index) => 
-              <li class="item" key={todo.key}>
+              <li class="item" key={todo.key}
+                style={{left: '50px'}}
+                onMouseDown={this.handleHold.bind(this)}
+                onMouseMove={this.handleMove.bind(this)}
+                onMouseUp={this.handleRelease.bind(this)}
+              >
                 {todo.item}
                 <button class="del" onClick={() => this.handleDel(index)}>删除</button>
               </li>

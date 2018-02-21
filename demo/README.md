@@ -1,6 +1,6 @@
 # Kut-Demo
 
-A Demo of Kut
+This is the [home page](https://siubaak.github.io/kut) of Kut. You can use as the scaffold for building Kut app.
 
 ```bash
 # clone from github
@@ -12,7 +12,3 @@ npm i
 # pack and serve locally at port 1234
 npm start
 ```
-
-# License
-
-[MIT](https://github.com/Siubaak/kut/blob/master/LICENSE)
