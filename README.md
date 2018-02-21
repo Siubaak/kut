@@ -8,7 +8,22 @@ Take my hat off to [React](https://github.com/facebook/react), especially to the
 
 ## Usage
 
-If you use webpack or parcel for module-based development, you could install from npm and import it. If you use babel to transform the jsx, it's better to import as React, so you don't need to change the config for babel/preset-react.
+You can just copy the demo as a template, and build your app based on it.
+
+```bash
+# clone from github
+git clone https://github.com/Siubaak/kut
+# cp the demo as a template
+cp kut/demo my-kut-app
+# cd into the demo directory
+cd my-kut-app
+# install all dependencies
+npm i
+# pack and serve locally at port 1234
+npm start
+```
+
+If you use webpack or parcel for module-based development, you could install from npm and import it. If you use Babel to transform the JSX, it's better to import as React, so you don't need to change the config for babel/preset-react.
 
 Install from npm.
 
@@ -48,12 +63,12 @@ Just see [https://siubaak.github.io/kut](https://siubaak.github.io/kut)
 
 ## Development
 
-If you want to contibute to Kut. Just clone it down, develop on it and pull request.
+If you want to contibute to Kut, just clone it down, develop on it and pull request.
 
 ```bash
 # clone from git
 git clone https://github.com/Siubaak/kut
-# enter the directory
+# cd into the kut directory
 cd kut
 # install all dependencies
 npm i

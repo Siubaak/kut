@@ -7,7 +7,7 @@ This is the [home page](https://siubaak.github.io/kut) of Kut. You can use as th
 git clone https://github.com/Siubaak/kut
 # cd into the demo directory
 cd kut/demo
-# install dependencies
+# install all dependencies
 npm i
 # pack and serve locally at port 1234
 npm start

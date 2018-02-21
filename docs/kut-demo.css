@@ -228,6 +228,7 @@
   border-top: 1px solid #0f2540;
 }
 .Footer {
+  margin-top: 80px;
   height: 96px;
   display: -webkit-box;
   display: -ms-flexbox;

@@ -71,7 +71,7 @@ require = (function (modules, cache, entry) {
 
   // Override the current require with this new one
   return newRequire;
-})({19:[function(require,module,exports) {
+})({34:[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -91,7 +91,7 @@ eventHandlers.forEach(function (eventHandler) {
     exports.KUT_SUPPORTED_EVENT_HANDLERS[eventHandler] = true;
 });
 //# sourceMappingURL=constant.js.map
-},{}],11:[function(require,module,exports) {
+},{}],25:[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -118,7 +118,7 @@ function createElement(type, config) {
 }
 exports.createElement = createElement;
 //# sourceMappingURL=element.js.map
-},{"./constant":19}],20:[function(require,module,exports) {
+},{"./constant":34}],31:[function(require,module,exports) {
 "use strict";
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -195,7 +195,7 @@ function getStyleString(style) {
 }
 exports.getStyleString = getStyleString;
 //# sourceMappingURL=util.js.map
-},{"./constant":19}],12:[function(require,module,exports) {
+},{"./constant":34}],26:[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -231,7 +231,7 @@ var Component = function () {
 }();
 exports.Component = Component;
 //# sourceMappingURL=component.js.map
-},{"./util":20}],27:[function(require,module,exports) {
+},{"./util":31}],36:[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -377,7 +377,7 @@ function patch(parentId, patches) {
 }
 exports.patch = patch;
 //# sourceMappingURL=diff.js.map
-},{"./renderer":13,"./util":20}],28:[function(require,module,exports) {
+},{"./renderer":27,"./util":31}],37:[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -416,7 +416,7 @@ function removeAllEventListener(kutId) {
 }
 exports.removeAllEventListener = removeAllEventListener;
 //# sourceMappingURL=event.js.map
-},{"./constant":19,"./util":20}],21:[function(require,module,exports) {
+},{"./constant":34,"./util":31}],35:[function(require,module,exports) {
 "use strict";
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -640,7 +640,7 @@ var ComponentInstance = function () {
 }();
 exports.ComponentInstance = ComponentInstance;
 //# sourceMappingURL=instance.js.map
-},{"./renderer":13,"./diff":27,"./constant":19,"./event":28,"./util":20}],13:[function(require,module,exports) {
+},{"./renderer":27,"./diff":36,"./constant":34,"./event":37,"./util":31}],27:[function(require,module,exports) {
 "use strict";
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -672,7 +672,7 @@ function render(element, container) {
 }
 exports.render = render;
 //# sourceMappingURL=renderer.js.map
-},{"./component":12,"./instance":21}],9:[function(require,module,exports) {
+},{"./component":26,"./instance":35}],18:[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -689,11 +689,11 @@ if (window) {
 }
 exports.default = Kut;
 //# sourceMappingURL=kut.js.map
-},{"./element":11,"./component":12,"./renderer":13}],5:[function(require,module,exports) {
+},{"./element":25,"./component":26,"./renderer":27}],11:[function(require,module,exports) {
 'use strict';
 
 module.exports = require('./dist/lib/kut.js');
-},{"./dist/lib/kut.js":9}],10:[function(require,module,exports) {
+},{"./dist/lib/kut.js":18}],19:[function(require,module,exports) {
 var bundleURL = null;
 function getBundleURLCached() {
   if (!bundleURL) {
@@ -723,7 +723,7 @@ function getBaseURL(url) {
 
 exports.getBundleURL = getBundleURLCached;
 exports.getBaseURL = getBaseURL;
-},{}],7:[function(require,module,exports) {
+},{}],16:[function(require,module,exports) {
 var bundle = require('./bundle-url');
 
 function updateLink(link) {
@@ -754,13 +754,13 @@ function reloadCSS() {
 }
 
 module.exports = reloadCSS;
-},{"./bundle-url":10}],22:[function(require,module,exports) {
+},{"./bundle-url":19}],33:[function(require,module,exports) {
 
         var reloadCSS = require('_css_loader');
         module.hot.dispose(reloadCSS);
         module.hot.accept(reloadCSS);
       
-},{"_css_loader":7}],14:[function(require,module,exports) {
+},{"_css_loader":16}],23:[function(require,module,exports) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -830,13 +830,13 @@ var Banner = function (_React$Component) {
 }(_index2.default.Component);
 
 exports.default = Banner;
-},{"../../../index":5,"./Banner.less":22}],23:[function(require,module,exports) {
+},{"../../../index":11,"./Banner.less":33}],30:[function(require,module,exports) {
 
         var reloadCSS = require('_css_loader');
         module.hot.dispose(reloadCSS);
         module.hot.accept(reloadCSS);
       
-},{"_css_loader":7}],15:[function(require,module,exports) {
+},{"_css_loader":16}],24:[function(require,module,exports) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -890,13 +890,13 @@ var Nav = function (_React$Component) {
 }(_index2.default.Component);
 
 exports.default = Nav;
-},{"../../../index":5,"./Nav.less":23}],24:[function(require,module,exports) {
+},{"../../../index":11,"./Nav.less":30}],28:[function(require,module,exports) {
 
         var reloadCSS = require('_css_loader');
         module.hot.dispose(reloadCSS);
         module.hot.accept(reloadCSS);
       
-},{"_css_loader":7}],16:[function(require,module,exports) {
+},{"_css_loader":16}],20:[function(require,module,exports) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -949,13 +949,13 @@ var Content = function (_React$Component) {
 }(_index2.default.Component);
 
 exports.default = Content;
-},{"../../../index":5,"./Content.less":24}],26:[function(require,module,exports) {
+},{"../../../index":11,"./Content.less":28}],32:[function(require,module,exports) {
 
         var reloadCSS = require('_css_loader');
         module.hot.dispose(reloadCSS);
         module.hot.accept(reloadCSS);
       
-},{"_css_loader":7}],17:[function(require,module,exports) {
+},{"_css_loader":16}],21:[function(require,module,exports) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1089,13 +1089,13 @@ var Demo = function (_React$Component) {
 }(_index2.default.Component);
 
 exports.default = Demo;
-},{"../../../index":5,"./Demo.less":26}],25:[function(require,module,exports) {
+},{"../../../index":11,"./Demo.less":32}],29:[function(require,module,exports) {
 
         var reloadCSS = require('_css_loader');
         module.hot.dispose(reloadCSS);
         module.hot.accept(reloadCSS);
       
-},{"_css_loader":7}],18:[function(require,module,exports) {
+},{"_css_loader":16}],22:[function(require,module,exports) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1146,13 +1146,13 @@ var Footer = function (_React$Component) {
 }(_index2.default.Component);
 
 exports.default = Footer;
-},{"../../../index":5,"./Footer.less":25}],8:[function(require,module,exports) {
+},{"../../../index":11,"./Footer.less":29}],17:[function(require,module,exports) {
 
         var reloadCSS = require('_css_loader');
         module.hot.dispose(reloadCSS);
         module.hot.accept(reloadCSS);
       
-},{"_css_loader":7}],6:[function(require,module,exports) {
+},{"_css_loader":16}],12:[function(require,module,exports) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1400,13 +1400,13 @@ var App = function (_React$Component) {
 }(_index2.default.Component);
 
 exports.default = App;
-},{"../index":5,"./components/Banner":14,"./components/Nav":15,"./components/Content":16,"./components/Demo":17,"./components/Footer":18,"./App.less":8}],4:[function(require,module,exports) {
+},{"../index":11,"./components/Banner":23,"./components/Nav":24,"./components/Content":20,"./components/Demo":21,"./components/Footer":22,"./App.less":17}],10:[function(require,module,exports) {
 
         var reloadCSS = require('_css_loader');
         module.hot.dispose(reloadCSS);
         module.hot.accept(reloadCSS);
       
-},{"_css_loader":7}],3:[function(require,module,exports) {
+},{"_css_loader":16}],7:[function(require,module,exports) {
 'use strict';
 
 var _index = require('../index');
@@ -1422,7 +1422,7 @@ require('./index.less');
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 _index2.default.render(_index2.default.createElement(_App2.default, null), document.getElementById('root'));
-},{"../index":5,"./App":6,"./index.less":4}],29:[function(require,module,exports) {
+},{"../index":11,"./App":12,"./index.less":10}],38:[function(require,module,exports) {
 
 var global = (1, eval)('this');
 var OldModule = module.bundle.Module;
@@ -1444,7 +1444,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = '' || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + '51771' + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + '53284' + '/');
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
 
@@ -1545,5 +1545,5 @@ function hmrAccept(bundle, id) {
     return hmrAccept(global.require, id);
   });
 }
-},{}]},{},[29,3])
-//# sourceMappingURL=./kut-demo.map
+},{}]},{},[38,7])
+//# sourceMappingURL=kut-demo.map
