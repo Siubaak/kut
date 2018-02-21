@@ -40,6 +40,18 @@ export function createElement(
         props[prop] = config[prop]
       }
     }
+    if (type && (type as typeof Component).defaultProps) {
+      const defaultProps: KutProps = (type as typeof Component).defaultProps
+      for (let prop in defaultProps) {
+        if (
+          Object.hasOwnProperty.call(defaultProps, prop)
+          && !KUT_RESERVED_PROPS[prop]
+          && props[prop] === undefined
+        ) {
+          props[prop] = defaultProps[prop]
+        }
+      }
+    }
   }
   return { type, key, props }
 }

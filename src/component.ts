@@ -7,6 +7,7 @@ import { assign } from './util'
 export class Component {
   state: any
   props: KutProps
+  static defaultProps: KutProps
   update: (nextElement: KutChild, nextState?: any) => void
 
   constructor(props: KutProps) {
