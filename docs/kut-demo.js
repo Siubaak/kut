@@ -71,7 +71,7 @@ require = (function (modules, cache, entry) {
 
   // Override the current require with this new one
   return newRequire;
-})({29:[function(require,module,exports) {
+})({26:[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -91,7 +91,7 @@ eventHandlers.forEach(function (eventHandler) {
     exports.KUT_SUPPORTED_EVENT_HANDLERS[eventHandler] = true;
 });
 //# sourceMappingURL=constant.js.map
-},{}],21:[function(require,module,exports) {
+},{}],22:[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -118,7 +118,7 @@ function createElement(type, config) {
 }
 exports.createElement = createElement;
 //# sourceMappingURL=element.js.map
-},{"./constant":29}],22:[function(require,module,exports) {
+},{"./constant":26}],23:[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -154,7 +154,7 @@ var Component = function () {
 }();
 exports.Component = Component;
 //# sourceMappingURL=component.js.map
-},{}],32:[function(require,module,exports) {
+},{}],33:[function(require,module,exports) {
 "use strict";
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -211,7 +211,7 @@ function getStyleString(style) {
 }
 exports.getStyleString = getStyleString;
 //# sourceMappingURL=util.js.map
-},{"./constant":29}],31:[function(require,module,exports) {
+},{"./constant":26}],31:[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -357,7 +357,7 @@ function patch(parentId, patches) {
 }
 exports.patch = patch;
 //# sourceMappingURL=diff.js.map
-},{"./renderer":23,"./util":32}],33:[function(require,module,exports) {
+},{"./renderer":24,"./util":33}],32:[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -396,7 +396,7 @@ function removeAllEventListener(kutId) {
 }
 exports.removeAllEventListener = removeAllEventListener;
 //# sourceMappingURL=event.js.map
-},{"./constant":29,"./util":32}],30:[function(require,module,exports) {
+},{"./constant":26,"./util":33}],27:[function(require,module,exports) {
 "use strict";
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -620,7 +620,7 @@ var ComponentInstance = function () {
 }();
 exports.ComponentInstance = ComponentInstance;
 //# sourceMappingURL=instance.js.map
-},{"./renderer":23,"./diff":31,"./constant":29,"./event":33,"./util":32}],23:[function(require,module,exports) {
+},{"./renderer":24,"./diff":31,"./constant":26,"./event":32,"./util":33}],24:[function(require,module,exports) {
 "use strict";
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -647,7 +647,7 @@ function render(element, container) {
 }
 exports.render = render;
 //# sourceMappingURL=renderer.js.map
-},{"./component":22,"./instance":30}],14:[function(require,module,exports) {
+},{"./component":23,"./instance":27}],14:[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -664,7 +664,7 @@ if (window) {
 }
 exports.default = Kut;
 //# sourceMappingURL=kut.js.map
-},{"./element":21,"./component":22,"./renderer":23}],7:[function(require,module,exports) {
+},{"./element":22,"./component":23,"./renderer":24}],7:[function(require,module,exports) {
 'use strict';
 
 module.exports = require('./dist/lib/kut.js');
@@ -729,7 +729,7 @@ function reloadCSS() {
 }
 
 module.exports = reloadCSS;
-},{"./bundle-url":20}],26:[function(require,module,exports) {
+},{"./bundle-url":20}],28:[function(require,module,exports) {
 
         var reloadCSS = require('_css_loader');
         module.hot.dispose(reloadCSS);
@@ -805,7 +805,7 @@ var Banner = function (_React$Component) {
 }(_index2.default.Component);
 
 exports.default = Banner;
-},{"../../../index":7,"./Banner.less":26}],24:[function(require,module,exports) {
+},{"../../../index":7,"./Banner.less":28}],21:[function(require,module,exports) {
 
         var reloadCSS = require('_css_loader');
         module.hot.dispose(reloadCSS);
@@ -865,13 +865,13 @@ var Nav = function (_React$Component) {
 }(_index2.default.Component);
 
 exports.default = Nav;
-},{"../../../index":7,"./Nav.less":24}],25:[function(require,module,exports) {
+},{"../../../index":7,"./Nav.less":21}],29:[function(require,module,exports) {
 
         var reloadCSS = require('_css_loader');
         module.hot.dispose(reloadCSS);
         module.hot.accept(reloadCSS);
       
-},{"_css_loader":12}],18:[function(require,module,exports) {
+},{"_css_loader":12}],17:[function(require,module,exports) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -924,13 +924,13 @@ var Content = function (_React$Component) {
 }(_index2.default.Component);
 
 exports.default = Content;
-},{"../../../index":7,"./Content.less":25}],27:[function(require,module,exports) {
+},{"../../../index":7,"./Content.less":29}],25:[function(require,module,exports) {
 
         var reloadCSS = require('_css_loader');
         module.hot.dispose(reloadCSS);
         module.hot.accept(reloadCSS);
       
-},{"_css_loader":12}],17:[function(require,module,exports) {
+},{"_css_loader":12}],18:[function(require,module,exports) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -956,8 +956,6 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var uniqueKey = 0;
-var holding = false;
-var pos = { x: 0, y: 0 };
 
 var Demo = function (_React$Component) {
   _inherits(Demo, _React$Component);
@@ -1009,33 +1007,6 @@ var Demo = function (_React$Component) {
       this.setState({ todos: todos });
     }
   }, {
-    key: 'handleHold',
-    value: function handleHold(e) {
-      if (e.target.tagName.toLowerCase() === 'li') {
-        holding = true;
-        pos.x = e.x;
-        pos.y = e.y;
-        e.target.style.position = 'relative';
-      }
-    }
-  }, {
-    key: 'handleMove',
-    value: function handleMove(e) {
-      if (holding) {
-        e.target.style.left = e.x - pos.x;
-        e.target.style.top = e.y - pos.y;
-        console.log(e.x, e.y);
-      }
-    }
-  }, {
-    key: 'handleRelease',
-    value: function handleRelease(e) {
-      e.target.style.position = '';
-      e.target.style.left = 0;
-      e.target.style.top = 0;
-      holding = false;
-    }
-  }, {
     key: 'render',
     value: function render() {
       var _this2 = this;
@@ -1069,12 +1040,7 @@ var Demo = function (_React$Component) {
           this.state.todos.length ? this.state.todos.map(function (todo, index) {
             return _index2.default.createElement(
               'li',
-              { 'class': 'item', key: todo.key,
-                style: { left: '50px' },
-                onMouseDown: _this2.handleHold.bind(_this2),
-                onMouseMove: _this2.handleMove.bind(_this2),
-                onMouseUp: _this2.handleRelease.bind(_this2)
-              },
+              { 'class': 'item', key: todo.key },
               todo.item,
               _index2.default.createElement(
                 'button',
@@ -1098,7 +1064,7 @@ var Demo = function (_React$Component) {
 }(_index2.default.Component);
 
 exports.default = Demo;
-},{"../../../index":7,"./Demo.less":27}],28:[function(require,module,exports) {
+},{"../../../index":7,"./Demo.less":25}],30:[function(require,module,exports) {
 
         var reloadCSS = require('_css_loader');
         module.hot.dispose(reloadCSS);
@@ -1155,7 +1121,7 @@ var Footer = function (_React$Component) {
 }(_index2.default.Component);
 
 exports.default = Footer;
-},{"../../../index":7,"./Footer.less":28}],13:[function(require,module,exports) {
+},{"../../../index":7,"./Footer.less":30}],13:[function(require,module,exports) {
 
         var reloadCSS = require('_css_loader');
         module.hot.dispose(reloadCSS);
@@ -1253,7 +1219,7 @@ var App = function (_React$Component) {
           ),
           _index2.default.createElement(
             'a',
-            { className: { tab: true, color: this.state.fix }, href: '#docu' },
+            { className: { tab: true, color: this.state.fix }, href: '#docs' },
             '\u6587\u6863'
           )
         ),
@@ -1272,7 +1238,7 @@ var App = function (_React$Component) {
             _index2.default.createElement(
               'p',
               { 'class': 'desc indent' },
-              'Kut\uFF0C\u4E00\u4E2A\u7B80\u5355\u7684React-Like\u7684\u524D\u7AEF\u89C6\u56FE\u6E32\u67D3\u5E93\uFF0C\u662F\u5728\u5B66\u4E60React\u6E90\u7801\u65F6\u9020\u7684\u8F6E\u5B50\u3002\u76EE\u524DKut\u652F\u6301\u7684\u65B9\u6CD5\u4EC5\u6709\u4E24\u4E2A\uFF0C\u5373createElement\u3001render\uFF0C\u540C\u65F6\u4E5F\u652F\u6301\u7EC4\u4EF6\u5F00\u53D1\uFF0C\u5373Component\u7C7B\u3002\u5DF2\u7ECF\u80FD\u6EE1\u8DB3\u90E8\u5206\u5F00\u53D1\u9700\u6C42\uFF0C\u8FD9\u4E2A\u7F51\u9875\u672C\u8EAB\u5C31\u662F\u57FA\u4E8EKut\u6784\u5EFA\u7684\uFF0C\u6027\u80FD\u8FD8\u884C\uFF0C\u4E0D\u8FC7\u6682\u65F6\u4E0D\u5EFA\u8BAE\u7528\u4E8E\u751F\u4EA7\u73AF\u5883\u3002'
+              'Kut\uFF0C\u4E00\u4E2A\u7B80\u5355\u7684React-Like\u7684\u524D\u7AEF\u89C6\u56FE\u6E32\u67D3\u5E93\uFF0C\u662F\u5728\u5B66\u4E60React\u6E90\u7801\u65F6\u9020\u7684\u8F6E\u5B50\u3002\u76EE\u524DKut\u652F\u6301\u7684\u65B9\u6CD5\u4EC5\u6709\u4E24\u4E2A\uFF0C\u5373createElement\u3001render\uFF0C\u540C\u65F6\u4E5F\u652F\u6301\u7EC4\u4EF6\u5316\u5F00\u53D1\uFF0C\u5373Component\u7C7B\u3002\u5DF2\u7ECF\u80FD\u6EE1\u8DB3\u90E8\u5206\u5F00\u53D1\u9700\u6C42\uFF0C\u8FD9\u4E2A\u7F51\u9875\u672C\u8EAB\u5C31\u662F\u57FA\u4E8EKut\u6784\u5EFA\u7684\uFF0C\u6027\u80FD\u8FD8\u884C\u3002'
             ),
             _index2.default.createElement(
               'p',
@@ -1283,12 +1249,12 @@ var App = function (_React$Component) {
                 { href: 'https://zhuanlan.zhihu.com/p/20346379' },
                 '\u8FD9\u7BC7\u6587\u7AE0'
               ),
-              '\u8BB2\u5F97\u5F88\u597D\uFF0C\u6211\u5C31\u4E0D\u8D58\u8FF0\u4E86\u3002\u5BF9\u4E8E\u628A\u5143\u7D20\u4ECE\u5217\u8868\u4E2D\u5E95\u90E8\u632A\u5230\u9876\u90E8\u7684\u505A\u6CD5\uFF0CReact\u7684\u524D\u5411diff\u66F4\u65B0\u64CD\u4F5C\u8FC7\u591A\u4F1A\u5F71\u54CD\u6027\u80FD\uFF0C\u800CKut\u5F15\u5165\u4E86\u540E\u5411diff\uFF0C\u5E76\u53D6\u524D\u5411diff\u548C\u540E\u5411diff\u7684\u8F83\u4F18\u7ED3\u679C\u8FDB\u884C\u66F4\u65B0\uFF0C\u4ECE\u800C\u63D0\u5347\u6027\u80FD\u3002\u5927\u5BB6\u53EF\u4EE5\u5BF9\u793A\u4F8B\u4E2D\u7684\u5F85\u529E\u4E8B\u9879\u8FDB\u884C\u6DFB\u52A0\u3001\u6253\u4E71\u3001\u62D6\u62FD\u6765\u4F53\u9A8C\u3002'
+              '\u8BB2\u5F97\u5F88\u597D\uFF0C\u6211\u5C31\u4E0D\u8D58\u8FF0\u4E86\u3002\u5BF9\u4E8E\u628A\u5143\u7D20\u4ECE\u5217\u8868\u4E2D\u5E95\u90E8\u632A\u5230\u9876\u90E8\u7684\u505A\u6CD5\uFF0CReact\u7684\u524D\u5411diff\u66F4\u65B0\u64CD\u4F5C\u8FC7\u591A\u4F1A\u5F71\u54CD\u6027\u80FD\uFF0C\u800CKut\u5F15\u5165\u4E86\u540E\u5411diff\uFF0C\u5E76\u53D6\u524D\u5411diff\u548C\u540E\u5411diff\u7684\u8F83\u4F18\u7ED3\u679C\u8FDB\u884C\u66F4\u65B0\uFF0C\u4ECE\u800C\u63D0\u5347\u6027\u80FD\u3002\u5927\u5BB6\u53EF\u4EE5\u5BF9\u793A\u4F8B\u4E2D\u7684\u5F85\u529E\u4E8B\u9879\u8FDB\u884C\u6DFB\u52A0\u3001\u6253\u4E71\u6765\u4F53\u9A8C\u3002'
             ),
             _index2.default.createElement(
               'p',
               { 'class': 'desc indent' },
-              '\u7531\u8877\u611F\u53F9\u4E00\u4E0BReact\u5B9E\u5728\u662F\u592A\u5F3A\u5927\u4E86\uFF0C\u7279\u522B\u662FFiber\u3002\u63A5\u4E0B\u6765\u6211\u4F1A\u6162\u6162\u7684\u5B8C\u5584Kut\uFF0C\u4EE5\u652F\u6301Context\u3001Portal\u7B49\u7279\u6027\u3002\u6B22\u8FCE\u5927\u5BB6pull request\u548Cstar\u3002'
+              '\u7531\u8877\u611F\u53F9\u4E00\u4E0BReact\u5B9E\u5728\u662F\u592A\u5F3A\u5927\u4E86\uFF0C\u7279\u522B\u662FFiber\u3002\u63A5\u4E0B\u6765\u6211\u4F1A\u6162\u6162\u7684\u5B8C\u5584Kut\uFF0C\u4EE5\u652F\u6301Context\u3001Portal\u7B49\u7279\u6027\u3002\u6B22\u8FCE\u5927\u5BB6Pull Request\u548CStar\u3002'
             )
           ),
           _index2.default.createElement('div', { id: 'demo', className: 'anchor' }),
@@ -1302,7 +1268,7 @@ var App = function (_React$Component) {
             ),
             _index2.default.createElement(_Demo2.default, null)
           ),
-          _index2.default.createElement('div', { id: 'docu', className: 'anchor' }),
+          _index2.default.createElement('div', { id: 'docs', className: 'anchor' }),
           _index2.default.createElement(
             'div',
             { className: 'item' },
@@ -1342,7 +1308,7 @@ var App = function (_React$Component) {
 }(_index2.default.Component);
 
 exports.default = App;
-},{"../index":7,"./components/Banner":15,"./components/Nav":16,"./components/Content":18,"./components/Demo":17,"./components/Footer":19,"./App.less":13}],6:[function(require,module,exports) {
+},{"../index":7,"./components/Banner":15,"./components/Nav":16,"./components/Content":17,"./components/Demo":18,"./components/Footer":19,"./App.less":13}],6:[function(require,module,exports) {
 
         var reloadCSS = require('_css_loader');
         module.hot.dispose(reloadCSS);
@@ -1364,7 +1330,7 @@ require('./index.less');
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 _index2.default.render(_index2.default.createElement(_App2.default, null), document.getElementById('root'));
-},{"../index":7,"./App":8,"./index.less":6}],38:[function(require,module,exports) {
+},{"../index":7,"./App":8,"./index.less":6}],34:[function(require,module,exports) {
 
 var global = (1, eval)('this');
 var OldModule = module.bundle.Module;
@@ -1386,7 +1352,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = '' || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + '49572' + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + '55517' + '/');
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
 
@@ -1487,5 +1453,5 @@ function hmrAccept(bundle, id) {
     return hmrAccept(global.require, id);
   });
 }
-},{}]},{},[38,4])
+},{}]},{},[34,4])
 //# sourceMappingURL=./kut-demo.map

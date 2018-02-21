@@ -42,7 +42,7 @@ Kut.render(node, document.getElementById('root'))
 
 ## Demo & Docs
 
-I've made a [home page](https://siubaak.github.io/kut) for Kut, built with Kut. You can find a TodoList demo and the docs for Kut.
+I've made a home page for Kut, built with Kut. You can find a TodoList demo and the docs for Kut.
 
 Just see [https://siubaak.github.io/kut](https://siubaak.github.io/kut)
 
