@@ -27,9 +27,14 @@ export function instantiate(element: KutChild) {
  */
 export function render(
   element: KutChild,
-  container: HTMLElement,
-): void {
+  container?: HTMLElement,
+): void | string {
   const instance: KutInstance = instantiate(element)
   const rootId: string = Math.random().toString(36).substring(2, 4)
-  container.innerHTML = instance.mount(rootId)
+  const markup: string = instance.mount(rootId)
+  if (container) {
+    container.innerHTML = markup
+  } else {
+    return markup
+  }
 }

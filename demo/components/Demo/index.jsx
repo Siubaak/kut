@@ -9,11 +9,11 @@ class Demo extends React.Component {
     this.state = {
       input: '',
       todos: [
-        { key: -1, item: '继续学习React源码' },
-        { key: -2, item: '笔记本要清灰了' },
-        { key: -3, item: '完成课程论文第二章' },
-        { key: -4, item: '买洗发水和沐浴露' },
-        { key: -5, item: '补番《紫罗兰永恒公园》' },
+        { key: -1, item: '给笔记本电脑清灰' },
+        { key: -2, item: '继续学习React源码' },
+        { key: -3, item: '补番《紫罗兰永恒公园》' },
+        { key: -4, item: '完成课程论文第二章' },
+        { key: -5, item: '买洗发水和沐浴露' },
       ],
     }
   }

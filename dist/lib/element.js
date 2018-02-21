@@ -2,12 +2,11 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var constant_1 = require("./constant");
 function createElement(type, config) {
-    var rawChildren = [];
+    var children = [];
     for (var _i = 2; _i < arguments.length; _i++) {
-        rawChildren[_i - 2] = arguments[_i];
+        children[_i - 2] = arguments[_i];
     }
-    var children = rawChildren.length
-        ? [].concat.apply([], rawChildren) : [''];
+    children = children.length ? [].concat.apply([], children) : [''];
     var props = { children: children };
     var key = null;
     if (config) {

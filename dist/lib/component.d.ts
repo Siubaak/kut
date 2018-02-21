@@ -9,7 +9,6 @@ export declare class Component {
     render(props?: KutProps): KutElement;
     componentWillMount(): void;
     componentDidMount(): void;
-    componentWillReceiveProps(nextProps: KutProps): void;
     shouldComponentUpdate(nextProps: KutProps, nextState: any): boolean;
     componentWillUpdate(nextProps: KutProps, nextState: any): void;
     componentDidUpdate(): void;

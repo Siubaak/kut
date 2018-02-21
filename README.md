@@ -67,6 +67,13 @@ npm run webpack
 npm run build
 ```
 
+## References
+
+- [React - A declarative, efficient, and flexible JavaScript library for building user interfaces](https://github.com/facebook/react)
+- [React-Tiny - Tiny implementation of React in flow](https://github.com/CodeFalling/react-tiny)
+- [Anu - the React16-compat mini library](https://github.com/RubyLouvre/anu)
+- [Luy - a React-like framework](https://github.com/215566435/Luy)
+
 ## License
 
 Kut is licensed under the [MIT](https://github.com/Siubaak/kut/blob/master/LICENSE).

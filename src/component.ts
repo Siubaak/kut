@@ -47,7 +47,7 @@ export class Component {
   // 一堆生命周期函数
   componentWillMount() {}
   componentDidMount() {}
-  componentWillReceiveProps(nextProps: KutProps) {}
+  // componentWillReceiveProps(nextProps: KutProps) {}
   shouldComponentUpdate(nextProps: KutProps, nextState: any) {
     return true
   }

@@ -23,13 +23,10 @@ export interface KutElement {
 export function createElement(
   type: string | typeof Component,
   config: any,
-  ...rawChildren: (KutChild | KutChild[])[],
+  ...children: (KutChild | KutChild[])[],
 ): KutElement {
-  const children: KutChild[] =
-    rawChildren.length
-    ? [].concat(...rawChildren)
-    : ['']
-  const props: KutProps = { children }
+  children = children.length ? [].concat(...children) : ['']
+  const props: KutProps = { children: children as KutChild[] }
   let key: string = null
   if (config) {
     if (config.key != null) {

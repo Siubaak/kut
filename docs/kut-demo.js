@@ -71,7 +71,7 @@ require = (function (modules, cache, entry) {
 
   // Override the current require with this new one
   return newRequire;
-})({26:[function(require,module,exports) {
+})({19:[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -91,17 +91,17 @@ eventHandlers.forEach(function (eventHandler) {
     exports.KUT_SUPPORTED_EVENT_HANDLERS[eventHandler] = true;
 });
 //# sourceMappingURL=constant.js.map
-},{}],22:[function(require,module,exports) {
+},{}],11:[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var constant_1 = require("./constant");
 function createElement(type, config) {
-    var rawChildren = [];
+    var children = [];
     for (var _i = 2; _i < arguments.length; _i++) {
-        rawChildren[_i - 2] = arguments[_i];
+        children[_i - 2] = arguments[_i];
     }
-    var children = rawChildren.length ? [].concat.apply([], rawChildren) : [''];
+    children = children.length ? [].concat.apply([], children) : [''];
     var props = { children: children };
     var key = null;
     if (config) {
@@ -118,49 +118,33 @@ function createElement(type, config) {
 }
 exports.createElement = createElement;
 //# sourceMappingURL=element.js.map
-},{"./constant":26}],23:[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var Component = function () {
-    function Component(props) {
-        this.state = {};
-        this.props = props;
-        this.update = function (nextElement, nextState) {};
-    }
-    Component.prototype.setState = function (state) {
-        this.state = Object.assign({}, this.state, state);
-        this.update(null, this.state);
-    };
-    Component.prototype.forceUpdate = function () {
-        this.update(null, this.state);
-    };
-    Component.prototype.render = function (props) {
-        if (props === void 0) {
-            props = this.props;
-        }
-        return null;
-    };
-    Component.prototype.componentWillMount = function () {};
-    Component.prototype.componentDidMount = function () {};
-    Component.prototype.componentWillReceiveProps = function (nextProps) {};
-    Component.prototype.shouldComponentUpdate = function (nextProps, nextState) {
-        return true;
-    };
-    Component.prototype.componentWillUpdate = function (nextProps, nextState) {};
-    Component.prototype.componentDidUpdate = function () {};
-    Component.prototype.componentWillUnmount = function () {};
-    return Component;
-}();
-exports.Component = Component;
-//# sourceMappingURL=component.js.map
-},{}],33:[function(require,module,exports) {
+},{"./constant":19}],20:[function(require,module,exports) {
 "use strict";
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var constant_1 = require("./constant");
+function assign() {
+    var objects = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        objects[_i] = arguments[_i];
+    }
+    if (objects.length === 0) {
+        return null;
+    } else {
+        var obj = objects[0];
+        for (var i = 1; i < objects.length; ++i) {
+            for (var key in objects[i]) {
+                if (Object.hasOwnProperty.call(objects[i], key)) {
+                    obj[key] = objects[i][key];
+                }
+            }
+        }
+        return obj;
+    }
+}
+exports.assign = assign;
 function getParentID(childID) {
     var regex = /[:]\w+$/;
     return regex.test(childID) && childID.replace(regex, '');
@@ -211,7 +195,43 @@ function getStyleString(style) {
 }
 exports.getStyleString = getStyleString;
 //# sourceMappingURL=util.js.map
-},{"./constant":26}],31:[function(require,module,exports) {
+},{"./constant":19}],12:[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var util_1 = require("./util");
+var Component = function () {
+    function Component(props) {
+        this.state = {};
+        this.props = props;
+        this.update = function (nextElement, nextState) {};
+    }
+    Component.prototype.setState = function (state) {
+        this.state = util_1.assign({}, this.state, state);
+        this.update(null, this.state);
+    };
+    Component.prototype.forceUpdate = function () {
+        this.update(null, this.state);
+    };
+    Component.prototype.render = function (props) {
+        if (props === void 0) {
+            props = this.props;
+        }
+        return null;
+    };
+    Component.prototype.componentWillMount = function () {};
+    Component.prototype.componentDidMount = function () {};
+    Component.prototype.shouldComponentUpdate = function (nextProps, nextState) {
+        return true;
+    };
+    Component.prototype.componentWillUpdate = function (nextProps, nextState) {};
+    Component.prototype.componentDidUpdate = function () {};
+    Component.prototype.componentWillUnmount = function () {};
+    return Component;
+}();
+exports.Component = Component;
+//# sourceMappingURL=component.js.map
+},{"./util":20}],27:[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -357,7 +377,7 @@ function patch(parentId, patches) {
 }
 exports.patch = patch;
 //# sourceMappingURL=diff.js.map
-},{"./renderer":24,"./util":33}],32:[function(require,module,exports) {
+},{"./renderer":13,"./util":20}],28:[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -396,7 +416,7 @@ function removeAllEventListener(kutId) {
 }
 exports.removeAllEventListener = removeAllEventListener;
 //# sourceMappingURL=event.js.map
-},{"./constant":26,"./util":33}],27:[function(require,module,exports) {
+},{"./constant":19,"./util":20}],21:[function(require,module,exports) {
 "use strict";
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -620,7 +640,7 @@ var ComponentInstance = function () {
 }();
 exports.ComponentInstance = ComponentInstance;
 //# sourceMappingURL=instance.js.map
-},{"./renderer":24,"./diff":31,"./constant":26,"./event":32,"./util":33}],24:[function(require,module,exports) {
+},{"./renderer":13,"./diff":27,"./constant":19,"./event":28,"./util":20}],13:[function(require,module,exports) {
 "use strict";
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -643,11 +663,16 @@ exports.instantiate = instantiate;
 function render(element, container) {
     var instance = instantiate(element);
     var rootId = Math.random().toString(36).substring(2, 4);
-    container.innerHTML = instance.mount(rootId);
+    var markup = instance.mount(rootId);
+    if (container) {
+        container.innerHTML = markup;
+    } else {
+        return markup;
+    }
 }
 exports.render = render;
 //# sourceMappingURL=renderer.js.map
-},{"./component":23,"./instance":27}],14:[function(require,module,exports) {
+},{"./component":12,"./instance":21}],9:[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -664,11 +689,11 @@ if (window) {
 }
 exports.default = Kut;
 //# sourceMappingURL=kut.js.map
-},{"./element":22,"./component":23,"./renderer":24}],7:[function(require,module,exports) {
+},{"./element":11,"./component":12,"./renderer":13}],5:[function(require,module,exports) {
 'use strict';
 
 module.exports = require('./dist/lib/kut.js');
-},{"./dist/lib/kut.js":14}],20:[function(require,module,exports) {
+},{"./dist/lib/kut.js":9}],10:[function(require,module,exports) {
 var bundleURL = null;
 function getBundleURLCached() {
   if (!bundleURL) {
@@ -698,7 +723,7 @@ function getBaseURL(url) {
 
 exports.getBundleURL = getBundleURLCached;
 exports.getBaseURL = getBaseURL;
-},{}],12:[function(require,module,exports) {
+},{}],7:[function(require,module,exports) {
 var bundle = require('./bundle-url');
 
 function updateLink(link) {
@@ -729,13 +754,13 @@ function reloadCSS() {
 }
 
 module.exports = reloadCSS;
-},{"./bundle-url":20}],28:[function(require,module,exports) {
+},{"./bundle-url":10}],22:[function(require,module,exports) {
 
         var reloadCSS = require('_css_loader');
         module.hot.dispose(reloadCSS);
         module.hot.accept(reloadCSS);
       
-},{"_css_loader":12}],15:[function(require,module,exports) {
+},{"_css_loader":7}],14:[function(require,module,exports) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -805,13 +830,13 @@ var Banner = function (_React$Component) {
 }(_index2.default.Component);
 
 exports.default = Banner;
-},{"../../../index":7,"./Banner.less":28}],21:[function(require,module,exports) {
+},{"../../../index":5,"./Banner.less":22}],23:[function(require,module,exports) {
 
         var reloadCSS = require('_css_loader');
         module.hot.dispose(reloadCSS);
         module.hot.accept(reloadCSS);
       
-},{"_css_loader":12}],16:[function(require,module,exports) {
+},{"_css_loader":7}],15:[function(require,module,exports) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -865,13 +890,13 @@ var Nav = function (_React$Component) {
 }(_index2.default.Component);
 
 exports.default = Nav;
-},{"../../../index":7,"./Nav.less":21}],29:[function(require,module,exports) {
+},{"../../../index":5,"./Nav.less":23}],24:[function(require,module,exports) {
 
         var reloadCSS = require('_css_loader');
         module.hot.dispose(reloadCSS);
         module.hot.accept(reloadCSS);
       
-},{"_css_loader":12}],17:[function(require,module,exports) {
+},{"_css_loader":7}],16:[function(require,module,exports) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -924,13 +949,13 @@ var Content = function (_React$Component) {
 }(_index2.default.Component);
 
 exports.default = Content;
-},{"../../../index":7,"./Content.less":29}],25:[function(require,module,exports) {
+},{"../../../index":5,"./Content.less":24}],26:[function(require,module,exports) {
 
         var reloadCSS = require('_css_loader');
         module.hot.dispose(reloadCSS);
         module.hot.accept(reloadCSS);
       
-},{"_css_loader":12}],18:[function(require,module,exports) {
+},{"_css_loader":7}],17:[function(require,module,exports) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -967,7 +992,7 @@ var Demo = function (_React$Component) {
 
     _this.state = {
       input: '',
-      todos: [{ key: -1, item: '继续学习React源码' }, { key: -2, item: '笔记本要清灰了' }, { key: -3, item: '完成课程论文第二章' }, { key: -4, item: '买洗发水和沐浴露' }, { key: -5, item: '补番《紫罗兰永恒公园》' }]
+      todos: [{ key: -1, item: '给笔记本电脑清灰' }, { key: -2, item: '继续学习React源码' }, { key: -3, item: '补番《紫罗兰永恒公园》' }, { key: -4, item: '完成课程论文第二章' }, { key: -5, item: '买洗发水和沐浴露' }]
     };
     return _this;
   }
@@ -1047,7 +1072,7 @@ var Demo = function (_React$Component) {
                 { 'class': 'del', onClick: function onClick() {
                     return _this2.handleDel(index);
                   } },
-                '\u5220\u9664'
+                '\u5B8C\u6210'
               )
             );
           }) : _index2.default.createElement(
@@ -1064,13 +1089,13 @@ var Demo = function (_React$Component) {
 }(_index2.default.Component);
 
 exports.default = Demo;
-},{"../../../index":7,"./Demo.less":25}],30:[function(require,module,exports) {
+},{"../../../index":5,"./Demo.less":26}],25:[function(require,module,exports) {
 
         var reloadCSS = require('_css_loader');
         module.hot.dispose(reloadCSS);
         module.hot.accept(reloadCSS);
       
-},{"_css_loader":12}],19:[function(require,module,exports) {
+},{"_css_loader":7}],18:[function(require,module,exports) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1121,13 +1146,13 @@ var Footer = function (_React$Component) {
 }(_index2.default.Component);
 
 exports.default = Footer;
-},{"../../../index":7,"./Footer.less":30}],13:[function(require,module,exports) {
+},{"../../../index":5,"./Footer.less":25}],8:[function(require,module,exports) {
 
         var reloadCSS = require('_css_loader');
         module.hot.dispose(reloadCSS);
         module.hot.accept(reloadCSS);
       
-},{"_css_loader":12}],8:[function(require,module,exports) {
+},{"_css_loader":7}],6:[function(require,module,exports) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1243,18 +1268,48 @@ var App = function (_React$Component) {
             _index2.default.createElement(
               'p',
               { 'class': 'desc indent' },
-              '\u7531\u4E8E\u662F\u53C2\u8003(\u6284)\u7684React\uFF0C\u6240\u4EE5Kut\u57FA\u672C\u7684\u5B9E\u73B0\u903B\u8F91\u548CReact\u662F\u76F8\u4F3C\u7684\uFF0CKut\u8FDB\u884C\u4E86\u6539\u8FDB\u7684\u4E00\u4E2A\u5730\u65B9\u662Fdiff\u7B97\u6CD5\u3002React\u7684diff\u7B97\u6CD5\u6211\u79F0\u5176\u4E3A\u524D\u5411diff\uFF0C',
+              '\u7531\u4E8E\u662F\u53C2\u8003\uFF08\u6284\uFF09\u7684React\uFF0C\u6240\u4EE5Kut\u57FA\u672C\u7684\u5B9E\u73B0\u903B\u8F91\u548CReact\u662F\u76F8\u4F3C\u7684\uFF0CKut\u8FDB\u884C\u4E86\u6539\u8FDB\u7684\u4E00\u4E2A\u5730\u65B9\u662Fdiff\u7B97\u6CD5\u3002React\u7684diff\u7B97\u6CD5\u6211\u79F0\u5176\u4E3A\u524D\u5411diff\uFF0C\u8FD9\u7BC7',
               _index2.default.createElement(
                 'a',
                 { href: 'https://zhuanlan.zhihu.com/p/20346379' },
-                '\u8FD9\u7BC7\u6587\u7AE0'
+                '\u6587\u7AE0'
               ),
-              '\u8BB2\u5F97\u5F88\u597D\uFF0C\u6211\u5C31\u4E0D\u8D58\u8FF0\u4E86\u3002\u5BF9\u4E8E\u628A\u5143\u7D20\u4ECE\u5217\u8868\u4E2D\u5E95\u90E8\u632A\u5230\u9876\u90E8\u7684\u505A\u6CD5\uFF0CReact\u7684\u524D\u5411diff\u66F4\u65B0\u64CD\u4F5C\u8FC7\u591A\u4F1A\u5F71\u54CD\u6027\u80FD\uFF0C\u800CKut\u5F15\u5165\u4E86\u540E\u5411diff\uFF0C\u5E76\u53D6\u524D\u5411diff\u548C\u540E\u5411diff\u7684\u8F83\u4F18\u7ED3\u679C\u8FDB\u884C\u66F4\u65B0\uFF0C\u4ECE\u800C\u63D0\u5347\u6027\u80FD\u3002\u5927\u5BB6\u53EF\u4EE5\u5BF9\u793A\u4F8B\u4E2D\u7684\u5F85\u529E\u4E8B\u9879\u8FDB\u884C\u6DFB\u52A0\u3001\u6253\u4E71\u6765\u4F53\u9A8C\u3002'
+              '\u8BB2\u5F97\u5F88\u597D\uFF0C\u6211\u5C31\u4E0D\u8D58\u8FF0\u4E86\u3002\u5BF9\u4E8E\u628A\u5143\u7D20\u4ECE\u5217\u8868\u4E2D\u5E95\u90E8\u632A\u5230\u9876\u90E8\u7684\u505A\u6CD5\uFF0CReact\u7684\u524D\u5411diff\u66F4\u65B0\u64CD\u4F5C\u8FC7\u591A\u4F1A\u5F71\u54CD\u6027\u80FD\uFF0C\u800CKut\u5F15\u5165\u4E86\u540E\u5411diff\uFF0C\u5E76\u53D6\u524D\u5411diff\u548C\u540E\u5411diff\u7684\u8F83\u4F18\u7ED3\u679C\u8FDB\u884C\u66F4\u65B0\uFF0C\u4ECE\u800C\u63D0\u5347\u6027\u80FD\uFF08\u540E\u9762\u53D1\u73B0\u6709\u4E9B\u9879\u76EE\u4E5F\u662F\u8FD9\u4E48\u505A\u7684\uFF09\u3002\u5927\u5BB6\u53EF\u4EE5\u5BF9\u793A\u4F8B\u4E2D\u7684\u5F85\u529E\u4E8B\u9879\u8FDB\u884C\u6DFB\u52A0\u3001\u6253\u4E71\u6765\u4F53\u9A8C\u3002'
             ),
             _index2.default.createElement(
               'p',
               { 'class': 'desc indent' },
-              '\u7531\u8877\u611F\u53F9\u4E00\u4E0BReact\u5B9E\u5728\u662F\u592A\u5F3A\u5927\u4E86\uFF0C\u7279\u522B\u662FFiber\u3002\u63A5\u4E0B\u6765\u6211\u4F1A\u6162\u6162\u7684\u5B8C\u5584Kut\uFF0C\u4EE5\u652F\u6301Context\u3001Portal\u7B49\u7279\u6027\u3002\u6B22\u8FCE\u5927\u5BB6Pull Request\u548CStar\u3002'
+              '\u7531\u8877\u611F\u53F9\u4E00\u4E0BReact\u5B9E\u5728\u662F\u592A\u5F3A\u5927\u4E86\uFF0C\u7279\u522B\u662FFiber\u3002\u63A5\u4E0B\u6765\u6211\u4F1A\u6162\u6162\u7684\u652F\u6301Context\u3001Portal\u7B49\u7279\u6027\u3002\u6B22\u8FCE\u5927\u5BB6Pull Request\u548CStar\u3002\u5B66\u4E60\u8FC7\u7A0B\u4E2D\u770B\u5230\u7684\u9879\u76EE\u6709',
+              _index2.default.createElement(
+                'a',
+                { href: 'https://github.com/facebook/react' },
+                'React'
+              ),
+              '\u3001',
+              _index2.default.createElement(
+                'a',
+                { href: 'https://github.com/CodeFalling/react-tiny' },
+                'React-Tiny'
+              ),
+              '\u3001',
+              _index2.default.createElement(
+                'a',
+                { href: 'https://github.com/RubyLouvre/anu' },
+                'Anu'
+              ),
+              '\u548C',
+              _index2.default.createElement(
+                'a',
+                { href: 'https://github.com/215566435/Luy' },
+                'Luy'
+              ),
+              '\uFF0C\u800C\u56FE\u6807\u662F',
+              _index2.default.createElement(
+                'a',
+                { href: 'http://www.iconfont.cn' },
+                'Iconfont'
+              ),
+              '\u4E0A\u968F\u624B\u641C\u7D22\u5F97\u5230\u7684\uFF0C\u8868\u793A\u611F\u8C22\u3002'
             )
           ),
           _index2.default.createElement('div', { id: 'demo', className: 'anchor' }),
@@ -1280,12 +1335,7 @@ var App = function (_React$Component) {
             _index2.default.createElement(
               'p',
               { 'class': 'desc indent' },
-              'Kut\u662F\u57FA\u4E8ETypeScript\u5F00\u53D1\u7684\uFF0C\u4E14\u81EA\u5E26\u4E86.d.ts\u6587\u4EF6\uFF0C\u56E0\u6B64VSCode\u6709\u826F\u597D\u7684\u667A\u80FD\u63D0\u9192\u3002\u5176\u5B9E\u7531\u4E8E\u662F\u53C2\u8003(\u6284)\u7684React\uFF0C\u6240\u4EE5\u63A5\u53E3\u7684\u7528\u6CD5\u57FA\u672C\u4E00\u81F4\u3002'
-            ),
-            _index2.default.createElement(
-              'h2',
-              { 'class': 'title' },
-              'Kut.Component'
+              'Kut\u662F\u57FA\u4E8ETypeScript\u5F00\u53D1\u7684\uFF0C\u4E14\u7F16\u8BD1\u6253\u5305\u6587\u4EF6\u81EA\u5E26\u58F0\u660E\uFF0C\u56E0\u6B64VSCode\u6709\u826F\u597D\u7684\u667A\u80FD\u63D0\u793A\u3002\u5176\u5B9E\u7531\u4E8E\u662F\u53C2\u8003\uFF08\u6284\uFF09\u7684React\uFF0C\u6240\u4EE5\u63A5\u53E3\u7684\u7528\u6CD5\u57FA\u672C\u4E00\u81F4\u3002'
             ),
             _index2.default.createElement(
               'h2',
@@ -1293,9 +1343,51 @@ var App = function (_React$Component) {
               'Kut.createElement'
             ),
             _index2.default.createElement(
+              'section',
+              { 'class': 'code' },
+              'function createElement(type, config, ...children): KutElement'
+            ),
+            _index2.default.createElement(
+              'p',
+              { 'class': 'desc indent' },
+              'KutElement\u7684\u5DE5\u5382\u51FD\u6570\u3002\u53C2\u6570\u4E3Atype\u3001config\u3001children\u3002\u5176\u4E2Dtype\u7C7B\u578B\u4E3Astring\u6216typeof Component\uFF0Cconfig\u7C7B\u578B\u4E3Aany\uFF0Cchildren\u7C7B\u578B\u4E3Astring[]\u6216number[]\u6216KutElement[]\u3002\u8FD4\u56DE\u503C\u4E3AKutElement\u5373Virtual DOM\u8282\u70B9\u5BF9\u8C61\u3002type\u53C2\u6570\u63A5\u53D7\u666E\u901A\u7684\u6587\u672C\u3001\u5185\u7F6EDOM\u7C7B\u578B\u5B57\u9762\u91CF\uFF08\u5982div\u3001h1\u7B49\uFF09\u548CKut.Component\u7EE7\u627F\u5B50\u7C7B\uFF1Bconfig\u53C2\u6570\u4E3AVirtual DOM\u8282\u70B9\u7684\u5C5E\u6027\uFF0C\u5305\u62EC\u552F\u4E00\u8BC6\u522Bkey\u3001\u7C7B\u540DclassName\u3001\u6837\u5F0Fstyle\u7B49\u7B49\u4EFB\u610F\u5C5E\u6027\uFF1Bchildren\u53C2\u6570\u4E3A\u8BE5\u8282\u70B9\u7684\u5B50\u8282\u70B9\u6570\u7EC4\uFF0C\u5143\u7D20\u4E3AKutElement\u3002\u82E5\u4F7F\u7528JSX\u4EE5\u53CABabel\u8FDB\u884C\u8F6C\u6362\u7684\u8BDD\u5C06\u4E0D\u9700\u8981\u624B\u52A8\u8C03\u7528\u8BE5\u65B9\u6CD5\u3002'
+            ),
+            _index2.default.createElement(
+              'h2',
+              { 'class': 'title' },
+              'Kut.Component'
+            ),
+            _index2.default.createElement(
+              'section',
+              { 'class': 'code' },
+              'class Component ',
+              '{',
+              ' constructor(props) ',
+              '{',
+              ' ',
+              '}',
+              ' ',
+              '}'
+            ),
+            _index2.default.createElement(
+              'p',
+              { 'class': 'desc indent' },
+              '\u7EC4\u4EF6\u7C7B\u57FA\u7C7B\u3002\u4E0EReact\u76F8\u540C\uFF0C\u8FDB\u884C\u7EC4\u4EF6\u5F00\u53D1\u65F6\u5FC5\u987B\u7EE7\u627F\u6B64\u7C7B\u3002\u76EE\u524D\u6682\u4E0D\u652F\u6301Context\u7279\u6027\uFF0C\u6545\u65E0\u6CD5\u4F7F\u7528React-Redux\uFF0C\u6784\u9020\u53C2\u6570\u4EC5\u6709props\uFF0C\u4E3AVirtual DOM\u7236\u8282\u70B9\u4F20\u5165\u5C5E\u6027\u3002\u76EE\u524D\u652F\u6301setState(state)\u548CforceUpdate()\u65B9\u6CD5\uFF0C\u4EE5\u53CA\u751F\u547D\u5468\u671F\u51FD\u6570componentWillMount()\u3001componentDidMount()\u3001shouldComponentUpdate(nextProps, nextState)\u3001componentWillUpdate(nextProps, nextState)\u3001componentDidUpdate()\u3001componentWillUnmount()\u3002'
+            ),
+            _index2.default.createElement(
               'h2',
               { 'class': 'title' },
               'Kut.render'
+            ),
+            _index2.default.createElement(
+              'section',
+              { 'class': 'code' },
+              'function render(element, container?): void | string'
+            ),
+            _index2.default.createElement(
+              'p',
+              { 'class': 'desc indent' },
+              '\u6E32\u67D3\u6302\u8F7D\u51FD\u6570\u3002\u53C2\u6570\u4E3Aelement\u3001container\u3002\u5176\u4E2Delement\u7C7B\u578B\u4E3Astring\u3001number\u6216KutElement\uFF0Ccontainer\u7C7B\u578B\u4E3AHTMLElement\uFF0C\u5373DOM\u8282\u70B9\u5B9E\u4F8B\u3002container\u53C2\u6570\u53EF\u9009\uFF0C\u63D0\u4F9B\u65F6\u5C06\u4F7F\u7528container.innerHTML\u8FDB\u884C\u6E32\u67D3\u6302\u8F7D\uFF0C\u7F3A\u7701\u65F6\u5C06\u8FD4\u56DE\u6E32\u67D3\u7684\u5B57\u7B26\u4E32\u3002'
             )
           )
         ),
@@ -1308,13 +1400,13 @@ var App = function (_React$Component) {
 }(_index2.default.Component);
 
 exports.default = App;
-},{"../index":7,"./components/Banner":15,"./components/Nav":16,"./components/Content":17,"./components/Demo":18,"./components/Footer":19,"./App.less":13}],6:[function(require,module,exports) {
+},{"../index":5,"./components/Banner":14,"./components/Nav":15,"./components/Content":16,"./components/Demo":17,"./components/Footer":18,"./App.less":8}],4:[function(require,module,exports) {
 
         var reloadCSS = require('_css_loader');
         module.hot.dispose(reloadCSS);
         module.hot.accept(reloadCSS);
       
-},{"_css_loader":12}],4:[function(require,module,exports) {
+},{"_css_loader":7}],3:[function(require,module,exports) {
 'use strict';
 
 var _index = require('../index');
@@ -1330,7 +1422,7 @@ require('./index.less');
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 _index2.default.render(_index2.default.createElement(_App2.default, null), document.getElementById('root'));
-},{"../index":7,"./App":8,"./index.less":6}],34:[function(require,module,exports) {
+},{"../index":5,"./App":6,"./index.less":4}],29:[function(require,module,exports) {
 
 var global = (1, eval)('this');
 var OldModule = module.bundle.Module;
@@ -1352,7 +1444,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = '' || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + '55517' + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + '51771' + '/');
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
 
@@ -1453,5 +1545,5 @@ function hmrAccept(bundle, id) {
     return hmrAccept(global.require, id);
   });
 }
-},{}]},{},[34,4])
+},{}]},{},[29,3])
 //# sourceMappingURL=./kut-demo.map

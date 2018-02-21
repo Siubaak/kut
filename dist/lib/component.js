@@ -20,7 +20,6 @@ var Component = (function () {
     };
     Component.prototype.componentWillMount = function () { };
     Component.prototype.componentDidMount = function () { };
-    Component.prototype.componentWillReceiveProps = function (nextProps) { };
     Component.prototype.shouldComponentUpdate = function (nextProps, nextState) {
         return true;
     };

@@ -9,4 +9,4 @@ export interface KutElement {
     key: string;
     props: KutProps;
 }
-export declare function createElement(type: string | typeof Component, config: any, ...rawChildren: (KutChild | KutChild[])[]): KutElement;
+export declare function createElement(type: string | typeof Component, config: any, ...children: (KutChild | KutChild[])[]): KutElement;
