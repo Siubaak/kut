@@ -1,4 +1,4 @@
-# Kut
+# <img width="24" height="24" src="https://raw.githubusercontent.com/Siubaak/kut/master/docs/favicon.ico"/> Kut
 
 [![](https://img.shields.io/npm/v/kut.svg?style=flat-square)](https://www.npmjs.com/package/kut)
 
