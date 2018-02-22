@@ -46,7 +46,7 @@ export function createElement(
         if (
           Object.hasOwnProperty.call(defaultProps, prop)
           && !KUT_RESERVED_PROPS[prop]
-          && props[prop] === undefined
+          && props[prop] == null
         ) {
           props[prop] = defaultProps[prop]
         }
