@@ -2,6 +2,7 @@ import { KutProps, KutElement, KutChild } from './element';
 export declare class Component {
     state: any;
     props: KutProps;
+    static defaultProps: KutProps;
     update: (nextElement: KutChild, nextState?: any) => void;
     constructor(props: KutProps);
     protected setState(state: any): void;

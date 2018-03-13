@@ -19,6 +19,16 @@ function createElement(type, config) {
                 props[prop] = config[prop];
             }
         }
+        if (type && type.defaultProps) {
+            var defaultProps = type.defaultProps;
+            for (var prop in defaultProps) {
+                if (Object.hasOwnProperty.call(defaultProps, prop)
+                    && !constant_1.KUT_RESERVED_PROPS[prop]
+                    && props[prop] == null) {
+                    props[prop] = defaultProps[prop];
+                }
+            }
+        }
     }
     return { type: type, key: key, props: props };
 }

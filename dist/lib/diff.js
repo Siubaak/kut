@@ -115,33 +115,21 @@ function patch(parentId, patches) {
         var beforeIndex = dir === 'forward'
             ? op.index + 1 + insertNum
             : op.index;
-        switch (op.type) {
-            case 'insert': {
-                var beforeNode = container.children[beforeIndex];
-                var markup = op.inst.mount(parentId + ":" + op.inst.key);
-                var node = util_1.createNode(markup);
-                if (beforeNode !== undefined) {
-                    container.insertBefore(node, beforeNode);
-                }
-                else {
-                    container.appendChild(node);
-                }
+        if (op.type === 'remove') {
+            op.inst.unmount();
+        }
+        else {
+            var node = void 0;
+            if (op.type === 'insert') {
                 ++insertNum;
-                break;
+                var markup = op.inst.mount(parentId + ":" + op.inst.key);
+                node = util_1.createNode(markup);
             }
-            case 'move': {
-                var beforeNode = container.children[beforeIndex];
-                if (beforeNode !== undefined) {
-                    container.insertBefore(op.inst.node, beforeNode);
-                }
-                else {
-                    container.appendChild(op.inst.node);
-                }
-                break;
+            else {
+                node = op.inst.node;
             }
-            default: {
-                op.inst.unmount();
-            }
+            var beforeNode = container.children[beforeIndex];
+            container.insertBefore(node, beforeNode);
         }
     });
 }

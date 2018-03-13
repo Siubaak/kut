@@ -169,33 +169,24 @@ export function patch(parentId: string, patches: Patches): void {
       dir === 'forward'
       ? op.index + 1 + insertNum
       : op.index
-    switch(op.type) {
-      case 'insert':{
-        const beforeNode = container.children[beforeIndex]
-        const markup: string = op.inst.mount(`${parentId}:${op.inst.key}`)
-        const node: Text | HTMLElement = createNode(markup)
-        if (beforeNode !== undefined) {
-          container.insertBefore(node, beforeNode)
-        } else {
-          // 若不存在beforeNode，即数组尾，则直接append即可
-          container.appendChild(node)
-        }
+    if (op.type === 'remove') {
+      // 移除节点
+      op.inst.unmount()
+    } else {
+      let node: Text | HTMLElement
+      if (op.type === 'insert') {
+        // 插入节点，需要调用createNode创建DOM节点
         ++insertNum
-        break
+        const markup: string = op.inst.mount(`${parentId}:${op.inst.key}`)
+        node = createNode(markup)
+      } else {
+        // 移动节点，只需获取需要移动的节点
+        node = op.inst.node
       }
-      case 'move': {
-        const beforeNode = container.children[beforeIndex]
-        if (beforeNode !== undefined) {
-          container.insertBefore(op.inst.node, beforeNode)
-        } else {
-          // 若不存在beforeNode，即数组尾，则直接append即可
-          container.appendChild(op.inst.node)
-        }
-        break
-      }
-      default: {
-        op.inst.unmount()
-      }
+      const beforeNode = container.children[beforeIndex]
+      // 无需判断beforeNode是否存在，
+      // 当beforeNode为undefined时，insertBefore等效于appendChild方法
+      container.insertBefore(node, beforeNode)
     }
   })
 }
