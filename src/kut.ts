@@ -9,7 +9,7 @@ const Kut = {
 }
 
 if (window) {
-  (window as any).Kut = Kut
+  ;(window as any).Kut = Kut
 }
 
 export default Kut

@@ -123,7 +123,7 @@ export class DOMInstance {
       } else if (prop === 'style') {
         node.style.cssText = getStyleString(nextProps.style)
       } else if (prop === 'value') {
-        (node as any).value = nextProps.value
+        ;(node as any).value = nextProps.value
       } else if (
         KUT_SUPPORTED_EVENT_HANDLERS[prop.toLowerCase()]
         && typeof nextProps[prop] === 'function'

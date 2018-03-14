@@ -17,7 +17,7 @@ export interface KutElement {
 /**
  * 创建element并返回该element，即VDOM节点
  * @param type 类型，如div或自定义组件
- * @param config 配置，如key、ref、style等
+ * @param config 配置，如key、style等
  * @param children 子节点数组
  */
 export function createElement(
@@ -41,7 +41,7 @@ export function createElement(
       }
     }
     if (type && (type as typeof Component).defaultProps) {
-      const defaultProps: KutProps = (type as typeof Component).defaultProps
+      const defaultProps: any = (type as typeof Component).defaultProps
       for (let prop in defaultProps) {
         if (
           Object.hasOwnProperty.call(defaultProps, prop)

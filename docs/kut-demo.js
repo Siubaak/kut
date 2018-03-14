@@ -71,7 +71,7 @@ require = (function (modules, cache, entry) {
 
   // Override the current require with this new one
   return newRequire;
-})({32:[function(require,module,exports) {
+})({28:[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -91,7 +91,7 @@ eventHandlers.forEach(function (eventHandler) {
     exports.KUT_SUPPORTED_EVENT_HANDLERS[eventHandler] = true;
 });
 //# sourceMappingURL=constant.js.map
-},{}],21:[function(require,module,exports) {
+},{}],17:[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -126,7 +126,7 @@ function createElement(type, config) {
 }
 exports.createElement = createElement;
 //# sourceMappingURL=element.js.map
-},{"./constant":32}],33:[function(require,module,exports) {
+},{"./constant":28}],29:[function(require,module,exports) {
 "use strict";
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -203,7 +203,7 @@ function getStyleString(style) {
 }
 exports.getStyleString = getStyleString;
 //# sourceMappingURL=util.js.map
-},{"./constant":32}],22:[function(require,module,exports) {
+},{"./constant":28}],18:[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -240,7 +240,7 @@ var Component = function () {
 }();
 exports.Component = Component;
 //# sourceMappingURL=component.js.map
-},{"./util":33}],38:[function(require,module,exports) {
+},{"./util":29}],34:[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -371,7 +371,7 @@ function patch(parentId, patches) {
 }
 exports.patch = patch;
 //# sourceMappingURL=diff.js.map
-},{"./renderer":23,"./util":33}],39:[function(require,module,exports) {
+},{"./renderer":19,"./util":29}],35:[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -410,7 +410,7 @@ function removeAllEventListener(kutId) {
 }
 exports.removeAllEventListener = removeAllEventListener;
 //# sourceMappingURL=event.js.map
-},{"./constant":32,"./util":33}],34:[function(require,module,exports) {
+},{"./constant":28,"./util":29}],30:[function(require,module,exports) {
 "use strict";
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -529,6 +529,7 @@ var DOMInstance = function () {
             } else if (prop === 'style') {
                 node.style.cssText = util_1.getStyleString(nextProps.style);
             } else if (prop === 'value') {
+                ;
                 node.value = nextProps.value;
             } else if (constant_1.KUT_SUPPORTED_EVENT_HANDLERS[prop.toLowerCase()] && typeof nextProps[prop] === 'function') {
                 event_1.setEventListener(this.kutId, prop.toLowerCase().replace(constant_1.CUT_ON_REGEX, ''), nextProps[prop]);
@@ -637,7 +638,7 @@ var ComponentInstance = function () {
 }();
 exports.ComponentInstance = ComponentInstance;
 //# sourceMappingURL=instance.js.map
-},{"./renderer":23,"./diff":38,"./constant":32,"./event":39,"./util":33}],23:[function(require,module,exports) {
+},{"./renderer":19,"./diff":34,"./constant":28,"./event":35,"./util":29}],19:[function(require,module,exports) {
 "use strict";
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -669,7 +670,7 @@ function render(element, container) {
 }
 exports.render = render;
 //# sourceMappingURL=renderer.js.map
-},{"./component":22,"./instance":34}],12:[function(require,module,exports) {
+},{"./component":18,"./instance":30}],8:[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -682,15 +683,16 @@ var Kut = {
     render: renderer_1.render
 };
 if (window) {
+    ;
     window.Kut = Kut;
 }
 exports.default = Kut;
 //# sourceMappingURL=kut.js.map
-},{"./element":21,"./component":22,"./renderer":23}],9:[function(require,module,exports) {
+},{"./element":17,"./component":18,"./renderer":19}],5:[function(require,module,exports) {
 'use strict';
 
 module.exports = require('./dist/lib/kut.js');
-},{"./dist/lib/kut.js":12}],15:[function(require,module,exports) {
+},{"./dist/lib/kut.js":8}],11:[function(require,module,exports) {
 var bundleURL = null;
 function getBundleURLCached() {
   if (!bundleURL) {
@@ -720,7 +722,7 @@ function getBaseURL(url) {
 
 exports.getBundleURL = getBundleURLCached;
 exports.getBaseURL = getBaseURL;
-},{}],11:[function(require,module,exports) {
+},{}],7:[function(require,module,exports) {
 var bundle = require('./bundle-url');
 
 function updateLink(link) {
@@ -751,13 +753,13 @@ function reloadCSS() {
 }
 
 module.exports = reloadCSS;
-},{"./bundle-url":15}],24:[function(require,module,exports) {
+},{"./bundle-url":11}],20:[function(require,module,exports) {
 
         var reloadCSS = require('_css_loader');
         module.hot.dispose(reloadCSS);
         module.hot.accept(reloadCSS);
       
-},{"_css_loader":11}],16:[function(require,module,exports) {
+},{"_css_loader":7}],12:[function(require,module,exports) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -827,13 +829,13 @@ var Banner = function (_React$Component) {
 }(_index2.default.Component);
 
 exports.default = Banner;
-},{"../../../index":9,"./Banner.less":24}],26:[function(require,module,exports) {
+},{"../../../index":5,"./Banner.less":20}],23:[function(require,module,exports) {
 
         var reloadCSS = require('_css_loader');
         module.hot.dispose(reloadCSS);
         module.hot.accept(reloadCSS);
       
-},{"_css_loader":11}],18:[function(require,module,exports) {
+},{"_css_loader":7}],16:[function(require,module,exports) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -887,13 +889,13 @@ var Nav = function (_React$Component) {
 }(_index2.default.Component);
 
 exports.default = Nav;
-},{"../../../index":9,"./Nav.less":26}],25:[function(require,module,exports) {
+},{"../../../index":5,"./Nav.less":23}],21:[function(require,module,exports) {
 
         var reloadCSS = require('_css_loader');
         module.hot.dispose(reloadCSS);
         module.hot.accept(reloadCSS);
       
-},{"_css_loader":11}],17:[function(require,module,exports) {
+},{"_css_loader":7}],13:[function(require,module,exports) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -946,13 +948,13 @@ var Content = function (_React$Component) {
 }(_index2.default.Component);
 
 exports.default = Content;
-},{"../../../index":9,"./Content.less":25}],28:[function(require,module,exports) {
+},{"../../../index":5,"./Content.less":21}],27:[function(require,module,exports) {
 
         var reloadCSS = require('_css_loader');
         module.hot.dispose(reloadCSS);
         module.hot.accept(reloadCSS);
       
-},{"_css_loader":11}],19:[function(require,module,exports) {
+},{"_css_loader":7}],15:[function(require,module,exports) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1086,13 +1088,13 @@ var Demo = function (_React$Component) {
 }(_index2.default.Component);
 
 exports.default = Demo;
-},{"../../../index":9,"./Demo.less":28}],27:[function(require,module,exports) {
+},{"../../../index":5,"./Demo.less":27}],22:[function(require,module,exports) {
 
         var reloadCSS = require('_css_loader');
         module.hot.dispose(reloadCSS);
         module.hot.accept(reloadCSS);
       
-},{"_css_loader":11}],20:[function(require,module,exports) {
+},{"_css_loader":7}],14:[function(require,module,exports) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1143,13 +1145,13 @@ var Footer = function (_React$Component) {
 }(_index2.default.Component);
 
 exports.default = Footer;
-},{"../../../index":9,"./Footer.less":27}],13:[function(require,module,exports) {
+},{"../../../index":5,"./Footer.less":22}],9:[function(require,module,exports) {
 
         var reloadCSS = require('_css_loader');
         module.hot.dispose(reloadCSS);
         module.hot.accept(reloadCSS);
       
-},{"_css_loader":11}],10:[function(require,module,exports) {
+},{"_css_loader":7}],6:[function(require,module,exports) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1397,13 +1399,13 @@ var App = function (_React$Component) {
 }(_index2.default.Component);
 
 exports.default = App;
-},{"../index":9,"./components/Banner":16,"./components/Nav":18,"./components/Content":17,"./components/Demo":19,"./components/Footer":20,"./App.less":13}],8:[function(require,module,exports) {
+},{"../index":5,"./components/Banner":12,"./components/Nav":16,"./components/Content":13,"./components/Demo":15,"./components/Footer":14,"./App.less":9}],4:[function(require,module,exports) {
 
         var reloadCSS = require('_css_loader');
         module.hot.dispose(reloadCSS);
         module.hot.accept(reloadCSS);
       
-},{"_css_loader":11}],7:[function(require,module,exports) {
+},{"_css_loader":7}],3:[function(require,module,exports) {
 'use strict';
 
 var _index = require('../index');
@@ -1419,7 +1421,7 @@ require('./index.less');
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 _index2.default.render(_index2.default.createElement(_App2.default, null), document.getElementById('root'));
-},{"../index":9,"./App":10,"./index.less":8}],42:[function(require,module,exports) {
+},{"../index":5,"./App":6,"./index.less":4}],38:[function(require,module,exports) {
 
 var global = (1, eval)('this');
 var OldModule = module.bundle.Module;
@@ -1441,7 +1443,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = '' || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + '49991' + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + '63323' + '/');
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
 
@@ -1542,5 +1544,5 @@ function hmrAccept(bundle, id) {
     return hmrAccept(global.require, id);
   });
 }
-},{}]},{},[42,7])
+},{}]},{},[38,3])
 //# sourceMappingURL=/dist/kut-demo.map

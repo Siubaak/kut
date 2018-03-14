@@ -9,6 +9,7 @@ var Kut = {
     render: renderer_1.render,
 };
 if (window) {
+    ;
     window.Kut = Kut;
 }
 exports.default = Kut;

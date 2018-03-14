@@ -126,6 +126,7 @@ var DOMInstance = (function () {
                 node.style.cssText = util_1.getStyleString(nextProps.style);
             }
             else if (prop === 'value') {
+                ;
                 node.value = nextProps.value;
             }
             else if (constant_1.KUT_SUPPORTED_EVENT_HANDLERS[prop.toLowerCase()]
