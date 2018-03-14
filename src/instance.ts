@@ -222,6 +222,9 @@ export class ComponentInstance {
   update(nextElement: KutChild, nextState: any = this._component.state): void {
     // 使用==以判断undefined和null
     nextElement = nextElement == null ? this._element : (nextElement as KutElement)
+    if (this._element !== nextElement) {
+      this._component.componentWillReceiveProps(nextElement.props)
+    }
     this._component.props = nextElement.props
     this._component.state = nextState
     if (this._component.shouldComponentUpdate(nextElement.props, nextState)) {

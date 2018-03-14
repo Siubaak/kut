@@ -214,6 +214,9 @@ var ComponentInstance = (function () {
     ComponentInstance.prototype.update = function (nextElement, nextState) {
         if (nextState === void 0) { nextState = this._component.state; }
         nextElement = nextElement == null ? this._element : nextElement;
+        if (this._element !== nextElement) {
+            this._component.componentWillReceiveProps(nextElement.props);
+        }
         this._component.props = nextElement.props;
         this._component.state = nextState;
         if (this._component.shouldComponentUpdate(nextElement.props, nextState)) {
