@@ -2,8 +2,8 @@ import { KutChild } from './element';
 import { KutInstance } from './instance';
 export interface PatchOp {
     type: 'insert' | 'move' | 'remove';
-    index: number;
     inst: KutInstance;
+    index?: number;
 }
 export interface Patches {
     ops: PatchOp[];

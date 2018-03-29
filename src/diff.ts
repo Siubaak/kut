@@ -5,8 +5,8 @@ import { getNode, createNode } from './util'
 
 export interface PatchOp {
   type: 'insert' | 'move' | 'remove'
-  index: number
   inst: KutInstance
+  index?: number
 }
 
 export interface Patches {
@@ -83,7 +83,6 @@ export function diff(
       if (forwardPrevInstance) {
         forwardOps.push({
           type: 'remove',
-          index: -1,
           inst: forwardPrevInstance,
         })
       }
@@ -110,7 +109,6 @@ export function diff(
       if (backwardPrevInstance) {
         backwardOps.push({
           type: 'remove',
-          index: -1,
           inst: backwardPrevInstance,
         })
       }
@@ -132,12 +130,10 @@ export function diff(
     if (!nextInstanceMap[key]) {
       forwardOps.push({
         type: 'remove',
-        index: -1,
         inst: prevInstanceMap[key],
       })
       backwardOps.push({
         type: 'remove',
-        index: -1,
         inst: prevInstanceMap[key],
       })
     }

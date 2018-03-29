@@ -44,7 +44,6 @@ function diff(prevInstances, nextChildren) {
             if (forwardPrevInstance) {
                 forwardOps.push({
                     type: 'remove',
-                    index: -1,
                     inst: forwardPrevInstance,
                 });
             }
@@ -70,7 +69,6 @@ function diff(prevInstances, nextChildren) {
             if (backwardPrevInstance) {
                 backwardOps.push({
                     type: 'remove',
-                    index: -1,
                     inst: backwardPrevInstance,
                 });
             }
@@ -89,12 +87,10 @@ function diff(prevInstances, nextChildren) {
         if (!nextInstanceMap[key]) {
             forwardOps.push({
                 type: 'remove',
-                index: -1,
                 inst: prevInstanceMap[key],
             });
             backwardOps.push({
                 type: 'remove',
-                index: -1,
                 inst: prevInstanceMap[key],
             });
         }
