@@ -169,6 +169,7 @@
   cursor: pointer;
   font-size: 14px;
   color: #0f2540;
+  background-color: #fff;
   -webkit-transition: all .2s;
   transition: all .2s;
 }
@@ -219,6 +220,7 @@
   transition: all .2s;
   position: relative;
   right: 0;
+  background-color: #fff;
 }
 .Demo .list .item .del:hover {
   background-color: #0f2540;

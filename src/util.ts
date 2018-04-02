@@ -69,3 +69,18 @@ export function getStyleString(style: any): string {
   }
   return markup.trim()
 }
+
+export class DidMountSet {
+  private _didMountHandlers: Function[] = []
+  add(handler: Function) {
+    this._didMountHandlers.push(handler)
+  }
+  exec() {
+    while(this._didMountHandlers.length) {
+      const handler: Function = this._didMountHandlers.pop()
+      handler()
+    }
+  }
+}
+
+export const didMountSet: DidMountSet = new DidMountSet()

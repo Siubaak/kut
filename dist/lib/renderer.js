@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var component_1 = require("./component");
 var instance_1 = require("./instance");
+var util_1 = require("./util");
 function instantiate(element) {
     var instance = null;
     if (typeof element === 'number' || typeof element === 'string') {
@@ -20,12 +21,8 @@ function render(element, container) {
     var instance = instantiate(element);
     var rootId = Math.random().toString(36).substring(2, 4);
     var markup = instance.mount(rootId);
-    if (container) {
-        container.innerHTML = markup;
-    }
-    else {
-        return markup;
-    }
+    container.innerHTML = markup;
+    util_1.didMountSet.exec();
 }
 exports.render = render;
 //# sourceMappingURL=renderer.js.map

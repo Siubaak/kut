@@ -80,4 +80,21 @@ function getStyleString(style) {
     return markup.trim();
 }
 exports.getStyleString = getStyleString;
+var DidMountSet = (function () {
+    function DidMountSet() {
+        this._didMountHandlers = [];
+    }
+    DidMountSet.prototype.add = function (handler) {
+        this._didMountHandlers.push(handler);
+    };
+    DidMountSet.prototype.exec = function () {
+        while (this._didMountHandlers.length) {
+            var handler = this._didMountHandlers.pop();
+            handler();
+        }
+    };
+    return DidMountSet;
+}());
+exports.DidMountSet = DidMountSet;
+exports.didMountSet = new DidMountSet();
 //# sourceMappingURL=util.js.map

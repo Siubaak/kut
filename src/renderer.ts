@@ -1,6 +1,7 @@
 import { Component } from './component'
 import { KutChild, KutElement } from './element'
 import { KutInstance, TextInstance, DOMInstance, ComponentInstance } from './instance'
+import { didMountSet } from './util'
 
 /**
  * element实例化工厂函数
@@ -27,14 +28,12 @@ export function instantiate(element: KutChild) {
  */
 export function render(
   element: KutChild,
-  container?: HTMLElement,
+  container: HTMLElement,
 ): void | string {
   const instance: KutInstance = instantiate(element)
   const rootId: string = Math.random().toString(36).substring(2, 4)
   const markup: string = instance.mount(rootId)
-  if (container) {
-    container.innerHTML = markup
-  } else {
-    return markup
-  }
+  container.innerHTML = markup
+  // 调用所有componentDidMount方法
+  didMountSet.exec()
 }

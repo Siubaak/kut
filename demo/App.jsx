@@ -21,6 +21,7 @@ class App extends React.Component {
         this.setState({ fix: false })
       }
     })
+    console.log(document.getElementById('intro'))
   }
   render() {
     return (

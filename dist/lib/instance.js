@@ -204,7 +204,7 @@ var ComponentInstance = (function () {
         var renderedElement = this._component.render();
         this._renderedInstance = renderer_1.instantiate(renderedElement);
         var markup = this._renderedInstance.mount(kutId);
-        this._component.componentDidMount();
+        util_1.didMountSet.add(this._component.componentDidMount.bind(this._component));
         return markup;
     };
     ComponentInstance.prototype.shouldReceive = function (nextElement) {

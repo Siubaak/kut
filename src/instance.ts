@@ -4,7 +4,7 @@ import { Component } from './component'
 import { Patches, diff, patch } from './diff'
 import { KUT_ID, KUT_SUPPORTED_EVENT_HANDLERS, CUT_ON_REGEX } from './constant'
 import { setEventListener, removeEventListener, removeAllEventListener } from './event'
-import { getNode, getClassString, getStyleString } from './util'
+import { getNode, getClassString, getStyleString, didMountSet } from './util'
 
 export type KutInstance = TextInstance | DOMInstance | ComponentInstance
 
@@ -211,7 +211,8 @@ export class ComponentInstance {
     const renderedElement: KutElement = this._component.render()
     this._renderedInstance = instantiate(renderedElement)
     const markup = this._renderedInstance.mount(kutId)
-    this._component.componentDidMount()
+    // 等挂载完统一调用componentDidMount方法
+    didMountSet.add(this._component.componentDidMount.bind(this._component))
     return markup
   }
   shouldReceive(nextElement: KutChild): boolean {

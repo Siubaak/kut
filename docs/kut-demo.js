@@ -71,7 +71,7 @@ require = (function (modules, cache, entry) {
 
   // Override the current require with this new one
   return newRequire;
-})({18:[function(require,module,exports) {
+})({28:[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -91,7 +91,7 @@ eventHandlers.forEach(function (eventHandler) {
     exports.KUT_SUPPORTED_EVENT_HANDLERS[eventHandler] = true;
 });
 //# sourceMappingURL=constant.js.map
-},{}],14:[function(require,module,exports) {
+},{}],17:[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -126,7 +126,7 @@ function createElement(type, config) {
 }
 exports.createElement = createElement;
 //# sourceMappingURL=element.js.map
-},{"./constant":18}],17:[function(require,module,exports) {
+},{"./constant":28}],29:[function(require,module,exports) {
 "use strict";
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -202,8 +202,25 @@ function getStyleString(style) {
     return markup.trim();
 }
 exports.getStyleString = getStyleString;
+var DidMountSet = function () {
+    function DidMountSet() {
+        this._didMountHandlers = [];
+    }
+    DidMountSet.prototype.add = function (handler) {
+        this._didMountHandlers.push(handler);
+    };
+    DidMountSet.prototype.exec = function () {
+        while (this._didMountHandlers.length) {
+            var handler = this._didMountHandlers.pop();
+            handler();
+        }
+    };
+    return DidMountSet;
+}();
+exports.DidMountSet = DidMountSet;
+exports.didMountSet = new DidMountSet();
 //# sourceMappingURL=util.js.map
-},{"./constant":18}],15:[function(require,module,exports) {
+},{"./constant":28}],18:[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -240,7 +257,7 @@ var Component = function () {
 }();
 exports.Component = Component;
 //# sourceMappingURL=component.js.map
-},{"./util":17}],31:[function(require,module,exports) {
+},{"./util":29}],34:[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -367,7 +384,7 @@ function patch(parentId, patches) {
 }
 exports.patch = patch;
 //# sourceMappingURL=diff.js.map
-},{"./renderer":16,"./util":17}],32:[function(require,module,exports) {
+},{"./renderer":19,"./util":29}],35:[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -406,7 +423,7 @@ function removeAllEventListener(kutId) {
 }
 exports.removeAllEventListener = removeAllEventListener;
 //# sourceMappingURL=event.js.map
-},{"./constant":18,"./util":17}],27:[function(require,module,exports) {
+},{"./constant":28,"./util":29}],30:[function(require,module,exports) {
 "use strict";
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -595,7 +612,7 @@ var ComponentInstance = function () {
         var renderedElement = this._component.render();
         this._renderedInstance = renderer_1.instantiate(renderedElement);
         var markup = this._renderedInstance.mount(kutId);
-        this._component.componentDidMount();
+        util_1.didMountSet.add(this._component.componentDidMount.bind(this._component));
         return markup;
     };
     ComponentInstance.prototype.shouldReceive = function (nextElement) {
@@ -634,7 +651,7 @@ var ComponentInstance = function () {
 }();
 exports.ComponentInstance = ComponentInstance;
 //# sourceMappingURL=instance.js.map
-},{"./renderer":16,"./diff":31,"./constant":18,"./event":32,"./util":17}],16:[function(require,module,exports) {
+},{"./renderer":19,"./diff":34,"./constant":28,"./event":35,"./util":29}],19:[function(require,module,exports) {
 "use strict";
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -642,6 +659,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 Object.defineProperty(exports, "__esModule", { value: true });
 var component_1 = require("./component");
 var instance_1 = require("./instance");
+var util_1 = require("./util");
 function instantiate(element) {
     var instance = null;
     if (typeof element === 'number' || typeof element === 'string') {
@@ -658,15 +676,12 @@ function render(element, container) {
     var instance = instantiate(element);
     var rootId = Math.random().toString(36).substring(2, 4);
     var markup = instance.mount(rootId);
-    if (container) {
-        container.innerHTML = markup;
-    } else {
-        return markup;
-    }
+    container.innerHTML = markup;
+    util_1.didMountSet.exec();
 }
 exports.render = render;
 //# sourceMappingURL=renderer.js.map
-},{"./component":15,"./instance":27}],13:[function(require,module,exports) {
+},{"./component":18,"./instance":30,"./util":29}],8:[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -684,11 +699,11 @@ if (window) {
 }
 exports.default = Kut;
 //# sourceMappingURL=kut.js.map
-},{"./element":14,"./component":15,"./renderer":16}],11:[function(require,module,exports) {
+},{"./element":17,"./component":18,"./renderer":19}],5:[function(require,module,exports) {
 'use strict';
 
 module.exports = require('./dist/lib/kut.js');
-},{"./dist/lib/kut.js":13}],20:[function(require,module,exports) {
+},{"./dist/lib/kut.js":8}],11:[function(require,module,exports) {
 var bundleURL = null;
 function getBundleURLCached() {
   if (!bundleURL) {
@@ -718,7 +733,7 @@ function getBaseURL(url) {
 
 exports.getBundleURL = getBundleURLCached;
 exports.getBaseURL = getBaseURL;
-},{}],19:[function(require,module,exports) {
+},{}],7:[function(require,module,exports) {
 var bundle = require('./bundle-url');
 
 function updateLink(link) {
@@ -749,13 +764,13 @@ function reloadCSS() {
 }
 
 module.exports = reloadCSS;
-},{"./bundle-url":20}],28:[function(require,module,exports) {
+},{"./bundle-url":11}],26:[function(require,module,exports) {
 
         var reloadCSS = require('_css_loader');
         module.hot.dispose(reloadCSS);
         module.hot.accept(reloadCSS);
       
-},{"_css_loader":19}],22:[function(require,module,exports) {
+},{"_css_loader":7}],12:[function(require,module,exports) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -825,13 +840,13 @@ var Banner = function (_React$Component) {
 }(_index2.default.Component);
 
 exports.default = Banner;
-},{"../../../index":11,"./Banner.less":28}],34:[function(require,module,exports) {
+},{"../../../index":5,"./Banner.less":26}],23:[function(require,module,exports) {
 
         var reloadCSS = require('_css_loader');
         module.hot.dispose(reloadCSS);
         module.hot.accept(reloadCSS);
       
-},{"_css_loader":19}],23:[function(require,module,exports) {
+},{"_css_loader":7}],13:[function(require,module,exports) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -885,13 +900,13 @@ var Nav = function (_React$Component) {
 }(_index2.default.Component);
 
 exports.default = Nav;
-},{"../../../index":11,"./Nav.less":34}],29:[function(require,module,exports) {
+},{"../../../index":5,"./Nav.less":23}],25:[function(require,module,exports) {
 
         var reloadCSS = require('_css_loader');
         module.hot.dispose(reloadCSS);
         module.hot.accept(reloadCSS);
       
-},{"_css_loader":19}],24:[function(require,module,exports) {
+},{"_css_loader":7}],15:[function(require,module,exports) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -944,13 +959,13 @@ var Content = function (_React$Component) {
 }(_index2.default.Component);
 
 exports.default = Content;
-},{"../../../index":11,"./Content.less":29}],30:[function(require,module,exports) {
+},{"../../../index":5,"./Content.less":25}],24:[function(require,module,exports) {
 
         var reloadCSS = require('_css_loader');
         module.hot.dispose(reloadCSS);
         module.hot.accept(reloadCSS);
       
-},{"_css_loader":19}],26:[function(require,module,exports) {
+},{"_css_loader":7}],14:[function(require,module,exports) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1084,13 +1099,13 @@ var Demo = function (_React$Component) {
 }(_index2.default.Component);
 
 exports.default = Demo;
-},{"../../../index":11,"./Demo.less":30}],33:[function(require,module,exports) {
+},{"../../../index":5,"./Demo.less":24}],27:[function(require,module,exports) {
 
         var reloadCSS = require('_css_loader');
         module.hot.dispose(reloadCSS);
         module.hot.accept(reloadCSS);
       
-},{"_css_loader":19}],25:[function(require,module,exports) {
+},{"_css_loader":7}],16:[function(require,module,exports) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1141,13 +1156,13 @@ var Footer = function (_React$Component) {
 }(_index2.default.Component);
 
 exports.default = Footer;
-},{"../../../index":11,"./Footer.less":33}],21:[function(require,module,exports) {
+},{"../../../index":5,"./Footer.less":27}],9:[function(require,module,exports) {
 
         var reloadCSS = require('_css_loader');
         module.hot.dispose(reloadCSS);
         module.hot.accept(reloadCSS);
       
-},{"_css_loader":19}],12:[function(require,module,exports) {
+},{"_css_loader":7}],6:[function(require,module,exports) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1216,6 +1231,7 @@ var App = function (_React$Component) {
           _this2.setState({ fix: false });
         }
       });
+      console.log(document.getElementById('intro'));
     }
   }, {
     key: 'render',
@@ -1395,13 +1411,13 @@ var App = function (_React$Component) {
 }(_index2.default.Component);
 
 exports.default = App;
-},{"../index":11,"./components/Banner":22,"./components/Nav":23,"./components/Content":24,"./components/Demo":26,"./components/Footer":25,"./App.less":21}],10:[function(require,module,exports) {
+},{"../index":5,"./components/Banner":12,"./components/Nav":13,"./components/Content":15,"./components/Demo":14,"./components/Footer":16,"./App.less":9}],4:[function(require,module,exports) {
 
         var reloadCSS = require('_css_loader');
         module.hot.dispose(reloadCSS);
         module.hot.accept(reloadCSS);
       
-},{"_css_loader":19}],7:[function(require,module,exports) {
+},{"_css_loader":7}],3:[function(require,module,exports) {
 'use strict';
 
 var _index = require('../index');
@@ -1417,7 +1433,7 @@ require('./index.less');
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 _index2.default.render(_index2.default.createElement(_App2.default, null), document.getElementById('root'));
-},{"../index":11,"./App":12,"./index.less":10}],35:[function(require,module,exports) {
+},{"../index":5,"./App":6,"./index.less":4}],38:[function(require,module,exports) {
 
 var global = (1, eval)('this');
 var OldModule = module.bundle.Module;
@@ -1439,7 +1455,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = '' || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + '36651' + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + '46515' + '/');
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
 
@@ -1540,5 +1556,5 @@ function hmrAccept(bundle, id) {
     return hmrAccept(global.require, id);
   });
 }
-},{}]},{},[35,7])
+},{}]},{},[38,3])
 //# sourceMappingURL=/dist/kut-demo.map
