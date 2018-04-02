@@ -120,21 +120,38 @@ var DOMInstance = (function () {
                 continue;
             }
             else if (prop === 'className') {
-                node.className = util_1.getClassString(nextProps.className);
+                var nextClassName = util_1.getClassString(nextProps.className);
+                if (node.className !== nextClassName) {
+                    node.className = nextClassName;
+                }
             }
             else if (prop === 'style') {
-                node.style.cssText = util_1.getStyleString(nextProps.style);
+                var nextStyle = util_1.getStyleString(nextProps.style);
+                if (node.style.cssText !== nextStyle) {
+                    node.style.cssText = nextStyle;
+                }
             }
             else if (prop === 'value') {
-                ;
-                node.value = nextProps.value;
+                var nextValue = nextProps.value;
+                if (node.value !== nextValue) {
+                    ;
+                    node.value = nextValue;
+                }
             }
             else if (constant_1.KUT_SUPPORTED_EVENT_HANDLERS[prop.toLowerCase()]
                 && typeof nextProps[prop] === 'function') {
-                event_1.setEventListener(this.kutId, prop.toLowerCase().replace(constant_1.CUT_ON_REGEX, ''), nextProps[prop]);
+                var event_2 = prop.toLowerCase().replace(constant_1.CUT_ON_REGEX, '');
+                var prevEventListener = event_1.getEventListener(this.kutId, event_2);
+                var nextEventListener = nextProps[prop];
+                if (prevEventListener !== nextEventListener) {
+                    event_1.setEventListener(this.kutId, event_2, nextEventListener);
+                }
             }
             else {
-                node.setAttribute(prop, nextProps[prop]);
+                var nextAttr = nextProps[prop];
+                if (node.getAttribute(prop) !== nextAttr) {
+                    node.setAttribute(prop, nextAttr);
+                }
             }
         }
         for (var prop in prevProps) {

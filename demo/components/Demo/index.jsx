@@ -46,22 +46,22 @@ class Demo extends React.Component {
   render() {
     return (
       <div className="Demo">
-        <p class="desc">待办事项</p>
-        <div class="input-box">
-          <input class="input" onInput={this.handleInput.bind(this)} value={this.state.input}></input>
-          <button class="add" onClick={this.handleAdd.bind(this)}>添加</button>
-          <button class="add" onClick={this.handleRan.bind(this)}>打乱</button>
+        <p className="desc">待办事项</p>
+        <div className="input-box">
+          <input className="input" onInput={this.handleInput.bind(this)} value={this.state.input}></input>
+          <button className="add" onClick={this.handleAdd.bind(this)}>添加</button>
+          <button className="add" onClick={this.handleRan.bind(this)}>打乱</button>
         </div>
-        <ul class="list">
+        <ul className="list">
           {
             this.state.todos.length
             ? this.state.todos.map((todo, index) => 
-              <li class="item" key={todo.key}>
+              <li className="item" key={todo.key}>
                 {todo.item}
-                <button class="del" onClick={() => this.handleDel(index)}>完成</button>
+                <button className="del" onClick={() => this.handleDel(index)}>完成</button>
               </li>
             )
-            : <li class="item">无</li>
+            : <li className="item">无</li>
           }
         </ul>
       </div>

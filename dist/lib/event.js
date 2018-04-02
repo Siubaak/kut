@@ -18,6 +18,10 @@ if (document) {
         });
     });
 }
+function getEventListener(kutId, event) {
+    return eventHanlders[kutId][event];
+}
+exports.getEventListener = getEventListener;
 function setEventListener(kutId, event, eventHanlder) {
     if (!eventHanlders[kutId]) {
         eventHanlders[kutId] = {};

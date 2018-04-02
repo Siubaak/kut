@@ -3,7 +3,7 @@ import { instantiate } from './renderer'
 import { Component } from './component'
 import { Patches, diff, patch } from './diff'
 import { KUT_ID, KUT_SUPPORTED_EVENT_HANDLERS, CUT_ON_REGEX } from './constant'
-import { setEventListener, removeEventListener, removeAllEventListener } from './event'
+import { setEventListener, removeEventListener, removeAllEventListener, getEventListener } from './event'
 import { getNode, getClassString, getStyleString, didMountSet } from './util'
 
 export type KutInstance = TextInstance | DOMInstance | ComponentInstance
@@ -119,22 +119,35 @@ export class DOMInstance {
       if (prop === 'children') {
         continue
       } else if (prop === 'className') {
-        node.className = getClassString(nextProps.className)
+        const nextClassName: string = getClassString(nextProps.className)
+        if (node.className !== nextClassName) {
+          node.className = nextClassName
+        }
       } else if (prop === 'style') {
-        node.style.cssText = getStyleString(nextProps.style)
+        const nextStyle: string = getStyleString(nextProps.style)
+        if (node.style.cssText !== nextStyle) {
+          node.style.cssText = nextStyle
+        }
       } else if (prop === 'value') {
-        ;(node as any).value = nextProps.value
+        const nextValue: any = nextProps.value
+        if ((node as any).value !== nextValue) {
+          ;(node as any).value = nextValue
+        }
       } else if (
         KUT_SUPPORTED_EVENT_HANDLERS[prop.toLowerCase()]
         && typeof nextProps[prop] === 'function'
       ) {
-        setEventListener(
-          this.kutId,
-          prop.toLowerCase().replace(CUT_ON_REGEX, ''),
-          nextProps[prop],
-        )
+        const event: string = prop.toLowerCase().replace(CUT_ON_REGEX, '')
+        const prevEventListener = getEventListener(this.kutId, event)
+        const nextEventListener = nextProps[prop]
+        if (prevEventListener !== nextEventListener) {
+          setEventListener(this.kutId, event, nextEventListener)
+        }
       } else {
-        node.setAttribute(prop, nextProps[prop])
+        const nextAttr: any = nextProps[prop]
+        if (node.getAttribute(prop) !== nextAttr) {
+          node.setAttribute(prop, nextAttr)
+        }
       }
     }
     for (let prop in prevProps) {

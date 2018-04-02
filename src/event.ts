@@ -24,6 +24,13 @@ if (document) {
   })
 }
 
+export function getEventListener(
+  kutId: string,
+  event: string,
+) {
+  return eventHanlders[kutId][event]
+}
+
 export function setEventListener(
   kutId: string,
   event: string,
