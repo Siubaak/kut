@@ -1,58 +1,48 @@
 import { KUT_ID, KUT_SUPPORTED_EVENTS } from './constant'
 import { getParentID } from './util'
 
-const eventHanlders: {
-  [ key: string ]: {
-    [ event: string ]: (e: Event) => void
+// 事件委托集合
+export class EventListenerSet {
+  private _eventListeners:  {
+    [ key: string ]: {
+      [ event: string ]: (e: Event) => void
+    }
+  } = {}
+  constructor() {
+    if (document) {
+      KUT_SUPPORTED_EVENTS.forEach((event: string) => {
+        document.addEventListener(event, (e: Event) => {
+          let kutId = (e.target as HTMLElement).getAttribute
+            && (e.target as HTMLElement).getAttribute(KUT_ID)
+          while (kutId) {
+            const eventListener: (e: Event) => void =
+              this._eventListeners[kutId] && this._eventListeners[kutId][event]
+            if (eventListener) {
+              eventListener(e)
+            }
+            kutId = getParentID(kutId)
+          }
+        })
+      })
+    }
   }
-} = {}
-
-if (document) {
-  KUT_SUPPORTED_EVENTS.forEach((event: string) => {
-    document.addEventListener(event, (e: Event) => {
-      let kutId = (e.target as HTMLElement).getAttribute
-        && (e.target as HTMLElement).getAttribute(KUT_ID)
-      while (kutId) {
-        const eventHanlder: (e: Event) => void =
-          eventHanlders[kutId] && eventHanlders[kutId][event]
-        if (eventHanlder) {
-          eventHanlder(e)
-        }
-        kutId = getParentID(kutId)
-      }
-    })
-  })
-}
-
-export function getEventListener(
-  kutId: string,
-  event: string,
-) {
-  return eventHanlders[kutId][event]
-}
-
-export function setEventListener(
-  kutId: string,
-  event: string,
-  eventHanlder: (e: Event) => void,
-): void {
-  if (!eventHanlders[kutId]) {
-    eventHanlders[kutId] = {}
+  get(kutId: string, event: string): Function {
+    return this._eventListeners[kutId][event]
   }
-  eventHanlders[kutId][event] = eventHanlder
-}
-
-export function removeEventListener(
-  kutId: string,
-  event: string,
-): void {
-  if (eventHanlders[kutId]) {
-    delete eventHanlders[kutId][event]
+  set(kutId: string, event: string, eventListener: (e: Event) => void): void {
+    if (!this._eventListeners[kutId]) {
+      this._eventListeners[kutId] = {}
+    }
+    this._eventListeners[kutId][event] = eventListener
+  }
+  del(kutId: string, event: string): void {
+    if (this._eventListeners[kutId]) {
+      delete this._eventListeners[kutId][event]
+    }
+  }
+  delAll(kutId: string): void {
+    delete this._eventListeners[kutId]
   }
 }
 
-export function removeAllEventListener(
-  kutId: string,
-): void {
-  delete eventHanlders[kutId]
-}
+export const eventListenerSet: EventListenerSet = new EventListenerSet()

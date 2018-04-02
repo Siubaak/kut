@@ -39,7 +39,7 @@ var TextInstance = (function () {
         }
     };
     TextInstance.prototype.unmount = function () {
-        event_1.removeAllEventListener(this.kutId);
+        event_1.eventListenerSet.delAll(this.kutId);
         util_1.getNode(this.kutId).remove();
         delete this.kutId;
         delete this.index;
@@ -88,7 +88,7 @@ var DOMInstance = (function () {
             }
             else if (constant_1.KUT_SUPPORTED_EVENT_HANDLERS[prop.toLowerCase()]
                 && typeof props[prop] === 'function') {
-                event_1.setEventListener(kutId, prop.toLowerCase().replace(constant_1.CUT_ON_REGEX, ''), props[prop]);
+                event_1.eventListenerSet.set(kutId, prop.toLowerCase().replace(constant_1.CUT_ON_REGEX, ''), props[prop]);
             }
             else {
                 markup += prop + "=\"" + props[prop] + "\" ";
@@ -141,10 +141,10 @@ var DOMInstance = (function () {
             else if (constant_1.KUT_SUPPORTED_EVENT_HANDLERS[prop.toLowerCase()]
                 && typeof nextProps[prop] === 'function') {
                 var event_2 = prop.toLowerCase().replace(constant_1.CUT_ON_REGEX, '');
-                var prevEventListener = event_1.getEventListener(this.kutId, event_2);
+                var prevEventListener = event_1.eventListenerSet.get(this.kutId, event_2);
                 var nextEventListener = nextProps[prop];
                 if (prevEventListener !== nextEventListener) {
-                    event_1.setEventListener(this.kutId, event_2, nextEventListener);
+                    event_1.eventListenerSet.set(this.kutId, event_2, nextEventListener);
                 }
             }
             else {
@@ -158,7 +158,7 @@ var DOMInstance = (function () {
             if (nextProps[prop] == null) {
                 if (constant_1.KUT_SUPPORTED_EVENT_HANDLERS[prop.toLowerCase()]
                     && typeof nextProps[prop] === 'function') {
-                    event_1.removeEventListener(this.kutId, prop.toLowerCase().replace(constant_1.CUT_ON_REGEX, ''));
+                    event_1.eventListenerSet.del(this.kutId, prop.toLowerCase().replace(constant_1.CUT_ON_REGEX, ''));
                 }
                 else {
                     node.removeAttribute(prop);
@@ -179,7 +179,7 @@ var DOMInstance = (function () {
         this._element = nextElement;
     };
     DOMInstance.prototype.unmount = function () {
-        event_1.removeAllEventListener(this.kutId);
+        event_1.eventListenerSet.delAll(this.kutId);
         this._childInstances.forEach(function (child) { return child.unmount(); });
         util_1.getNode(this.kutId).remove();
         delete this.kutId;
@@ -247,7 +247,7 @@ var ComponentInstance = (function () {
     };
     ComponentInstance.prototype.unmount = function () {
         this._component.componentWillUnmount();
-        event_1.removeAllEventListener(this.kutId);
+        event_1.eventListenerSet.delAll(this.kutId);
         this._renderedInstance.unmount();
         util_1.getNode(this.kutId).remove();
         delete this.kutId;

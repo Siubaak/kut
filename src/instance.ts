@@ -3,7 +3,7 @@ import { instantiate } from './renderer'
 import { Component } from './component'
 import { Patches, diff, patch } from './diff'
 import { KUT_ID, KUT_SUPPORTED_EVENT_HANDLERS, CUT_ON_REGEX } from './constant'
-import { setEventListener, removeEventListener, removeAllEventListener, getEventListener } from './event'
+import { eventListenerSet } from './event'
 import { getNode, getClassString, getStyleString, didMountSet } from './util'
 
 export type KutInstance = TextInstance | DOMInstance | ComponentInstance
@@ -40,7 +40,7 @@ export class TextInstance {
     }
   }
   unmount() {
-    removeAllEventListener(this.kutId)
+    eventListenerSet.delAll(this.kutId)
     getNode(this.kutId).remove()
     delete this.kutId
     delete this.index
@@ -84,7 +84,7 @@ export class DOMInstance {
         KUT_SUPPORTED_EVENT_HANDLERS[prop.toLowerCase()]
         && typeof props[prop] === 'function'
       ) {
-        setEventListener(
+        eventListenerSet.set(
           kutId,
           prop.toLowerCase().replace(CUT_ON_REGEX, ''),
           props[prop],
@@ -138,10 +138,10 @@ export class DOMInstance {
         && typeof nextProps[prop] === 'function'
       ) {
         const event: string = prop.toLowerCase().replace(CUT_ON_REGEX, '')
-        const prevEventListener = getEventListener(this.kutId, event)
+        const prevEventListener = eventListenerSet.get(this.kutId, event)
         const nextEventListener = nextProps[prop]
         if (prevEventListener !== nextEventListener) {
-          setEventListener(this.kutId, event, nextEventListener)
+          eventListenerSet.set(this.kutId, event, nextEventListener)
         }
       } else {
         const nextAttr: any = nextProps[prop]
@@ -156,7 +156,7 @@ export class DOMInstance {
           KUT_SUPPORTED_EVENT_HANDLERS[prop.toLowerCase()]
           && typeof nextProps[prop] === 'function'
         ) {
-          removeEventListener(
+          eventListenerSet.del(
             this.kutId,
             prop.toLowerCase().replace(CUT_ON_REGEX, ''),
           )
@@ -184,7 +184,7 @@ export class DOMInstance {
     this._element = nextElement
   }
   unmount() {
-    removeAllEventListener(this.kutId)
+    eventListenerSet.delAll(this.kutId)
     this._childInstances.forEach((child: KutInstance) => child.unmount())
     getNode(this.kutId).remove()
     delete this.kutId
@@ -251,7 +251,7 @@ export class ComponentInstance {
   }
   unmount() {
     this._component.componentWillUnmount()
-    removeAllEventListener(this.kutId)
+    eventListenerSet.delAll(this.kutId)
     this._renderedInstance.unmount()
     getNode(this.kutId).remove()
     delete this.kutId
