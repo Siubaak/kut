@@ -17,9 +17,6 @@ class Demo extends React.Component {
       ],
     }
   }
-  componentDidUpdate() {
-    console.log(this.state.todos)
-  }
   handleInput(e) {
     this.setState({ input: e.target.value })
   }

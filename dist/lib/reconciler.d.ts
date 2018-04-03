@@ -4,5 +4,6 @@ export declare class Reconciler {
     private _dirtyInstances;
     private _isBatchUpdating;
     enqueueUpdate(dirtyInstance: KutInstance, nextElement: KutChild): void;
+    private _runBatchUpdate();
 }
 export declare const reconciler: Reconciler;
