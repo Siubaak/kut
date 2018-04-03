@@ -6,7 +6,7 @@ export function assign(...objects: any[]): any {
   } else {
     let obj = objects[0]
     for (let i = 1; i < objects.length; ++i) {
-      for (let key in objects[i]) {
+      for (const key in objects[i]) {
         if (Object.hasOwnProperty.call(objects[i], key)) {
           obj[key] = objects[i][key]
         }
@@ -55,7 +55,7 @@ export function getStyleString(style: any): string {
   let markup: string = ''
   if (style == null) {
   } else if (typeof style === 'object') {
-    for (let key in style) {
+    for (const key in style) {
       if (Object.hasOwnProperty.call(style, key)) {
         markup += 
           // 驼峰式转换，如backgroundColor转换为background-color

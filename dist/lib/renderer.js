@@ -19,8 +19,7 @@ function instantiate(element) {
 exports.instantiate = instantiate;
 function render(element, container) {
     var instance = instantiate(element);
-    var rootId = Math.random().toString(36).substring(2, 4);
-    var markup = instance.mount(rootId);
+    var markup = instance.mount('kut');
     container.innerHTML = markup;
     util_1.didMountSet.exec();
 }

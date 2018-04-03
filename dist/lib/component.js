@@ -4,15 +4,15 @@ var util_1 = require("./util");
 var Component = (function () {
     function Component(props) {
         this.state = {};
+        this.update = function () { };
         this.props = props;
-        this.update = function (nextElement, nextState) { };
     }
     Component.prototype.setState = function (state) {
         this.state = util_1.assign({}, this.state, state);
-        this.update(null, this.state);
+        this.update();
     };
     Component.prototype.forceUpdate = function () {
-        this.update(null, this.state);
+        this.update();
     };
     Component.prototype.render = function (props) {
         if (props === void 0) { props = this.props; }

@@ -5,6 +5,7 @@ var diff_1 = require("./diff");
 var constant_1 = require("./constant");
 var event_1 = require("./event");
 var util_1 = require("./util");
+var reconciler_1 = require("./reconciler");
 var TextInstance = (function () {
     function TextInstance(element) {
         this.index = 0;
@@ -170,7 +171,7 @@ var DOMInstance = (function () {
         if (prevChildInstances.length === 1
             && nextChildren.length === 1
             && prevChildInstances[0].shouldReceive(nextChildren[0])) {
-            prevChildInstances[0].update(nextChildren[0]);
+            reconciler_1.reconciler.enqueueUpdate(prevChildInstances[0], nextChildren[0]);
         }
         else {
             var patches = diff_1.diff(prevChildInstances, nextChildren);
@@ -212,16 +213,17 @@ var ComponentInstance = (function () {
         configurable: true
     });
     ComponentInstance.prototype.mount = function (kutId) {
+        var _this = this;
         this.kutId = kutId;
         var type = this._element.type;
         var ComponentConstructor = type;
-        this._component = new ComponentConstructor(this._element.props);
-        this._component.componentWillMount();
-        this._component.update = this.update.bind(this);
-        var renderedElement = this._component.render();
+        this.component = new ComponentConstructor(this._element.props);
+        this.component.componentWillMount();
+        this.component.update = function () { return reconciler_1.reconciler.enqueueUpdate(_this, null); };
+        var renderedElement = this.component.render();
         this._renderedInstance = renderer_1.instantiate(renderedElement);
         var markup = this._renderedInstance.mount(kutId);
-        util_1.didMountSet.add(this._component.componentDidMount.bind(this._component));
+        util_1.didMountSet.add(this.component.componentDidMount.bind(this.component));
         return markup;
     };
     ComponentInstance.prototype.shouldReceive = function (nextElement) {
@@ -229,31 +231,29 @@ var ComponentInstance = (function () {
             && nextElement.type === this._element.type
             && nextElement.key === this._element.key;
     };
-    ComponentInstance.prototype.update = function (nextElement, nextState) {
-        if (nextState === void 0) { nextState = this._component.state; }
+    ComponentInstance.prototype.update = function (nextElement) {
         nextElement = nextElement == null ? this._element : nextElement;
         if (this._element !== nextElement) {
-            this._component.componentWillReceiveProps(nextElement.props);
+            this.component.componentWillReceiveProps(nextElement.props);
         }
-        this._component.props = nextElement.props;
-        this._component.state = nextState;
-        if (this._component.shouldComponentUpdate(nextElement.props, nextState)) {
-            this._component.componentWillUpdate(nextElement.props, nextState);
-            var nextRenderedElement = this._component.render();
-            this._renderedInstance.update(nextRenderedElement);
-            this._component.componentDidUpdate();
+        var nextProps = this.component.props = nextElement.props;
+        var nextState = this.component.state;
+        if (this.component.shouldComponentUpdate(nextProps, nextState)) {
+            this.component.componentWillUpdate(nextProps, nextState);
+            var nextRenderedElement = this.component.render();
+            reconciler_1.reconciler.enqueueUpdate(this._renderedInstance, nextRenderedElement);
         }
         this._element = nextElement;
     };
     ComponentInstance.prototype.unmount = function () {
-        this._component.componentWillUnmount();
+        this.component.componentWillUnmount();
         event_1.eventListenerSet.delAll(this.kutId);
         this._renderedInstance.unmount();
         util_1.getNode(this.kutId).remove();
         delete this.kutId;
         delete this.index;
         delete this._element;
-        delete this._component;
+        delete this.component;
         delete this._renderedInstance;
     };
     return ComponentInstance;

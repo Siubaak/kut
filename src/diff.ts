@@ -2,6 +2,7 @@ import { KutChild, KutElement } from './element'
 import { KutInstance } from './instance'
 import { instantiate } from './renderer'
 import { getNode, createNode } from './util'
+import { reconciler } from './reconciler'
 
 export interface PatchOp {
   type: 'insert' | 'move' | 'remove'
@@ -45,7 +46,7 @@ export function diff(
     // 若相同对prevInstance进行更新，否则新建instance
     // 然后均按序存在nextInstance中
     if (prevInstance && prevInstance.shouldReceive(nextChild)) {
-      prevInstance.update(nextChild)
+      reconciler.enqueueUpdate(prevInstance, nextChild)
       nextInstances.push(prevInstance)
     } else {
       const nextInstance = instantiate(nextChild)
@@ -72,8 +73,8 @@ export function diff(
       if (forwardPrevInstance.index < lastForwardIndex) {
         forwardOps.push({
           type: 'move',
-          index: lastForwardIndex,
           inst: forwardPrevInstance,
+          index: lastForwardIndex,
         })
       }
       // 更新固定位置
@@ -88,8 +89,8 @@ export function diff(
       }
       forwardOps.push({
         type: 'insert',
-        index: lastForwardIndex,
         inst: forwardNextInstance,
+        index: lastForwardIndex,
       })
     }
     // 后向diff
@@ -100,8 +101,8 @@ export function diff(
       if (backwardPrevInstance.index > lastBackwardIndex) {
         backwardOps.push({
           type: 'move',
-          index: lastBackwardIndex,
           inst: backwardPrevInstance,
+          index: lastBackwardIndex,
         })
       }
       lastBackwardIndex = Math.min(backwardPrevInstance.index, lastBackwardIndex)
@@ -114,8 +115,8 @@ export function diff(
       }
       backwardOps.push({
         type: 'insert',
-        index: lastBackwardIndex,
         inst: backwardNextInstance,
+        index: lastBackwardIndex,
       })
     }
   }
@@ -126,7 +127,7 @@ export function diff(
     nextInstanceMap[inst.key] = inst
   )
   // 去掉prevInstances中多余节点
-  for (let key in prevInstanceMap) {
+  for (const key in prevInstanceMap) {
     if (!nextInstanceMap[key]) {
       forwardOps.push({
         type: 'remove',

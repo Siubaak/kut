@@ -32,7 +32,7 @@ export function createElement(
     if (config.key != null) {
       key = ('' + (config.key as string)).replace(/:/g, '_')
     }
-    for (let prop in config) {
+    for (const prop in config) {
       if (
         Object.hasOwnProperty.call(config, prop)
         && !KUT_RESERVED_PROPS[prop]
@@ -42,7 +42,7 @@ export function createElement(
     }
     if (type && (type as typeof Component).defaultProps) {
       const defaultProps: any = (type as typeof Component).defaultProps
-      for (let prop in defaultProps) {
+      for (const prop in defaultProps) {
         if (
           Object.hasOwnProperty.call(defaultProps, prop)
           && !KUT_RESERVED_PROPS[prop]

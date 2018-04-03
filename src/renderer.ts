@@ -31,8 +31,7 @@ export function render(
   container: HTMLElement,
 ): void | string {
   const instance: KutInstance = instantiate(element)
-  const rootId: string = Math.random().toString(36).substring(2, 4)
-  const markup: string = instance.mount(rootId)
+  const markup: string = instance.mount('kut')
   container.innerHTML = markup
   // 调用所有componentDidMount方法
   didMountSet.exec()

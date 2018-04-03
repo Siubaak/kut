@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var renderer_1 = require("./renderer");
 var util_1 = require("./util");
+var reconciler_1 = require("./reconciler");
 function diff(prevInstances, nextChildren) {
     var prevInstanceMap = {};
     prevInstances.forEach(function (inst, index) {
@@ -14,7 +15,7 @@ function diff(prevInstances, nextChildren) {
             : '' + index;
         var prevInstance = prevInstanceMap[key];
         if (prevInstance && prevInstance.shouldReceive(nextChild)) {
-            prevInstance.update(nextChild);
+            reconciler_1.reconciler.enqueueUpdate(prevInstance, nextChild);
             nextInstances.push(prevInstance);
         }
         else {
@@ -34,8 +35,8 @@ function diff(prevInstances, nextChildren) {
             if (forwardPrevInstance.index < lastForwardIndex) {
                 forwardOps.push({
                     type: 'move',
-                    index: lastForwardIndex,
                     inst: forwardPrevInstance,
+                    index: lastForwardIndex,
                 });
             }
             lastForwardIndex = Math.max(forwardPrevInstance.index, lastForwardIndex);
@@ -49,8 +50,8 @@ function diff(prevInstances, nextChildren) {
             }
             forwardOps.push({
                 type: 'insert',
-                index: lastForwardIndex,
                 inst: forwardNextInstance,
+                index: lastForwardIndex,
             });
         }
         var backwardNextInstance = nextInstances[nextInstances.length - index - 1];
@@ -59,8 +60,8 @@ function diff(prevInstances, nextChildren) {
             if (backwardPrevInstance.index > lastBackwardIndex) {
                 backwardOps.push({
                     type: 'move',
-                    index: lastBackwardIndex,
                     inst: backwardPrevInstance,
+                    index: lastBackwardIndex,
                 });
             }
             lastBackwardIndex = Math.min(backwardPrevInstance.index, lastBackwardIndex);
@@ -74,8 +75,8 @@ function diff(prevInstances, nextChildren) {
             }
             backwardOps.push({
                 type: 'insert',
-                index: lastBackwardIndex,
                 inst: backwardNextInstance,
+                index: lastBackwardIndex,
             });
         }
     }

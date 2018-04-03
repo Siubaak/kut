@@ -5,15 +5,13 @@ import { assign } from './util'
  * Component基类，编写Component件时进行继承
  */
 export class Component {
-  state: any
+  state: any = {}
   props: KutProps
+  update = () => {}
   static defaultProps: any
-  update: (nextElement: KutChild, nextState?: any) => void
 
   constructor(props: KutProps) {
-    this.state = {}
     this.props = props
-    this.update = (nextElement: KutChild, nextState?: any) => {}
   }
 
   /**
@@ -25,7 +23,7 @@ export class Component {
    */
   protected setState(state: any): void {
     this.state = assign({}, this.state, state)
-    this.update(null, this.state)
+    this.update()
   }
 
   /**
@@ -34,7 +32,7 @@ export class Component {
    * @protected
    */
   protected forceUpdate(): void {
-    this.update(null, this.state)
+    this.update()
   }
 
   /**
