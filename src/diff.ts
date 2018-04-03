@@ -1,7 +1,7 @@
 import { KutChild, KutElement } from './element'
 import { KutInstance } from './instance'
 import { instantiate } from './renderer'
-import { getNode, createNode } from './util'
+import { getNode, createNode, didMountSet } from './util'
 import { reconciler } from './reconciler'
 
 export interface PatchOp {
@@ -170,20 +170,25 @@ export function patch(parentId: string, patches: Patches): void {
       // 移除节点
       op.inst.unmount()
     } else {
-      let node: Text | HTMLElement
       if (op.type === 'insert') {
         // 插入节点，需要调用createNode创建DOM节点
         ++insertNum
         const markup: string = op.inst.mount(`${parentId}:${op.inst.key}`)
-        node = createNode(markup)
+        const node = createNode(markup)
+        const beforeNode = container.children[beforeIndex]
+        // 无需判断beforeNode是否存在，
+        // 当beforeNode为undefined时，insertBefore等效于appendChild方法
+        container.insertBefore(node, beforeNode)
+        // 调用所有componentDidMount方法
+        didMountSet.exec()
       } else {
         // 移动节点，只需获取需要移动的节点
-        node = op.inst.node
+        const node = op.inst.node
+        const beforeNode = container.children[beforeIndex]
+        // 无需判断beforeNode是否存在，
+        // 当beforeNode为undefined时，insertBefore等效于appendChild方法
+        container.insertBefore(node, beforeNode)
       }
-      const beforeNode = container.children[beforeIndex]
-      // 无需判断beforeNode是否存在，
-      // 当beforeNode为undefined时，insertBefore等效于appendChild方法
-      container.insertBefore(node, beforeNode)
     }
   })
 }

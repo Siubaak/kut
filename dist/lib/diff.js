@@ -116,17 +116,19 @@ function patch(parentId, patches) {
             op.inst.unmount();
         }
         else {
-            var node = void 0;
             if (op.type === 'insert') {
                 ++insertNum;
                 var markup = op.inst.mount(parentId + ":" + op.inst.key);
-                node = util_1.createNode(markup);
+                var node = util_1.createNode(markup);
+                var beforeNode = container.children[beforeIndex];
+                container.insertBefore(node, beforeNode);
+                util_1.didMountSet.exec();
             }
             else {
-                node = op.inst.node;
+                var node = op.inst.node;
+                var beforeNode = container.children[beforeIndex];
+                container.insertBefore(node, beforeNode);
             }
-            var beforeNode = container.children[beforeIndex];
-            container.insertBefore(node, beforeNode);
         }
     });
 }

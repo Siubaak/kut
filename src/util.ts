@@ -4,7 +4,7 @@ export function assign(...objects: any[]): any {
   if (objects.length === 0) {
     return null
   } else {
-    let obj = objects[0]
+    const obj = objects[0]
     for (let i = 1; i < objects.length; ++i) {
       for (const key in objects[i]) {
         if (Object.hasOwnProperty.call(objects[i], key)) {
