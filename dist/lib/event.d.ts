@@ -1,5 +1,5 @@
 export declare class EventListenerSet {
-    private _eventListeners;
+    private readonly _eventListeners;
     constructor();
     get(kutId: string, event: string): Function;
     set(kutId: string, event: string, eventListener: (e: Event) => void): void;

@@ -97,4 +97,70 @@ var DidMountSet = (function () {
 }());
 exports.DidMountSet = DidMountSet;
 exports.didMountSet = new DidMountSet();
+var Heap = (function () {
+    function Heap(compare) {
+        this._arr = [];
+        this._compare = compare;
+    }
+    Object.defineProperty(Heap.prototype, "length", {
+        get: function () {
+            return this._arr.length;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Heap.prototype.push = function (item) {
+        this._arr.push(item);
+        this._promote(this._arr.length - 1);
+    };
+    Heap.prototype.pop = function () {
+        var len = this._arr.length;
+        var m;
+        if (len > 1) {
+            m = this._arr[0];
+            this._arr[0] = this._arr.pop();
+            this._heapify(0);
+        }
+        else {
+            m = this._arr.pop();
+        }
+        return m;
+    };
+    Heap.prototype._heapify = function (i) {
+        var l = this._left(i);
+        var r = this._right(i);
+        var m = i;
+        if (this._arr[l] && this._compare(this._arr[l], this._arr[i])) {
+            m = l;
+        }
+        if (this._arr[r] && this._compare(this._arr[r], this._arr[i])) {
+            m = r;
+        }
+        if (m !== i) {
+            _a = [this._arr[m], this._arr[i]], this._arr[i] = _a[0], this._arr[m] = _a[1];
+            this._heapify(m);
+        }
+        var _a;
+    };
+    Heap.prototype._promote = function (i) {
+        var p = this._parent(i);
+        while (this._arr[p] && this._compare(this._arr[p], this._arr[i])) {
+            _a = [this._arr[p], this._arr[i]], this._arr[i] = _a[0], this._arr[p] = _a[1];
+            i = p;
+            p = this._parent(i);
+        }
+        var _a;
+    };
+    Heap.prototype._parent = function (i) {
+        return Math.floor((i + 1) / 2) - 1;
+    };
+    Heap.prototype._left = function (i) {
+        return 2 * (i + 1) - 1;
+    };
+    Heap.prototype._right = function (i) {
+        return 2 * (i + 1);
+    };
+    return Heap;
+}());
+exports.Heap = Heap;
 //# sourceMappingURL=util.js.map

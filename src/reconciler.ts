@@ -1,41 +1,48 @@
 import { KutChild } from './element'
 import { KutInstance, ComponentInstance } from './instance'
+import { Heap } from './util'
 
 interface DirtyInstance {
   instance: KutInstance,
   element: KutChild,
 }
 
-// pop的复杂度有点高，加上batchUpdate的while有n2lgn，后期改成最小堆实现
-class DirtyInstanceMap {
-  private _dirtyInstanceMap: { [ id: string ]: DirtyInstance } = {}
-  get length() {
-    return Object.keys(this._dirtyInstanceMap).length
+/**
+ * dirtyInstance储存集合
+ */
+class DirtyInstanceSet {
+  private readonly _map: { [ id: string ]: DirtyInstance } = {}
+  private readonly _arr: Heap<string> = new Heap(
+    (contrast: string, self: string) =>
+      contrast.split(':').length < self.split(':').length
+  )
+  get length(): number {
+    return this._arr.length
   }
-  push(dirtyInstance: DirtyInstance) {
-    this._dirtyInstanceMap[dirtyInstance.instance.kutId] = dirtyInstance
+  push(dirtyInstance: DirtyInstance): void {
+    const kutId: string = dirtyInstance.instance.kutId
+    if (!this._map[kutId]) {
+      this._arr.push(kutId)
+    }
+    this._map[kutId] = dirtyInstance
   }
-  pop() {
-    const kutIds: string[] = Object.keys(this._dirtyInstanceMap)
-    kutIds.sort((id1, id2) => {
-      // 根据层级区分父子节点，以便先更新父节点，避免子节点重复更新
-      const len1 = id1.split(':').length
-      const len2 = id2.split(':').length
-      // 层级长度越小，节点等级越高
-      return len1 - len2
-    })
-    const dirtyInstance: DirtyInstance = this._dirtyInstanceMap[kutIds[0]]
-    delete this._dirtyInstanceMap[kutIds[0]]
+  pop(): DirtyInstance {
+    const kutId = this._arr.pop()
+    const dirtyInstance = this._map[kutId]
+    delete this._map[kutId]
     return dirtyInstance
   }
 }
 
-// mount和unmount都是同步的，只有update是异步的
+/**
+ * 更新调和器类，用于异步更新调和，合并Instance多次更新。
+ * mount和unmount都是同步的，只有update是异步的。
+ */
 export class Reconciler {
-  private _dirtyInstances = new DirtyInstanceMap() 
+  private readonly _dirtyInstanceSet = new DirtyInstanceSet() 
   private _isBatchUpdating: boolean = false
   enqueueUpdate(dirtyInstance: KutInstance, nextElement: KutChild): void {
-    this._dirtyInstances.push({
+    this._dirtyInstanceSet.push({
       instance: dirtyInstance,
       element: nextElement,
     })
@@ -47,8 +54,8 @@ export class Reconciler {
   private _runBatchUpdate() {
     this._isBatchUpdating = true
     setTimeout(() => {
-      while(this._dirtyInstances.length) {
-        const { instance, element } = this._dirtyInstances.pop()
+      while(this._dirtyInstanceSet.length) {
+        const { instance, element } = this._dirtyInstanceSet.pop()
         // 验证kutId，防止被推进更新队列之后被unmount掉了
         if (instance.kutId) {
           instance.update(element)
@@ -62,4 +69,7 @@ export class Reconciler {
   }
 }
 
+/**
+ * 导出Reconciler的单例
+ */
 export const reconciler: Reconciler = new Reconciler()

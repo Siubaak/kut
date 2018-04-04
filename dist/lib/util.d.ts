@@ -10,3 +10,16 @@ export declare class DidMountSet {
     exec(): void;
 }
 export declare const didMountSet: DidMountSet;
+export declare class Heap<T> {
+    private readonly _arr;
+    private readonly _compare;
+    constructor(compare: (contrast: T, self: T) => boolean);
+    readonly length: number;
+    push(item: T): void;
+    pop(): T;
+    private _heapify(i);
+    private _promote(i);
+    private _parent(i);
+    private _left(i);
+    private _right(i);
+}

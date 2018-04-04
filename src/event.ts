@@ -1,9 +1,11 @@
 import { KUT_ID, KUT_SUPPORTED_EVENTS } from './constant'
 import { getParentID } from './util'
 
-// 事件委托集合
+/**
+ * 事件委托集合类，用于document挂载所有节点事件的listener
+ */
 export class EventListenerSet {
-  private _eventListeners:  {
+  private readonly _eventListeners:  {
     [ key: string ]: {
       [ event: string ]: (e: Event) => void
     }
@@ -45,4 +47,7 @@ export class EventListenerSet {
   }
 }
 
+/**
+ * 导出EventListenerSet的单例
+ */
 export const eventListenerSet: EventListenerSet = new EventListenerSet()
