@@ -53,7 +53,7 @@ export class Reconciler {
   }
   private _runBatchUpdate() {
     this._isBatchUpdating = true
-    setTimeout(() => {
+    requestAnimationFrame(() => {
       while(this._dirtyInstanceSet.length) {
         const { instance, element } = this._dirtyInstanceSet.pop()
         // 验证kutId，防止被推进更新队列之后被unmount掉了
@@ -65,7 +65,7 @@ export class Reconciler {
         }
       }
       this._isBatchUpdating = false
-    }, 0)
+    })
   }
 }
 

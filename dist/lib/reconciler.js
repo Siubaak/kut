@@ -47,7 +47,7 @@ var Reconciler = (function () {
     Reconciler.prototype._runBatchUpdate = function () {
         var _this = this;
         this._isBatchUpdating = true;
-        setTimeout(function () {
+        requestAnimationFrame(function () {
             while (_this._dirtyInstanceSet.length) {
                 var _a = _this._dirtyInstanceSet.pop(), instance = _a.instance, element = _a.element;
                 if (instance.kutId) {
@@ -58,7 +58,7 @@ var Reconciler = (function () {
                 }
             }
             _this._isBatchUpdating = false;
-        }, 0);
+        });
     };
     return Reconciler;
 }());
