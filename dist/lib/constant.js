@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.KUT_ID = 'data-kutid';
 exports.KUT_RESERVED_PROPS = {
     key: true,
+    ref: true,
 };
 exports.CUT_ON_REGEX = /^on/;
 var eventHandlers = Object.keys(window || {}).filter(function (key) { return exports.CUT_ON_REGEX.test(key); });

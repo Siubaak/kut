@@ -89,7 +89,7 @@ var DidMountSet = (function () {
     };
     DidMountSet.prototype.exec = function () {
         while (this._didMountHandlers.length) {
-            var handler = this._didMountHandlers.pop();
+            var handler = this._didMountHandlers.shift();
             handler();
         }
     };
@@ -113,7 +113,7 @@ var Heap = (function () {
         this._arr.push(item);
         this._promote(this._arr.length - 1);
     };
-    Heap.prototype.pop = function () {
+    Heap.prototype.shift = function () {
         var len = this._arr.length;
         var m;
         if (len > 1) {

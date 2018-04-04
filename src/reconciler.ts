@@ -3,9 +3,9 @@ import { KutInstance, ComponentInstance } from './instance'
 import { Heap } from './util'
 
 interface DirtyInstance {
-  instance: KutInstance,
-  element: KutChild,
-  callback: () => void,
+  instance: KutInstance
+  element: KutChild
+  callback: () => void
 }
 
 /**
@@ -27,8 +27,8 @@ class DirtyInstanceSet {
     }
     this._map[kutId] = dirtyInstance
   }
-  pop(): DirtyInstance {
-    const kutId = this._arr.pop()
+  shift(): DirtyInstance {
+    const kutId = this._arr.shift()
     const dirtyInstance = this._map[kutId]
     delete this._map[kutId]
     return dirtyInstance
@@ -57,12 +57,12 @@ export class Reconciler {
     this._isBatchUpdating = true
     requestAnimationFrame(() => {
       while(this._dirtyInstanceSet.length) {
-        const { instance, element, callback } = this._dirtyInstanceSet.pop()
+        const { instance, element, callback } = this._dirtyInstanceSet.shift()
         // 验证kutId，防止被推进更新队列之后被unmount掉了
         if (instance.kutId) {
           instance.update(element)
+          // 如果有callback则调用，主要用于调用componentDidUpdate和setState的回调
           if (callback) {
-            // 如果有callback则调用，主要用于componentDidUpdate调用
             callback()
           }
         }

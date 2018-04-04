@@ -22,8 +22,8 @@ var DirtyInstanceSet = (function () {
         }
         this._map[kutId] = dirtyInstance;
     };
-    DirtyInstanceSet.prototype.pop = function () {
-        var kutId = this._arr.pop();
+    DirtyInstanceSet.prototype.shift = function () {
+        var kutId = this._arr.shift();
         var dirtyInstance = this._map[kutId];
         delete this._map[kutId];
         return dirtyInstance;
@@ -46,7 +46,7 @@ var Reconciler = (function () {
         this._isBatchUpdating = true;
         requestAnimationFrame(function () {
             while (_this._dirtyInstanceSet.length) {
-                var _a = _this._dirtyInstanceSet.pop(), instance = _a.instance, element = _a.element, callback = _a.callback;
+                var _a = _this._dirtyInstanceSet.shift(), instance = _a.instance, element = _a.element, callback = _a.callback;
                 if (instance.kutId) {
                     instance.update(element);
                     if (callback) {

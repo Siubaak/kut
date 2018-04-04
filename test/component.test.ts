@@ -12,13 +12,5 @@ describe('test/component.test.js', () => {
     assert(typeof inst.update === 'function')
 
     assert(typeof inst.render === 'function')
-
-    assert(typeof inst.componentWillMount === 'function')
-    assert(typeof inst.componentDidMount === 'function')
-    assert(typeof inst.componentWillReceiveProps === 'function')
-    assert(typeof inst.shouldComponentUpdate === 'function')
-    assert(typeof inst.componentWillUpdate === 'function')
-    assert(typeof inst.componentDidUpdate === 'function')
-    assert(typeof inst.componentWillUnmount === 'function')
   })
 })

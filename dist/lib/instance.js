@@ -41,7 +41,7 @@ var TextInstance = (function () {
     };
     TextInstance.prototype.unmount = function () {
         event_1.eventListenerSet.delAll(this.kutId);
-        util_1.getNode(this.kutId).remove();
+        this.node.remove();
         delete this.kutId;
         delete this.index;
         delete this._element;
@@ -104,6 +104,9 @@ var DOMInstance = (function () {
             _this._childInstances.push(instance);
         });
         markup += "</" + this._element.type + ">";
+        if (typeof this._element.ref === 'function') {
+            util_1.didMountSet.add(function () { return _this._element.ref(_this.node); });
+        }
         return markup;
     };
     DOMInstance.prototype.shouldReceive = function (nextElement) {
@@ -113,7 +116,7 @@ var DOMInstance = (function () {
     };
     DOMInstance.prototype.update = function (nextElement) {
         nextElement = nextElement == null ? this._element : nextElement;
-        var node = util_1.getNode(this.kutId);
+        var node = this.node;
         var prevProps = this._element.props;
         var nextProps = nextElement.props;
         for (var prop in nextProps) {
@@ -182,7 +185,7 @@ var DOMInstance = (function () {
     DOMInstance.prototype.unmount = function () {
         event_1.eventListenerSet.delAll(this.kutId);
         this._childInstances.forEach(function (child) { return child.unmount(); });
-        util_1.getNode(this.kutId).remove();
+        this.node.remove();
         delete this.kutId;
         delete this.index;
         delete this._element;
@@ -218,13 +221,18 @@ var ComponentInstance = (function () {
         var type = this._element.type;
         var ComponentConstructor = type;
         this._component = new ComponentConstructor(this._element.props);
-        this._component.componentWillMount();
+        if (typeof this._component.componentWillMount === 'function') {
+            ;
+            this._component.componentWillMount();
+        }
         this._component.update =
             function (callback) { return reconciler_1.reconciler.enqueueUpdate(_this, null, callback); };
         var renderedElement = this._component.render();
         this._renderedInstance = renderer_1.instantiate(renderedElement);
         var markup = this._renderedInstance.mount(kutId);
-        util_1.didMountSet.add(this._component.componentDidMount.bind(this._component));
+        if (typeof this._component.componentDidMount === 'function') {
+            util_1.didMountSet.add(this._component.componentDidMount.bind(this._component));
+        }
         return markup;
     };
     ComponentInstance.prototype.shouldReceive = function (nextElement) {
@@ -234,23 +242,39 @@ var ComponentInstance = (function () {
     };
     ComponentInstance.prototype.update = function (nextElement) {
         nextElement = nextElement == null ? this._element : nextElement;
-        if (this._element !== nextElement) {
+        if (typeof this._component.componentWillReceiveProps === 'function'
+            && this._element !== nextElement) {
+            ;
             this._component.componentWillReceiveProps(nextElement.props);
         }
         var nextProps = this._component.props = nextElement.props;
         var nextState = this._component.state;
-        if (this._component.shouldComponentUpdate(nextProps, nextState)) {
-            this._component.componentWillUpdate(nextProps, nextState);
+        var shouldUpdate = true;
+        if (typeof this._component.shouldComponentUpdate === 'function') {
+            shouldUpdate = this._component.shouldComponentUpdate(nextProps, nextState);
+        }
+        if (shouldUpdate) {
+            if (typeof this._component.componentWillUpdate === 'function') {
+                ;
+                this._component.componentWillUpdate(nextProps, nextState);
+            }
             var nextRenderedElement = this._component.render();
-            reconciler_1.reconciler.enqueueUpdate(this._renderedInstance, nextRenderedElement, this._component.componentDidUpdate.bind(this._component));
+            var callback = void 0;
+            if (typeof this._component.componentDidUpdate === 'function') {
+                callback = this._component.componentDidUpdate.bind(this._component);
+            }
+            reconciler_1.reconciler.enqueueUpdate(this._renderedInstance, nextRenderedElement, callback);
         }
         this._element = nextElement;
     };
     ComponentInstance.prototype.unmount = function () {
-        this._component.componentWillUnmount();
+        if (typeof this._component.componentWillUnmount === 'function') {
+            ;
+            this._component.componentWillUnmount();
+        }
         event_1.eventListenerSet.delAll(this.kutId);
         this._renderedInstance.unmount();
-        util_1.getNode(this.kutId).remove();
+        this.node.remove();
         delete this.kutId;
         delete this.index;
         delete this._element;

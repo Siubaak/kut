@@ -10,6 +10,7 @@ export const KUT_RESERVED_PROPS: {
   [prop: string]: boolean
 } = {
   key: true,
+  ref: true,
 }
 
 export const CUT_ON_REGEX: RegExp = /^on/
@@ -28,6 +29,7 @@ export const KUT_SUPPORTED_EVENT_HANDLERS: {
   [eventHandler: string]: boolean
 } = {}
 
+// 给event handler集合初始化
 eventHandlers.forEach((eventHandler: string) => {
   KUT_SUPPORTED_EVENT_HANDLERS[eventHandler] = true
 })

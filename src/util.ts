@@ -105,7 +105,7 @@ export class DidMountSet {
   }
   exec() {
     while(this._didMountHandlers.length) {
-      const handler: Function = this._didMountHandlers.pop()
+      const handler: Function = this._didMountHandlers.shift()
       handler()
     }
   }
@@ -122,17 +122,29 @@ export const didMountSet: DidMountSet = new DidMountSet()
 export class Heap<T> {
   private readonly _arr: T[] = []
   private readonly _compare: (contrast: T, self: T) => boolean
+
+  /**
+   * 优先队列构造函数，其中对比函数用于建堆
+   * @param compare 对比函数
+   */
   constructor(compare: (contrast: T, self: T) => boolean) {
     this._compare = compare
   }
   get length(): number {
     return this._arr.length
   }
+  /**
+   * 向优先队列压入一项
+   * @param item 
+   */
   push(item: T): void {
     this._arr.push(item)
     this._promote(this._arr.length - 1)
   }
-  pop(): T {
+  /**
+   * 返回优先队列中优先级最高一项，并从队列中去掉
+   */
+  shift(): T {
     const len = this._arr.length
     let m
     if (len > 1) {
@@ -145,7 +157,10 @@ export class Heap<T> {
     return m
   }
 
-  // 下面是二叉堆维护方法
+  /**
+   * 以位置i为根节点建堆
+   * @param i 
+   */
   private _heapify(i: number): void {
     const l = this._left(i)
     const r = this._right(i)
@@ -161,6 +176,10 @@ export class Heap<T> {
       this._heapify(m)
     }
   }
+  /**
+   * 提升i位置对应项
+   * @param i 
+   */
   private _promote(i: number): void {
     let p = this._parent(i)
     while(this._arr[p] && this._compare(this._arr[p], this._arr[i])) {
@@ -169,12 +188,24 @@ export class Heap<T> {
       p = this._parent(i)
     }
   }
+  /**
+   * 返回i位置对应项的父节点i
+   * @param i 
+   */
   private _parent(i: number): number {
     return Math.floor((i + 1) / 2) - 1
   }
+  /**
+   * 返回i位置对应项的左孩子节点i
+   * @param i 
+   */
   private _left(i: number): number {
     return 2 * (i + 1) - 1
   }
+  /**
+   * 返回i位置对应项的右孩子节点i
+   * @param i 
+   */
   private _right(i: number): number {
     return 2 * (i + 1)
   }

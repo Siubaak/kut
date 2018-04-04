@@ -53,14 +53,14 @@ export class Component {
     return null
   }
 
-  // 一堆生命周期函数
-  componentWillMount() {}
-  componentDidMount() {}
-  componentWillReceiveProps(nextProps: KutProps) {}
-  shouldComponentUpdate(nextProps: KutProps, nextState: any) {
-    return true
-  }
-  componentWillUpdate(nextProps: KutProps, nextState: any) {}
-  componentDidUpdate() {}
-  componentWillUnmount() {}
+  // 支持的生命周期函数
+  // componentWillMount() {}
+  // componentDidMount() {}
+  // componentWillReceiveProps(nextProps: KutProps) {}
+  // shouldComponentUpdate(nextProps: KutProps, nextState: any) {
+  //   return true
+  // }
+  // componentWillUpdate(nextProps: KutProps, nextState: any) {}
+  // componentDidUpdate() {}
+  // componentWillUnmount() {}
 }

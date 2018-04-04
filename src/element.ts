@@ -11,6 +11,7 @@ export interface KutProps {
 export interface KutElement {
   type: string | typeof Component
   key: string
+  ref: (node: HTMLElement) => void
   props: KutProps
 }
 
@@ -28,9 +29,13 @@ export function createElement(
   children = children.length ? [].concat(...children) : ['']
   const props: KutProps = { children: children as KutChild[] }
   let key: string = null
+  let ref: (node: HTMLElement) => void = null
   if (config) {
     if (config.key != null) {
       key = ('' + (config.key as string)).replace(/:/g, '_')
+    }
+    if (config.ref && typeof config.ref === 'function') {
+      ref = config.ref
     }
     for (const prop in config) {
       if (
@@ -53,5 +58,5 @@ export function createElement(
       }
     }
   }
-  return { type, key, props }
+  return { type, key, ref, props }
 }

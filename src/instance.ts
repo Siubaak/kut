@@ -42,7 +42,7 @@ export class TextInstance {
   }
   unmount() {
     eventListenerSet.delAll(this.kutId)
-    getNode(this.kutId).remove()
+    this.node.remove()
     delete this.kutId
     delete this.index
     delete this._element
@@ -103,6 +103,10 @@ export class DOMInstance {
       this._childInstances.push(instance)
     })
     markup += `</${this._element.type}>`
+    // 等挂载完统一返回ref
+    if (typeof this._element.ref === 'function') {
+      didMountSet.add(() => this._element.ref(this.node))
+    }
     return markup
   }
   shouldReceive(nextElement: KutChild): boolean {
@@ -113,7 +117,7 @@ export class DOMInstance {
   update(nextElement: KutChild): void {
     // 使用==以判断undefined和null
     nextElement = nextElement == null ? this._element : (nextElement as KutElement)
-    const node = getNode(this.kutId)
+    const node = this.node
     const prevProps = this._element.props
     const nextProps = nextElement.props
     for (const prop in nextProps) {
@@ -187,7 +191,7 @@ export class DOMInstance {
   unmount() {
     eventListenerSet.delAll(this.kutId)
     this._childInstances.forEach((child: KutInstance) => child.unmount())
-    getNode(this.kutId).remove()
+    this.node.remove()
     delete this.kutId
     delete this.index
     delete this._element
@@ -220,7 +224,9 @@ export class ComponentInstance {
     const type: string | typeof Component = (this._element as KutElement).type
     const ComponentConstructor: typeof Component = type as typeof Component
     this._component = new ComponentConstructor(this._element.props)
-    this._component.componentWillMount()
+    if (typeof (this._component as any).componentWillMount === 'function') {
+      ;(this._component as any).componentWillMount()
+    }
     // 异步更新方法注入，更新完毕后会调用componentDidUpdate方法
     this._component.update =
       (callback: () => void) => reconciler.enqueueUpdate(this, null, callback)
@@ -228,7 +234,9 @@ export class ComponentInstance {
     this._renderedInstance = instantiate(renderedElement)
     const markup = this._renderedInstance.mount(kutId)
     // 等挂载完统一调用componentDidMount方法
-    didMountSet.add(this._component.componentDidMount.bind(this._component))
+    if (typeof (this._component as any).componentDidMount === 'function') {
+      didMountSet.add((this._component as any).componentDidMount.bind(this._component))
+    }
     return markup
   }
   shouldReceive(nextElement: KutChild): boolean {
@@ -239,27 +247,38 @@ export class ComponentInstance {
   update(nextElement: KutChild): void {
     // 使用==以判断undefined和null
     nextElement = nextElement == null ? this._element : (nextElement as KutElement)
-    if (this._element !== nextElement) {
-      this._component.componentWillReceiveProps(nextElement.props)
+    if (
+      typeof (this._component as any).componentWillReceiveProps === 'function'
+      && this._element !== nextElement
+    ) {
+      ;(this._component as any).componentWillReceiveProps(nextElement.props)
     }
     const nextProps = this._component.props = nextElement.props
     const nextState = this._component.state
-    if (this._component.shouldComponentUpdate(nextProps, nextState)) {
-      this._component.componentWillUpdate(nextProps, nextState)
+    let shouldUpdate = true
+    if (typeof (this._component as any).shouldComponentUpdate === 'function') {
+      shouldUpdate = (this._component as any).shouldComponentUpdate(nextProps, nextState)
+    }
+    if (shouldUpdate) {
+      if (typeof (this._component as any).componentWillUpdate === 'function') {
+        ;(this._component as any).componentWillUpdate(nextProps, nextState)
+      }
       const nextRenderedElement: KutElement = this._component.render()
-      reconciler.enqueueUpdate(
-        this._renderedInstance,
-        nextRenderedElement,
-        this._component.componentDidUpdate.bind(this._component)
-      )
+      let callback
+      if (typeof (this._component as any).componentDidUpdate === 'function') {
+        callback = (this._component as any).componentDidUpdate.bind(this._component)
+      }
+      reconciler.enqueueUpdate(this._renderedInstance, nextRenderedElement, callback)
     }
     this._element = nextElement
   }
   unmount() {
-    this._component.componentWillUnmount()
+    if (typeof (this._component as any).componentWillUnmount === 'function') {
+      ;(this._component as any).componentWillUnmount()
+    }
     eventListenerSet.delAll(this.kutId)
     this._renderedInstance.unmount()
-    getNode(this.kutId).remove()
+    this.node.remove()
     delete this.kutId
     delete this.index
     delete this._element

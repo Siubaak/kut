@@ -16,7 +16,7 @@ export declare class Heap<T> {
     constructor(compare: (contrast: T, self: T) => boolean);
     readonly length: number;
     push(item: T): void;
-    pop(): T;
+    shift(): T;
     private _heapify(i);
     private _promote(i);
     private _parent(i);
