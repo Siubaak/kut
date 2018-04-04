@@ -217,13 +217,13 @@ var ComponentInstance = (function () {
         this.kutId = kutId;
         var type = this._element.type;
         var ComponentConstructor = type;
-        this.component = new ComponentConstructor(this._element.props);
-        this.component.componentWillMount();
-        this.component.update = function () { return reconciler_1.reconciler.enqueueUpdate(_this, null); };
-        var renderedElement = this.component.render();
+        this._component = new ComponentConstructor(this._element.props);
+        this._component.componentWillMount();
+        this._component.update = function () { return reconciler_1.reconciler.enqueueUpdate(_this, null); };
+        var renderedElement = this._component.render();
         this._renderedInstance = renderer_1.instantiate(renderedElement);
         var markup = this._renderedInstance.mount(kutId);
-        util_1.didMountSet.add(this.component.componentDidMount.bind(this.component));
+        util_1.didMountSet.add(this._component.componentDidMount.bind(this._component));
         return markup;
     };
     ComponentInstance.prototype.shouldReceive = function (nextElement) {
@@ -234,26 +234,26 @@ var ComponentInstance = (function () {
     ComponentInstance.prototype.update = function (nextElement) {
         nextElement = nextElement == null ? this._element : nextElement;
         if (this._element !== nextElement) {
-            this.component.componentWillReceiveProps(nextElement.props);
+            this._component.componentWillReceiveProps(nextElement.props);
         }
-        var nextProps = this.component.props = nextElement.props;
-        var nextState = this.component.state;
-        if (this.component.shouldComponentUpdate(nextProps, nextState)) {
-            this.component.componentWillUpdate(nextProps, nextState);
-            var nextRenderedElement = this.component.render();
-            reconciler_1.reconciler.enqueueUpdate(this._renderedInstance, nextRenderedElement);
+        var nextProps = this._component.props = nextElement.props;
+        var nextState = this._component.state;
+        if (this._component.shouldComponentUpdate(nextProps, nextState)) {
+            this._component.componentWillUpdate(nextProps, nextState);
+            var nextRenderedElement = this._component.render();
+            reconciler_1.reconciler.enqueueUpdate(this._renderedInstance, nextRenderedElement, this._component.componentDidUpdate.bind(this._component));
         }
         this._element = nextElement;
     };
     ComponentInstance.prototype.unmount = function () {
-        this.component.componentWillUnmount();
+        this._component.componentWillUnmount();
         event_1.eventListenerSet.delAll(this.kutId);
         this._renderedInstance.unmount();
         util_1.getNode(this.kutId).remove();
         delete this.kutId;
         delete this.index;
         delete this._element;
-        delete this.component;
+        delete this._component;
         delete this._renderedInstance;
     };
     return ComponentInstance;

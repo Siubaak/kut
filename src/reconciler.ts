@@ -5,6 +5,7 @@ import { Heap } from './util'
 interface DirtyInstance {
   instance: KutInstance,
   element: KutChild,
+  callback: () => void,
 }
 
 /**
@@ -41,11 +42,12 @@ class DirtyInstanceSet {
 export class Reconciler {
   private readonly _dirtyInstanceSet = new DirtyInstanceSet() 
   private _isBatchUpdating: boolean = false
-  enqueueUpdate(dirtyInstance: KutInstance, nextElement: KutChild): void {
-    this._dirtyInstanceSet.push({
-      instance: dirtyInstance,
-      element: nextElement,
-    })
+  enqueueUpdate(
+    instance: KutInstance,
+    element: KutChild,
+    callback?: () => void,
+  ): void {
+    this._dirtyInstanceSet.push({ instance, element, callback })
     // 如果没有批量更新，则进行批量更新
     if (!this._isBatchUpdating) {
       this._runBatchUpdate()
@@ -55,12 +57,13 @@ export class Reconciler {
     this._isBatchUpdating = true
     requestAnimationFrame(() => {
       while(this._dirtyInstanceSet.length) {
-        const { instance, element } = this._dirtyInstanceSet.pop()
+        const { instance, element, callback } = this._dirtyInstanceSet.pop()
         // 验证kutId，防止被推进更新队列之后被unmount掉了
         if (instance.kutId) {
           instance.update(element)
-          if ((instance as ComponentInstance).component) {
-            (instance as ComponentInstance).component.componentDidUpdate()
+          if (callback) {
+            // 如果有callback则调用，主要用于componentDidUpdate调用
+            callback()
           }
         }
       }

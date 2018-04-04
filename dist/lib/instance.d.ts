@@ -1,5 +1,4 @@
 import { KutChild } from './element';
-import { Component } from './component';
 export declare type KutInstance = TextInstance | DOMInstance | ComponentInstance;
 export declare class TextInstance {
     kutId: string;
@@ -29,7 +28,7 @@ export declare class DOMInstance {
 export declare class ComponentInstance {
     kutId: string;
     index: number;
-    component: Component;
+    private _component;
     private _element;
     private _renderedInstance;
     constructor(element: KutChild);

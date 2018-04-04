@@ -201,7 +201,7 @@ export class DOMInstance {
 export class ComponentInstance {
   kutId: string
   index: number = 0
-  component: Component
+  private _component: Component
   private _element: KutElement
   private _renderedInstance: KutInstance
   constructor(element: KutChild) {
@@ -219,15 +219,15 @@ export class ComponentInstance {
     this.kutId = kutId
     const type: string | typeof Component = (this._element as KutElement).type
     const ComponentConstructor: typeof Component = type as typeof Component
-    this.component = new ComponentConstructor(this._element.props)
-    this.component.componentWillMount()
+    this._component = new ComponentConstructor(this._element.props)
+    this._component.componentWillMount()
     // 异步更新方法注入，更新完毕后会调用componentDidUpdate方法
-    this.component.update =() => reconciler.enqueueUpdate(this, null)
-    const renderedElement: KutElement = this.component.render()
+    this._component.update = () => reconciler.enqueueUpdate(this, null)
+    const renderedElement: KutElement = this._component.render()
     this._renderedInstance = instantiate(renderedElement)
     const markup = this._renderedInstance.mount(kutId)
     // 等挂载完统一调用componentDidMount方法
-    didMountSet.add(this.component.componentDidMount.bind(this.component))
+    didMountSet.add(this._component.componentDidMount.bind(this._component))
     return markup
   }
   shouldReceive(nextElement: KutChild): boolean {
@@ -239,26 +239,30 @@ export class ComponentInstance {
     // 使用==以判断undefined和null
     nextElement = nextElement == null ? this._element : (nextElement as KutElement)
     if (this._element !== nextElement) {
-      this.component.componentWillReceiveProps(nextElement.props)
+      this._component.componentWillReceiveProps(nextElement.props)
     }
-    const nextProps = this.component.props = nextElement.props
-    const nextState = this.component.state
-    if (this.component.shouldComponentUpdate(nextProps, nextState)) {
-      this.component.componentWillUpdate(nextProps, nextState)
-      const nextRenderedElement: KutElement = this.component.render()
-      reconciler.enqueueUpdate(this._renderedInstance, nextRenderedElement)
+    const nextProps = this._component.props = nextElement.props
+    const nextState = this._component.state
+    if (this._component.shouldComponentUpdate(nextProps, nextState)) {
+      this._component.componentWillUpdate(nextProps, nextState)
+      const nextRenderedElement: KutElement = this._component.render()
+      reconciler.enqueueUpdate(
+        this._renderedInstance,
+        nextRenderedElement,
+        this._component.componentDidUpdate.bind(this._component)
+      )
     }
     this._element = nextElement
   }
   unmount() {
-    this.component.componentWillUnmount()
+    this._component.componentWillUnmount()
     eventListenerSet.delAll(this.kutId)
     this._renderedInstance.unmount()
     getNode(this.kutId).remove()
     delete this.kutId
     delete this.index
     delete this._element
-    delete this.component
+    delete this._component
     delete this._renderedInstance
   }
 }

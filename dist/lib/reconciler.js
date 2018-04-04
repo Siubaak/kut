@@ -35,11 +35,8 @@ var Reconciler = (function () {
         this._dirtyInstanceSet = new DirtyInstanceSet();
         this._isBatchUpdating = false;
     }
-    Reconciler.prototype.enqueueUpdate = function (dirtyInstance, nextElement) {
-        this._dirtyInstanceSet.push({
-            instance: dirtyInstance,
-            element: nextElement,
-        });
+    Reconciler.prototype.enqueueUpdate = function (instance, element, callback) {
+        this._dirtyInstanceSet.push({ instance: instance, element: element, callback: callback });
         if (!this._isBatchUpdating) {
             this._runBatchUpdate();
         }
@@ -49,11 +46,11 @@ var Reconciler = (function () {
         this._isBatchUpdating = true;
         requestAnimationFrame(function () {
             while (_this._dirtyInstanceSet.length) {
-                var _a = _this._dirtyInstanceSet.pop(), instance = _a.instance, element = _a.element;
+                var _a = _this._dirtyInstanceSet.pop(), instance = _a.instance, element = _a.element, callback = _a.callback;
                 if (instance.kutId) {
                     instance.update(element);
-                    if (instance.component) {
-                        instance.component.componentDidUpdate();
+                    if (callback) {
+                        callback();
                     }
                 }
             }
