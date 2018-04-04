@@ -219,7 +219,8 @@ var ComponentInstance = (function () {
         var ComponentConstructor = type;
         this._component = new ComponentConstructor(this._element.props);
         this._component.componentWillMount();
-        this._component.update = function () { return reconciler_1.reconciler.enqueueUpdate(_this, null); };
+        this._component.update =
+            function (callback) { return reconciler_1.reconciler.enqueueUpdate(_this, null, callback); };
         var renderedElement = this._component.render();
         this._renderedInstance = renderer_1.instantiate(renderedElement);
         var markup = this._renderedInstance.mount(kutId);

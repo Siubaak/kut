@@ -222,7 +222,8 @@ export class ComponentInstance {
     this._component = new ComponentConstructor(this._element.props)
     this._component.componentWillMount()
     // 异步更新方法注入，更新完毕后会调用componentDidUpdate方法
-    this._component.update = () => reconciler.enqueueUpdate(this, null)
+    this._component.update =
+      (callback: () => void) => reconciler.enqueueUpdate(this, null, callback)
     const renderedElement: KutElement = this._component.render()
     this._renderedInstance = instantiate(renderedElement)
     const markup = this._renderedInstance.mount(kutId)

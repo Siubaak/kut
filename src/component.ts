@@ -7,7 +7,7 @@ import { assign } from './util'
 export class Component {
   state: any = {}
   props: KutProps
-  update = () => {}
+  update = (callback: () => void) => {}
   static defaultProps: any
 
   constructor(props: KutProps) {
@@ -15,24 +15,34 @@ export class Component {
   }
 
   /**
+   * setState异步更新，可传入回调函数获取更新后state
    * 为state创建副本，并以此修改state，应该把state当作不可变对象
-   * 子类中不应进行override
-   * @param state 
+   * 子类中不应进行重写
+   * @param state 需要修改的state
+   * @param callback 回调函数，自动绑定当前上下文
    * @final
    * @protected
    */
-  protected setState(state: any): void {
+  protected setState(state: any, callback?: () => void): void {
     this.state = assign({}, this.state, state)
-    this.update()
+    if (callback) {
+      callback = callback.bind(this)
+    }
+    this.update(callback)
   }
 
   /**
-   * 强制更新Component
+   * setState异步更新，可传入回调函数获取更新后state
+   * 强制更新Component，子类中不应进行重写
+   * @param callback 回调函数，自动绑定当前上下文
    * @final
    * @protected
    */
-  protected forceUpdate(): void {
-    this.update()
+  protected forceUpdate(callback?: () => void): void {
+    if (callback) {
+      callback = callback.bind(this)
+    }
+    this.update(callback)
   }
 
   /**

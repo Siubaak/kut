@@ -16,9 +16,9 @@ export interface Patches {
 }
 
 /**
- * 对比两个数组，返回从旧节点数组到新节点数组的最少操作。
- * 采用前向diff和后向diff，并取两者操作较少这返回。
- * diff方法会更新prevInstances的引用数组。
+ * 对比两个数组，返回从旧节点数组到新节点数组的最少操作
+ * 采用前向diff和后向diff，并取两者操作较少这返回
+ * diff方法会更新prevInstances的引用数组
  * @param prevInstances 旧节点对应instance数组
  * @param nextChildren 新节点对应element数组
  */

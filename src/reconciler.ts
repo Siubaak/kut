@@ -36,8 +36,8 @@ class DirtyInstanceSet {
 }
 
 /**
- * 更新调和器类，用于异步更新调和，合并Instance多次更新。
- * mount和unmount都是同步的，只有update是异步的。
+ * 更新调和器类，用于异步更新调和，合并Instance多次更新
+ * mount和unmount都是同步的，只有update是异步的
  */
 export class Reconciler {
   private readonly _dirtyInstanceSet = new DirtyInstanceSet() 
