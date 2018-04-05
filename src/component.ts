@@ -1,4 +1,4 @@
-import { KutProps, KutElement, KutChild } from './element'
+import { KutProps, KutElement } from './element'
 import { assign } from './util'
 
 /**

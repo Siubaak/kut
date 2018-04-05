@@ -1,5 +1,5 @@
 import { KutChild } from './element'
-import { KutInstance, ComponentInstance } from './instance'
+import { KutInstance } from './instance'
 import { Heap } from './util'
 
 interface DirtyInstance {

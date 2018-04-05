@@ -1,4 +1,4 @@
-import { KutElement, KutChild, KutProps } from './element'
+import { KutElement, KutChild } from './element'
 import { instantiate } from './renderer'
 import { Component } from './component'
 import { Patches, diff, patch } from './diff'
