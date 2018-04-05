@@ -114,9 +114,8 @@ var Heap = (function () {
         this._promote(this._arr.length - 1);
     };
     Heap.prototype.shift = function () {
-        var len = this._arr.length;
         var m;
-        if (len > 1) {
+        if (this._arr.length > 1) {
             m = this._arr[0];
             this._arr[0] = this._arr.pop();
             this._heapify(0);

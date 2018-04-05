@@ -6,7 +6,7 @@ export declare function getClassString(className: any): string;
 export declare function getStyleString(style: any): string;
 export declare class DidMountSet {
     private _didMountHandlers;
-    add(handler: Function): void;
+    add(handler: () => void): void;
     exec(): void;
 }
 export declare const didMountSet: DidMountSet;

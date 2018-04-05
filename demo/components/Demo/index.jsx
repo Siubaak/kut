@@ -31,7 +31,7 @@ class Demo extends React.Component {
   handleRan(index) {
     const todos = [ ...this.state.todos ]
     const shuffleTodos = []
-    while(todos.length) {
+    while (todos.length) {
       const i = Math.floor(Math.random() * todos.length)
       shuffleTodos.push(todos[i])
       todos.splice(i, 1)

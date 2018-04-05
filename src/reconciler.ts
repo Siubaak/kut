@@ -5,7 +5,7 @@ import { Heap } from './util'
 interface DirtyInstance {
   instance: KutInstance
   element: KutChild
-  callback: () => void
+  callbacks: (() => void)[]
 }
 
 /**
@@ -24,8 +24,13 @@ class DirtyInstanceSet {
     const kutId: string = dirtyInstance.instance.kutId
     if (!this._map[kutId]) {
       this._arr.push(kutId)
+      this._map[kutId] = dirtyInstance
+    } else {
+      this._map[kutId].instance = dirtyInstance.instance
+      this._map[kutId].element = dirtyInstance.element
+      this._map[kutId].callbacks =
+        this._map[kutId].callbacks.concat(dirtyInstance.callbacks)
     }
-    this._map[kutId] = dirtyInstance
   }
   shift(): DirtyInstance {
     const kutId = this._arr.shift()
@@ -47,7 +52,11 @@ export class Reconciler {
     element: KutChild,
     callback?: () => void,
   ): void {
-    this._dirtyInstanceSet.push({ instance, element, callback })
+    const dirtyInstance: DirtyInstance = { instance, element, callbacks: [] }
+    if (typeof callback === 'function') {
+      dirtyInstance.callbacks.push(callback)
+    }
+    this._dirtyInstanceSet.push(dirtyInstance)
     // 如果没有批量更新，则进行批量更新
     if (!this._isBatchUpdating) {
       this._runBatchUpdate()
@@ -56,13 +65,14 @@ export class Reconciler {
   private _runBatchUpdate() {
     this._isBatchUpdating = true
     requestAnimationFrame(() => {
-      while(this._dirtyInstanceSet.length) {
-        const { instance, element, callback } = this._dirtyInstanceSet.shift()
+      while (this._dirtyInstanceSet.length) {
+        const { instance, element, callbacks } = this._dirtyInstanceSet.shift()
         // 验证kutId，防止被推进更新队列之后被unmount掉了
         if (instance.kutId) {
           instance.update(element)
           // 如果有callback则调用，主要用于调用componentDidUpdate和setState的回调
-          if (callback) {
+          while (callbacks.length) {
+            const callback = callbacks.shift()
             callback()
           }
         }

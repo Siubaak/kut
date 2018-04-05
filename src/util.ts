@@ -99,13 +99,13 @@ export function getStyleString(style: any): string {
  * 并统一在挂载完后执行
  */
 export class DidMountSet {
-  private _didMountHandlers: Function[] = []
-  add(handler: Function) {
+  private _didMountHandlers: (() => void)[] = []
+  add(handler: () => void) {
     this._didMountHandlers.push(handler)
   }
   exec() {
-    while(this._didMountHandlers.length) {
-      const handler: Function = this._didMountHandlers.shift()
+    while (this._didMountHandlers.length) {
+      const handler = this._didMountHandlers.shift()
       handler()
     }
   }
@@ -145,9 +145,8 @@ export class Heap<T> {
    * 返回优先队列中优先级最高一项，并从队列中去掉
    */
   shift(): T {
-    const len = this._arr.length
     let m
-    if (len > 1) {
+    if (this._arr.length > 1) {
       m = this._arr[0]
       this._arr[0] = this._arr.pop()
       this._heapify(0)
@@ -182,7 +181,7 @@ export class Heap<T> {
    */
   private _promote(i: number): void {
     let p = this._parent(i)
-    while(this._arr[p] && this._compare(this._arr[p], this._arr[i])) {
+    while (this._arr[p] && this._compare(this._arr[p], this._arr[i])) {
       [ this._arr[i], this._arr[p] ] = [ this._arr[p], this._arr[i] ]
       i = p
       p = this._parent(i)

@@ -28,7 +28,7 @@ export class EventListenerSet {
       })
     }
   }
-  get(kutId: string, event: string): Function {
+  get(kutId: string, event: string): (e: Event) => void {
     return this._eventListeners[kutId][event]
   }
   set(kutId: string, event: string, eventListener: (e: Event) => void): void {

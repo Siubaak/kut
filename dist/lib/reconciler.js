@@ -19,8 +19,14 @@ var DirtyInstanceSet = (function () {
         var kutId = dirtyInstance.instance.kutId;
         if (!this._map[kutId]) {
             this._arr.push(kutId);
+            this._map[kutId] = dirtyInstance;
         }
-        this._map[kutId] = dirtyInstance;
+        else {
+            this._map[kutId].instance = dirtyInstance.instance;
+            this._map[kutId].element = dirtyInstance.element;
+            this._map[kutId].callbacks =
+                this._map[kutId].callbacks.concat(dirtyInstance.callbacks);
+        }
     };
     DirtyInstanceSet.prototype.shift = function () {
         var kutId = this._arr.shift();
@@ -36,7 +42,11 @@ var Reconciler = (function () {
         this._isBatchUpdating = false;
     }
     Reconciler.prototype.enqueueUpdate = function (instance, element, callback) {
-        this._dirtyInstanceSet.push({ instance: instance, element: element, callback: callback });
+        var dirtyInstance = { instance: instance, element: element, callbacks: [] };
+        if (typeof callback === 'function') {
+            dirtyInstance.callbacks.push(callback);
+        }
+        this._dirtyInstanceSet.push(dirtyInstance);
         if (!this._isBatchUpdating) {
             this._runBatchUpdate();
         }
@@ -46,10 +56,11 @@ var Reconciler = (function () {
         this._isBatchUpdating = true;
         requestAnimationFrame(function () {
             while (_this._dirtyInstanceSet.length) {
-                var _a = _this._dirtyInstanceSet.shift(), instance = _a.instance, element = _a.element, callback = _a.callback;
+                var _a = _this._dirtyInstanceSet.shift(), instance = _a.instance, element = _a.element, callbacks = _a.callbacks;
                 if (instance.kutId) {
                     instance.update(element);
-                    if (callback) {
+                    while (callbacks.length) {
+                        var callback = callbacks.shift();
                         callback();
                     }
                 }
