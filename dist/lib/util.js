@@ -21,7 +21,10 @@ function assign() {
         return obj;
     }
 }
-exports.assign = assign;
+if (!Object.assign) {
+    ;
+    Object.assign = assign;
+}
 function getParentID(childID) {
     var regex = /[:]\w+$/;
     return regex.test(childID) && childID.replace(regex, '');

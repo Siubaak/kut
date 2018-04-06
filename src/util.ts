@@ -4,7 +4,7 @@ import { KUT_ID } from './constant'
  * ES6 Object.assign的polyfill
  * @param objects 
  */
-export function assign(...objects: any[]): any {
+function assign(...objects: any[]): any {
   if (objects.length === 0) {
     return null
   } else {
@@ -18,6 +18,10 @@ export function assign(...objects: any[]): any {
     }
     return obj
   }
+}
+
+if (!(Object as any).assign) {
+  ;(Object as any).assign = assign
 }
 
 /**

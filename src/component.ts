@@ -1,5 +1,4 @@
 import { KutProps, KutElement } from './element'
-import { assign } from './util'
 
 /**
  * Component基类，编写Component件时进行继承
@@ -24,7 +23,7 @@ export class Component {
    * @protected
    */
   protected setState(state: any, callback?: () => void): void {
-    this.state = assign({}, this.state, state)
+    this.state = (Object as any).assign({}, this.state, state)
     if (callback) {
       callback = callback.bind(this)
     }

@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var util_1 = require("./util");
 var Component = (function () {
     function Component(props) {
         this.state = {};
@@ -8,7 +7,7 @@ var Component = (function () {
         this.props = props;
     }
     Component.prototype.setState = function (state, callback) {
-        this.state = util_1.assign({}, this.state, state);
+        this.state = Object.assign({}, this.state, state);
         if (callback) {
             callback = callback.bind(this);
         }
