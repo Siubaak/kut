@@ -226,9 +226,9 @@ var ComponentInstance = (function () {
             ;
             this._component.componentWillMount();
         }
-        this._component._update = function (callback, skipShouldUpdate) {
+        this._component._update = function (skipShouldUpdate) {
             _this._skipShouldUpdate = skipShouldUpdate;
-            reconciler_1.reconciler.enqueueUpdate(_this, null, callback);
+            reconciler_1.reconciler.enqueueUpdate(_this, null);
         };
         var renderedElement = this._component.render();
         this._renderedInstance = renderer_1.instantiate(renderedElement);
@@ -264,11 +264,11 @@ var ComponentInstance = (function () {
                 this._component.componentWillUpdate(nextProps, nextState);
             }
             var nextRenderedElement = this._component.render();
-            var callback = void 0;
+            var didUpdate = void 0;
             if (typeof this._component.componentDidUpdate === 'function') {
-                callback = this._component.componentDidUpdate.bind(this._component);
+                didUpdate = this._component.componentDidUpdate.bind(this._component);
             }
-            reconciler_1.reconciler.enqueueUpdate(this._renderedInstance, nextRenderedElement, callback);
+            reconciler_1.reconciler.enqueueUpdate(this._renderedInstance, nextRenderedElement, didUpdate);
         }
         this._element = nextElement;
     };
@@ -285,6 +285,7 @@ var ComponentInstance = (function () {
         delete this._element;
         delete this._component;
         delete this._renderedInstance;
+        delete this._skipShouldUpdate;
     };
     return ComponentInstance;
 }());

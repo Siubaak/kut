@@ -208,7 +208,7 @@ export class ComponentInstance {
   private _component: Component
   private _element: KutElement
   private _renderedInstance: KutInstance
-  private _skipShouldUpdate = false
+  private _skipShouldUpdate: boolean = false
   constructor(element: KutChild) {
     this._element = element as KutElement
   }
@@ -229,9 +229,9 @@ export class ComponentInstance {
       ;(this._component as any).componentWillMount()
     }
     // 异步更新方法注入，更新完毕后会调用componentDidUpdate方法
-    this._component._update = (callback, skipShouldUpdate) => {
+    this._component._update = (skipShouldUpdate: boolean) => {
       this._skipShouldUpdate = skipShouldUpdate
-      reconciler.enqueueUpdate(this, null, callback)
+      reconciler.enqueueUpdate(this, null)
     }
     const renderedElement: KutElement = this._component.render()
     this._renderedInstance = instantiate(renderedElement)
@@ -271,11 +271,11 @@ export class ComponentInstance {
         ;(this._component as any).componentWillUpdate(nextProps, nextState)
       }
       const nextRenderedElement: KutElement = this._component.render()
-      let callback
+      let didUpdate: () => void
       if (typeof (this._component as any).componentDidUpdate === 'function') {
-        callback = (this._component as any).componentDidUpdate.bind(this._component)
+        didUpdate = (this._component as any).componentDidUpdate.bind(this._component)
       }
-      reconciler.enqueueUpdate(this._renderedInstance, nextRenderedElement, callback)
+      reconciler.enqueueUpdate(this._renderedInstance, nextRenderedElement, didUpdate)
     }
     this._element = nextElement
   }
@@ -291,6 +291,7 @@ export class ComponentInstance {
     delete this._element
     delete this._component
     delete this._renderedInstance
+    delete this._skipShouldUpdate
   }
 }
 

@@ -19,14 +19,8 @@ var DirtyInstanceSet = (function () {
         var kutId = dirtyInstance.instance.kutId;
         if (!this._map[kutId]) {
             this._arr.push(kutId);
-            this._map[kutId] = dirtyInstance;
         }
-        else {
-            this._map[kutId].instance = dirtyInstance.instance;
-            this._map[kutId].element = dirtyInstance.element;
-            this._map[kutId].callbacks =
-                this._map[kutId].callbacks.concat(dirtyInstance.callbacks);
-        }
+        this._map[kutId] = dirtyInstance;
     };
     DirtyInstanceSet.prototype.shift = function () {
         var kutId = this._arr.shift();
@@ -41,12 +35,8 @@ var Reconciler = (function () {
         this._dirtyInstanceSet = new DirtyInstanceSet();
         this._isBatchUpdating = false;
     }
-    Reconciler.prototype.enqueueUpdate = function (instance, element, callback) {
-        var dirtyInstance = { instance: instance, element: element, callbacks: [] };
-        if (typeof callback === 'function') {
-            dirtyInstance.callbacks.push(callback);
-        }
-        this._dirtyInstanceSet.push(dirtyInstance);
+    Reconciler.prototype.enqueueUpdate = function (instance, element, didUpdate) {
+        this._dirtyInstanceSet.push({ instance: instance, element: element, didUpdate: didUpdate });
         if (!this._isBatchUpdating) {
             this._runBatchUpdate();
         }
@@ -56,12 +46,11 @@ var Reconciler = (function () {
         this._isBatchUpdating = true;
         requestAnimationFrame(function () {
             while (_this._dirtyInstanceSet.length) {
-                var _a = _this._dirtyInstanceSet.shift(), instance = _a.instance, element = _a.element, callbacks = _a.callbacks;
+                var _a = _this._dirtyInstanceSet.shift(), instance = _a.instance, element = _a.element, didUpdate = _a.didUpdate;
                 if (instance.kutId) {
                     instance.update(element);
-                    while (callbacks.length) {
-                        var callback = callbacks.shift();
-                        callback();
+                    if (typeof didUpdate === 'function') {
+                        didUpdate();
                     }
                 }
             }

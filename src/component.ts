@@ -8,7 +8,7 @@ export class Component {
   props: KutProps
   static defaultProps: any
 
-  _update = (callback: () => void, skipShouldUpdate: boolean) => {}
+  _update = (skipShouldUpdate: boolean) => {}
 
   constructor(props: KutProps) {
     this.props = props
@@ -23,12 +23,9 @@ export class Component {
    * @final
    * @protected
    */
-  protected setState(state: any, callback?: () => void): void {
+  protected setState(state: any): void {
     this.state = (Object as any).assign({}, this.state, state)
-    if (callback) {
-      callback = callback.bind(this)
-    }
-    this._update(callback, false)
+    this._update(false)
   }
 
   /**
@@ -38,11 +35,8 @@ export class Component {
    * @final
    * @protected
    */
-  protected forceUpdate(callback?: () => void): void {
-    if (callback) {
-      callback = callback.bind(this)
-    }
-    this._update(callback, true)
+  protected forceUpdate(): void {
+    this._update(true)
   }
 
   /**
