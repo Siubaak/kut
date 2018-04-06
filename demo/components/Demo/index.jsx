@@ -17,8 +17,29 @@ class Demo extends React.Component {
       ],
     }
   }
+  componentWillMount() {
+    console.log('TodoList will mount')
+  }
+  componentDidMount() {
+    console.log('TodoList did mount')
+  }
+  componentWillReceiveProps() {
+    console.log('TodoList will receive props')
+  }
+  shouldComponentUpdate() {
+    return true
+  }
+  componentWillUpdate() {
+    console.log('TodoList will update')
+  }
+  componentDidUpdate() {
+    console.log('TodoList did update')
+  }
   handleInput(e) {
     this.setState({ input: e.target.value })
+  }
+  componentWillUnmount() {
+    console.log('TodoList will unmount')
   }
   handleAdd(e) {
     if (this.state.input !== '') {
