@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var Component = (function () {
     function Component(props) {
         this.state = {};
-        this.update = function (callback) { };
+        this._update = function (callback, skipShouldUpdate) { };
         this.props = props;
     }
     Component.prototype.setState = function (state, callback) {
@@ -11,13 +11,13 @@ var Component = (function () {
         if (callback) {
             callback = callback.bind(this);
         }
-        this.update(callback);
+        this._update(callback, false);
     };
     Component.prototype.forceUpdate = function (callback) {
         if (callback) {
             callback = callback.bind(this);
         }
-        this.update(callback);
+        this._update(callback, true);
     };
     Component.prototype.render = function (props) {
         if (props === void 0) { props = this.props; }

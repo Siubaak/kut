@@ -6,8 +6,9 @@ import { KutProps, KutElement } from './element'
 export class Component {
   state: any = {}
   props: KutProps
-  update = (callback: () => void) => {}
   static defaultProps: any
+
+  _update = (callback: () => void, skipShouldUpdate: boolean) => {}
 
   constructor(props: KutProps) {
     this.props = props
@@ -27,7 +28,7 @@ export class Component {
     if (callback) {
       callback = callback.bind(this)
     }
-    this.update(callback)
+    this._update(callback, false)
   }
 
   /**
@@ -41,7 +42,7 @@ export class Component {
     if (callback) {
       callback = callback.bind(this)
     }
-    this.update(callback)
+    this._update(callback, true)
   }
 
   /**

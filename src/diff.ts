@@ -140,7 +140,10 @@ export function diff(
     }
   }
   // 更新_index
-  nextInstances.forEach((nextInstance: KutInstance, index: number) => nextInstance.index = index)
+  nextInstances.forEach(
+    (nextInstance: KutInstance, index: number) =>
+      nextInstance.index = index
+  )
   // 替换_childInstances，直接赋值会丢失引用
   prevInstances.length = 0
   prevInstances.push(...nextInstances)

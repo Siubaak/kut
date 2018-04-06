@@ -96,7 +96,9 @@ function diff(prevInstances, nextChildren) {
             });
         }
     }
-    nextInstances.forEach(function (nextInstance, index) { return nextInstance.index = index; });
+    nextInstances.forEach(function (nextInstance, index) {
+        return nextInstance.index = index;
+    });
     prevInstances.length = 0;
     prevInstances.push.apply(prevInstances, nextInstances);
     return forwardOps.length < backwardOps.length

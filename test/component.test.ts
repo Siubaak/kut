@@ -9,7 +9,8 @@ describe('test/component.test.js', () => {
     
     assert(typeof inst.state === 'object')
     assert(typeof inst.props === 'object')
-    assert(typeof inst.update === 'function')
+
+    assert(typeof inst._update === 'function')
 
     assert(typeof inst.render === 'function')
   })

@@ -197,6 +197,7 @@ exports.DOMInstance = DOMInstance;
 var ComponentInstance = (function () {
     function ComponentInstance(element) {
         this.index = 0;
+        this._skipShouldUpdate = false;
         this._element = element;
     }
     Object.defineProperty(ComponentInstance.prototype, "key", {
@@ -225,8 +226,10 @@ var ComponentInstance = (function () {
             ;
             this._component.componentWillMount();
         }
-        this._component.update =
-            function (callback) { return reconciler_1.reconciler.enqueueUpdate(_this, null, callback); };
+        this._component._update = function (callback, skipShouldUpdate) {
+            _this._skipShouldUpdate = skipShouldUpdate;
+            reconciler_1.reconciler.enqueueUpdate(_this, null, callback);
+        };
         var renderedElement = this._component.render();
         this._renderedInstance = renderer_1.instantiate(renderedElement);
         var markup = this._renderedInstance.mount(kutId);
@@ -250,10 +253,12 @@ var ComponentInstance = (function () {
         var nextProps = this._component.props = nextElement.props;
         var nextState = this._component.state;
         var shouldUpdate = true;
-        if (typeof this._component.shouldComponentUpdate === 'function') {
+        if (typeof this._component.shouldComponentUpdate === 'function'
+            && !this._skipShouldUpdate) {
             shouldUpdate = this._component.shouldComponentUpdate(nextProps, nextState);
         }
         if (shouldUpdate) {
+            this._skipShouldUpdate = false;
             if (typeof this._component.componentWillUpdate === 'function') {
                 ;
                 this._component.componentWillUpdate(nextProps, nextState);
