@@ -22,3 +22,4 @@ export declare class Heap<T> {
     private _left(i);
     private _right(i);
 }
+export declare function shallowEqual(prev: any, next: any): boolean;

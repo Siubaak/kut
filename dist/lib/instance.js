@@ -80,6 +80,7 @@ var DOMInstance = (function () {
         var props = this._element.props;
         for (var prop in props) {
             if (prop === 'children') {
+                continue;
             }
             else if (prop === 'className') {
                 markup += "class=\"" + util_1.getClassString(props.className) + "\" ";
@@ -198,6 +199,7 @@ var ComponentInstance = (function () {
     function ComponentInstance(element) {
         this.index = 0;
         this._skipShouldUpdate = false;
+        this._stateQueue = [];
         this._element = element;
     }
     Object.defineProperty(ComponentInstance.prototype, "key", {
@@ -219,17 +221,22 @@ var ComponentInstance = (function () {
     ComponentInstance.prototype.mount = function (kutId) {
         var _this = this;
         this.kutId = kutId;
-        var type = this._element.type;
-        var ComponentConstructor = type;
-        this._component = new ComponentConstructor(this._element.props);
-        if (typeof this._component.componentWillMount === 'function') {
-            ;
-            this._component.componentWillMount();
-        }
-        this._component._update = function (skipShouldUpdate) {
-            _this._skipShouldUpdate = skipShouldUpdate;
-            reconciler_1.reconciler.enqueueUpdate(_this, null);
+        var ComponentSubclass = this._element.type;
+        this._component = new ComponentSubclass(this._element.props);
+        this._component._updater = {
+            enqueueSetState: function (partialState, callback) {
+                _this._stateQueue.push({ partialState: partialState, callback: callback });
+                reconciler_1.reconciler.enqueueUpdate(_this);
+            },
+            enqueueForceUpdate: function (callback) {
+                _this._skipShouldUpdate = true;
+                _this._stateQueue.push({ partialState: null, callback: callback });
+                reconciler_1.reconciler.enqueueUpdate(_this);
+            },
         };
+        if (typeof ComponentSubclass.getDerivedStateFromProps === 'function') {
+            this._component.state = Object.assign({}, this._component.state, ComponentSubclass.getDerivedStateFromProps(this._element.props, this._component.state));
+        }
         var renderedElement = this._component.render();
         this._renderedInstance = renderer_1.instantiate(renderedElement);
         var markup = this._renderedInstance.mount(kutId);
@@ -244,29 +251,47 @@ var ComponentInstance = (function () {
             && nextElement.key === this._element.key;
     };
     ComponentInstance.prototype.update = function (nextElement) {
+        var _this = this;
         nextElement = nextElement == null ? this._element : nextElement;
-        if (typeof this._component.componentWillReceiveProps === 'function'
-            && this._element !== nextElement) {
-            ;
-            this._component.componentWillReceiveProps(nextElement.props);
+        var prevProps = this._component.props;
+        var prevState = this._component.state;
+        if (this._element !== nextElement) {
+            var ComponentSubclass = this._element.type;
+            if (typeof ComponentSubclass.getDerivedStateFromProps === 'function') {
+                this._component.state = Object.assign({}, this._component.state, ComponentSubclass.getDerivedStateFromProps(nextElement.props, prevState));
+            }
+        }
+        while (this._stateQueue.length) {
+            var state = this._stateQueue.shift();
+            var partialState = state.partialState, callback = state.callback;
+            if (typeof partialState === 'function') {
+                partialState = partialState(this._component.state);
+            }
+            if (typeof partialState === 'object') {
+                this._component.state = Object.assign({}, this._component.state, partialState);
+                if (typeof callback === 'function') {
+                    callback(this._component.state);
+                }
+            }
         }
         var nextProps = this._component.props = nextElement.props;
         var nextState = this._component.state;
         var shouldUpdate = true;
-        if (typeof this._component.shouldComponentUpdate === 'function'
-            && !this._skipShouldUpdate) {
-            shouldUpdate = this._component.shouldComponentUpdate(nextProps, nextState);
+        if (!this._skipShouldUpdate) {
+            if (typeof this._component.shouldComponentUpdate === 'function') {
+                shouldUpdate = this._component.shouldComponentUpdate(nextProps, nextState);
+            }
         }
         if (shouldUpdate) {
             this._skipShouldUpdate = false;
-            if (typeof this._component.componentWillUpdate === 'function') {
-                ;
-                this._component.componentWillUpdate(nextProps, nextState);
+            var snapshot_1;
+            if (typeof this._component.getSnapshotBeforeUpdate === 'function') {
+                snapshot_1 = this._component.getSnapshotBeforeUpdate(prevProps, prevState);
             }
             var nextRenderedElement = this._component.render();
             var didUpdate = void 0;
             if (typeof this._component.componentDidUpdate === 'function') {
-                didUpdate = this._component.componentDidUpdate.bind(this._component);
+                didUpdate = function () { return _this._component.componentDidUpdate(prevProps, prevState, snapshot_1); };
             }
             reconciler_1.reconciler.enqueueUpdate(this._renderedInstance, nextRenderedElement, didUpdate);
         }
@@ -274,7 +299,6 @@ var ComponentInstance = (function () {
     };
     ComponentInstance.prototype.unmount = function () {
         if (typeof this._component.componentWillUnmount === 'function') {
-            ;
             this._component.componentWillUnmount();
         }
         event_1.eventListenerSet.delAll(this.kutId);

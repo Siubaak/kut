@@ -36,6 +36,7 @@ var Reconciler = (function () {
         this._isBatchUpdating = false;
     }
     Reconciler.prototype.enqueueUpdate = function (instance, element, didUpdate) {
+        if (element === void 0) { element = null; }
         this._dirtyInstanceSet.push({ instance: instance, element: element, didUpdate: didUpdate });
         if (!this._isBatchUpdating) {
             this._runBatchUpdate();

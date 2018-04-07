@@ -9,8 +9,8 @@ export class Component {
   static defaultProps: any
 
   _updater = {
-    enqueueSetState: (partialState: any, callback: () => void) => {},
-    enqueueForceUpdate: (callback: () => void) => {},
+    enqueueSetState: (partialState: any, callback: (nextState: any) => void) => {},
+    enqueueForceUpdate: (callback: (nextState: any) => void) => {},
   }
 
   constructor(props: KutProps) {
@@ -21,23 +21,32 @@ export class Component {
    * setState异步更新，可传入回调函数获取更新后state
    * 为state创建副本，并以此修改state，应该把state当作不可变对象
    * 子类中不应进行重写
-   * @param state 需要修改的state
-   * @param callback 回调函数，自动绑定当前上下文
+   * @param state 需要修改的state，或函数 prevState => partialState（自动绑定当前上下文）
+   * @param callback 回调函数 nextState => void（自动绑定当前上下文）
    * @final
    * @protected
    */
   protected setState(partialState: any, callback?: () => void): void {
+    if (typeof partialState === 'function') {
+      partialState = partialState.bind(this)
+    }
+    if (typeof callback === 'function') {
+      callback = callback.bind(this)
+    }
     this._updater.enqueueSetState(partialState, callback)
   }
 
   /**
    * setState异步更新，可传入回调函数获取更新后state
    * 强制更新Component，子类中不应进行重写
-   * @param callback 回调函数，自动绑定当前上下文
+   * @param callback 回调函数 nextState => void（自动绑定当前上下文）
    * @final
    * @protected
    */
   protected forceUpdate(callback?: () => void): void {
+    if (typeof callback === 'function') {
+      callback = callback.bind(this)
+    }
     this._updater.enqueueForceUpdate(callback)
   }
 
@@ -55,7 +64,7 @@ export class Component {
    * @param nextProps 新props
    * @param prevState 旧state
    */
-  static getDerivedStateFromProps?(nextProps: KutProps, prevState: any): void
+  static getDerivedStateFromProps?(nextProps: KutProps, prevState: any): any
 
   /**
    * 组件挂载完毕钩子方法

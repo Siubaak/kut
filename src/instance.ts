@@ -245,6 +245,10 @@ export class ComponentInstance {
   private _renderedInstance: KutInstance
 
   private _skipShouldUpdate: boolean = false
+  private _stateQueue: {
+    partialState: any,
+    callback: (nextState: any) => void,
+  }[] = []
 
   constructor(element: KutChild) {
     this._element = element as KutElement
@@ -265,20 +269,24 @@ export class ComponentInstance {
 
     // 异步更新方法注入，更新完毕后会调用componentDidUpdate方法
     this._component._updater = {
-      enqueueSetState: (partialState: any, callback: () => void) => {
-        this._skipShouldUpdate = false
-        reconciler.enqueueSetState(this, partialState, callback)
+      enqueueSetState: (partialState: any, callback: (nextState: any) => void) => {
+        this._stateQueue.push({ partialState, callback })
+        reconciler.enqueueUpdate(this)
       },
-      enqueueForceUpdate: (callback: () => void) => {
+      enqueueForceUpdate: (callback: (nextState: any) => void) => {
         this._skipShouldUpdate = true
-        reconciler.enqueueForceUpdate(this, callback)
+        this._stateQueue.push({ partialState: null, callback })
+        reconciler.enqueueUpdate(this)
       },
     }
 
     // 调用static getDerivedStateFromProps
     if (typeof ComponentSubclass.getDerivedStateFromProps === 'function') {
-      this._component.state =
-        ComponentSubclass.getDerivedStateFromProps(this._element.props, this._component.state)
+      this._component.state = (Object as any).assign(
+        {},
+        this._component.state,
+        ComponentSubclass.getDerivedStateFromProps(this._element.props, this._component.state),
+      )
     }
 
     // 调用render进行渲染
@@ -298,15 +306,10 @@ export class ComponentInstance {
       && nextElement.type === this._element.type
       && nextElement.key === this._element.key
   }
-  update(
-    nextElement: KutChild,
-    state?: {
-      partialState: any,
-      callback: (nextState: any) => void
-    }
-  ): void {
+  update(nextElement: KutChild): void {
     // 使用==以判断undefined和null
     nextElement = nextElement == null ? this._element : (nextElement as KutElement)
+
     // 保存旧props和state
     const prevProps = this._component.props
     const prevState = this._component.state
@@ -316,21 +319,28 @@ export class ComponentInstance {
       // 如果不同，证明是父组件触发更新，传入props，调用static getDerivedStateFromProps
       const ComponentSubclass =((this._element as KutElement).type as typeof Component)
       if (typeof ComponentSubclass.getDerivedStateFromProps === 'function') {
-        this._component.state =
-          ComponentSubclass.getDerivedStateFromProps(nextElement.props, prevState)
+        this._component.state = (Object as any).assign(
+          {},
+          this._component.state,
+          ComponentSubclass.getDerivedStateFromProps(nextElement.props, prevState),
+        )
       }
-    } else {
-      // 如果相同，则证明是setState和forceUpdate触发更新，进行state合并
-      if (typeof state === 'object') {
-        let { partialState, callback } = state
-        if (typeof partialState === 'function') {
-          partialState = partialState(prevState)
-        }
-        if (typeof partialState === 'object') {
-          this._component.state = (Object as any).assign({}, prevState, partialState)
-          if (typeof callback === 'function') {
-            callback(this._component.state)
-          }
+    }
+    // 合并state
+    while (this._stateQueue.length) {
+      const state = this._stateQueue.shift()
+      let { partialState, callback } = state
+      if (typeof partialState === 'function') {
+        partialState = partialState(this._component.state)
+      }
+      if (typeof partialState === 'object') {
+        this._component.state = (Object as any).assign(
+          {},
+          this._component.state,
+          partialState,
+        )
+        if (typeof callback === 'function') {
+          callback(this._component.state)
         }
       }
     }
@@ -343,11 +353,12 @@ export class ComponentInstance {
     if (!this._skipShouldUpdate) {
       if (typeof this._component.shouldComponentUpdate === 'function') {
         shouldUpdate = this._component.shouldComponentUpdate(nextProps, nextState)
-      } else {
-        shouldUpdate =
-          !shallowEqual(prevProps, nextProps)
-          || !shallowEqual(prevState, nextState)
       }
+      // else {
+      //   shouldUpdate =
+      //     !shallowEqual(prevProps, nextProps)
+      //     || !shallowEqual(prevState, nextState)
+      // }
     }
     
     if (shouldUpdate) {

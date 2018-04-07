@@ -32,6 +32,7 @@ export declare class ComponentInstance {
     private _element;
     private _renderedInstance;
     private _skipShouldUpdate;
+    private _stateQueue;
     constructor(element: KutChild);
     readonly key: string;
     readonly node: HTMLElement;

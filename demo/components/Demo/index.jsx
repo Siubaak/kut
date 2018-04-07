@@ -17,29 +17,40 @@ class Demo extends React.Component {
       ],
     }
   }
-  componentWillMount() {
-    console.log('TodoList will mount')
-  }
-  componentDidMount() {
-    console.log('TodoList did mount')
-  }
-  componentWillReceiveProps() {
-    console.log('TodoList will receive props')
-  }
-  shouldComponentUpdate() {
-    return true
-  }
-  componentWillUpdate() {
-    console.log('TodoList will update')
-  }
-  componentDidUpdate() {
-    console.log('TodoList did update')
-  }
+  
+  // static getDerivedStateFromProps(nextProps, prevState) {
+  //   console.warn('TodoList receive new props')
+  //   console.log('> nextProps:', nextProps)
+  //   console.log('> prevState:', prevState)
+  //   return {}
+  // }
+  // componentDidMount() {
+  //   console.warn('TodoList did mount')
+  // }
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   console.warn('Should TodoList update?')
+  //   console.log('> nextProps:', nextProps)
+  //   console.log('> nextState:', nextState)
+  //   return true
+  // }
+  // getSnapshotBeforeUpdate(prevProps, prevState) {
+  //   console.warn('Get snapshot of TodoList')
+  //   console.log('> prevProps:', prevProps)
+  //   console.log('> prevState:', prevState)
+  //   return 'TodoList Snapshot'
+  // }
+  // componentDidUpdate(prevProps, prevState, snapshot) {
+  //   console.warn('TodoList did update')
+  //   console.log('> prevProps:', prevProps)
+  //   console.log('> prevState:', prevState)
+  //   console.log('> Snapshot: ', snapshot)
+  // }
+  // componentWillUnmount() {
+  //   console.warn('TodoList will unmount')
+  // }
+
   handleInput(e) {
     this.setState({ input: e.target.value })
-  }
-  componentWillUnmount() {
-    console.log('TodoList will unmount')
   }
   handleAdd(e) {
     if (this.state.input !== '') {

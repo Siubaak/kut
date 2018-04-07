@@ -230,4 +230,5 @@ export function shallowEqual(prev: any, next: any): boolean {
       return false
     }
   }
+  return true
 }

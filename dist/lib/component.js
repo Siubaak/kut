@@ -3,15 +3,26 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var Component = (function () {
     function Component(props) {
         this.state = {};
-        this._update = function (skipShouldUpdate) { };
+        this._updater = {
+            enqueueSetState: function (partialState, callback) { },
+            enqueueForceUpdate: function (callback) { },
+        };
         this.props = props;
     }
-    Component.prototype.setState = function (state) {
-        this.state = Object.assign({}, this.state, state);
-        this._update(false);
+    Component.prototype.setState = function (partialState, callback) {
+        if (typeof partialState === 'function') {
+            partialState = partialState.bind(this);
+        }
+        if (typeof callback === 'function') {
+            callback = callback.bind(this);
+        }
+        this._updater.enqueueSetState(partialState, callback);
     };
-    Component.prototype.forceUpdate = function () {
-        this._update(true);
+    Component.prototype.forceUpdate = function (callback) {
+        if (typeof callback === 'function') {
+            callback = callback.bind(this);
+        }
+        this._updater.enqueueForceUpdate(callback);
     };
     Component.prototype.render = function (props) {
         if (props === void 0) { props = this.props; }

@@ -165,4 +165,18 @@ var Heap = (function () {
     return Heap;
 }());
 exports.Heap = Heap;
+function shallowEqual(prev, next) {
+    for (var key in prev) {
+        if (prev[key] !== next[key]) {
+            return false;
+        }
+    }
+    for (var key in next) {
+        if (prev[key] !== next[key]) {
+            return false;
+        }
+    }
+    return true;
+}
+exports.shallowEqual = shallowEqual;
 //# sourceMappingURL=util.js.map
