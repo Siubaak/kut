@@ -8,7 +8,10 @@ export class Component {
   props: KutProps
   static defaultProps: any
 
-  _update = (skipShouldUpdate: boolean) => {}
+  _updater = {
+    enqueueSetState: (partialState: any, callback: () => void) => {},
+    enqueueForceUpdate: (callback: () => void) => {},
+  }
 
   constructor(props: KutProps) {
     this.props = props
@@ -23,9 +26,8 @@ export class Component {
    * @final
    * @protected
    */
-  protected setState(state: any): void {
-    this.state = (Object as any).assign({}, this.state, state)
-    this._update(false)
+  protected setState(partialState: any, callback?: () => void): void {
+    this._updater.enqueueSetState(partialState, callback)
   }
 
   /**
@@ -35,8 +37,8 @@ export class Component {
    * @final
    * @protected
    */
-  protected forceUpdate(): void {
-    this._update(true)
+  protected forceUpdate(callback?: () => void): void {
+    this._updater.enqueueForceUpdate(callback)
   }
 
   /**
@@ -47,14 +49,46 @@ export class Component {
     return null
   }
 
-  // 支持的生命周期函数
-  // componentWillMount() {}
-  // componentDidMount() {}
-  // componentWillReceiveProps(nextProps: KutProps) {}
-  // shouldComponentUpdate(nextProps: KutProps, nextState: any) {
-  //   return true
-  // }
-  // componentWillUpdate(nextProps: KutProps, nextState: any) {}
-  // componentDidUpdate() {}
-  // componentWillUnmount() {}
+  /**
+   * 从props导出state，只在组件挂载和新props传入时调用
+   * setState和forceUpdate不触发
+   * @param nextProps 新props
+   * @param prevState 旧state
+   */
+  static getDerivedStateFromProps?(nextProps: KutProps, prevState: any): void
+
+  /**
+   * 组件挂载完毕钩子方法
+   */
+  componentDidMount?(): void
+
+  /**
+   * 控制组件是否更新，setState和父节点更新触发的更新将调用
+   * forceUpdate将跳过判断直接强制更新
+   * @param nextProps 新props
+   * @param nextState 新state
+   * @return {boolean}
+   */
+  shouldComponentUpdate?(nextProps: KutProps, nextState: any): boolean
+
+  /**
+   * 组件更新前获取快照，返回值任意，将作为componentDidUpdate第三个参数传入
+   * @param prevProps 旧props
+   * @param prevState 旧state
+   * @return {any}
+   */
+  getSnapshotBeforeUpdate?(prevProps: KutProps, prevState: any): any
+
+  /**
+   * 组件更新完毕钩子方法
+   * @param prevProps 旧props
+   * @param prevState 旧state
+   * @param snapshot getSnapshotBeforeUpdate返回值
+   */
+  componentDidUpdate?(prevProps: KutProps, prevState: any, snapshot: any): void
+
+  /**
+   * 组件卸载前钩子方法
+   */
+  componentWillUnmount?(): void
 }
