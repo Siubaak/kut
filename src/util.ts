@@ -213,3 +213,21 @@ export class Heap<T> {
     return 2 * (i + 1)
   }
 }
+
+/**
+ * 两个对象浅比较
+ * @param prev 旧对象
+ * @param next 新对象
+ */
+export function shallowEqual(prev: any, next: any): boolean {
+  for (const key in prev) {
+    if (prev[key] !== next[key]) {
+      return false
+    }
+  }
+  for (const key in next) {
+    if (prev[key] !== next[key]) {
+      return false
+    }
+  }
+}
