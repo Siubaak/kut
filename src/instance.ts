@@ -4,7 +4,7 @@ import { Component } from './component'
 import { Patches, diff, patch } from './diff'
 import { KUT_ID, KUT_SUPPORTED_EVENT_HANDLERS, CUT_ON_REGEX } from './constant'
 import { eventListenerSet } from './event'
-import { getNode, getClassString, getStyleString, didMountSet, shallowEqual } from './util'
+import { getNode, getClassString, getStyleString, didMountSet } from './util'
 import { reconciler } from './reconciler'
 
 export type KutInstance = TextInstance | DOMInstance | ComponentInstance
@@ -350,15 +350,11 @@ export class ComponentInstance {
 
     // 判断是否需要触发更新
     let shouldUpdate = true
-    if (!this._skipShouldUpdate) {
-      if (typeof this._component.shouldComponentUpdate === 'function') {
-        shouldUpdate = this._component.shouldComponentUpdate(nextProps, nextState)
-      }
-      // else {
-      //   shouldUpdate =
-      //     !shallowEqual(prevProps, nextProps)
-      //     || !shallowEqual(prevState, nextState)
-      // }
+    if (
+      typeof this._component.shouldComponentUpdate === 'function'
+      && !this._skipShouldUpdate
+    ) {
+      shouldUpdate = this._component.shouldComponentUpdate(nextProps, nextState)
     }
     
     if (shouldUpdate) {
@@ -376,7 +372,7 @@ export class ComponentInstance {
         didUpdate = () => this._component.componentDidUpdate(prevProps, prevState, snapshot)
       }
 
-      reconciler.enqueueUpdate(this._renderedInstance, nextRenderedElement,  didUpdate)
+      reconciler.enqueueUpdate(this._renderedInstance, nextRenderedElement, didUpdate)
     }
 
     this._element = nextElement

@@ -277,10 +277,9 @@ var ComponentInstance = (function () {
         var nextProps = this._component.props = nextElement.props;
         var nextState = this._component.state;
         var shouldUpdate = true;
-        if (!this._skipShouldUpdate) {
-            if (typeof this._component.shouldComponentUpdate === 'function') {
-                shouldUpdate = this._component.shouldComponentUpdate(nextProps, nextState);
-            }
+        if (typeof this._component.shouldComponentUpdate === 'function'
+            && !this._skipShouldUpdate) {
+            shouldUpdate = this._component.shouldComponentUpdate(nextProps, nextState);
         }
         if (shouldUpdate) {
             this._skipShouldUpdate = false;
