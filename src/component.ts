@@ -6,6 +6,7 @@ import { KutProps, KutElement } from './element'
 export class Component {
   state: any = {}
   props: KutProps
+  context: any
   static defaultProps: any
 
   _updater = {
@@ -13,8 +14,9 @@ export class Component {
     enqueueForceUpdate: (callback: (nextState: any) => void) => {},
   }
 
-  constructor(props: KutProps) {
+  constructor(props: KutProps, context?: any) {
     this.props = props
+    this.context = context
   }
 
   /**
@@ -78,7 +80,7 @@ export class Component {
    * @param nextState 新state
    * @return {boolean}
    */
-  shouldComponentUpdate?(nextProps: KutProps, nextState: any): boolean
+  shouldComponentUpdate?(nextProps: KutProps, nextState: any, nextContext: any): boolean
 
   /**
    * 组件更新前获取快照，返回值任意，将作为componentDidUpdate第三个参数传入

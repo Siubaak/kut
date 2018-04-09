@@ -261,11 +261,11 @@ export class ComponentInstance {
   get node(): HTMLElement {
     return getNode(this.kutId)
   }
-  mount(kutId: string): string {
+  mount(kutId: string, context?: any): string {
     this.kutId = kutId
     
     const ComponentSubclass = ((this._element as KutElement).type as typeof Component)
-    this._component = new ComponentSubclass(this._element.props)
+    this._component = new ComponentSubclass(this._element.props, context)
 
     // 异步更新方法注入，更新完毕后会调用componentDidUpdate方法
     this._component._updater = {
@@ -354,7 +354,7 @@ export class ComponentInstance {
       typeof this._component.shouldComponentUpdate === 'function'
       && !this._skipShouldUpdate
     ) {
-      shouldUpdate = this._component.shouldComponentUpdate(nextProps, nextState)
+      shouldUpdate = this._component.shouldComponentUpdate(nextProps, nextState, null)
     }
     
     if (shouldUpdate) {
