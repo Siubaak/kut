@@ -75,34 +75,70 @@ describe('test/render.test.js', () => {
     expect(patch.index).toBe(5)
   })
 
-  it('should diff and patch normally', () => {
+  it('should diff and forward patch normally', () => {
     const instList = getListInstArr(oldList)
     let markup = ''
     instList.forEach(inst => {
-      markup += inst.mount(inst.key)
+      markup += inst.mount('kut:' + inst.key)
     })
     document.body.dataset.kutid = 'kut'
     document.body.innerHTML = markup
-    const patches = diff(instList, getListEleArr([5, 1, 2, 4, 3]))
+    const patches = diff(instList, getListEleArr([3, 2, 4, 5, 1, 6]))
 
-    expect(patches.dir).toBe('backward')
-    expect(patches.ops.length).toBe(2)
+    expect(patches.dir).toBe('forward')
+    expect(patches.ops.length).toBe(3)
     expect(patches.ops[0].type).toBe('move')
-    expect(patches.ops[0].inst.key).toBe('k_4')
+    expect(patches.ops[0].inst.key).toBe('k_2')
     expect(patches.ops[0].index).toBe(2)
     expect(patches.ops[1].type).toBe('move')
-    expect(patches.ops[1].inst.key).toBe('k_5')
-    expect(patches.ops[1].index).toBe(0)
+    expect(patches.ops[1].inst.key).toBe('k_1')
+    expect(patches.ops[1].index).toBe(4)
+    expect(patches.ops[2].type).toBe('insert')
+    expect(patches.ops[2].inst.key).toBe('k_6')
+    expect(patches.ops[2].index).toBe(4)
 
     patch('kut', patches)
     const childNodes = document.body.childNodes
 
-    expect(childNodes.length).toBe(5)
-    expect((childNodes[0] as any).dataset.kutid).toBe('k_5')
-    expect((childNodes[1] as any).dataset.kutid).toBe('k_1')
-    expect((childNodes[2] as any).dataset.kutid).toBe('k_2')
-    expect((childNodes[3] as any).dataset.kutid).toBe('k_4')
-    expect((childNodes[4] as any).dataset.kutid).toBe('k_3')
+    expect(childNodes.length).toBe(6)
+    expect((childNodes[0] as any).dataset.kutid).toBe('kut:k_3')
+    expect((childNodes[1] as any).dataset.kutid).toBe('kut:k_2')
+    expect((childNodes[2] as any).dataset.kutid).toBe('kut:k_4')
+    expect((childNodes[3] as any).dataset.kutid).toBe('kut:k_5')
+    expect((childNodes[4] as any).dataset.kutid).toBe('kut:k_1')
+    expect((childNodes[5] as any).dataset.kutid).toBe('kut:k_6')
+
+    delete document.body.dataset.kutid
+    document.body.innerHTML = null
+  })
+
+  it('should diff and backward patch normally', () => {
+    const instList = getListInstArr(oldList)
+    let markup = ''
+    instList.forEach(inst => {
+      markup += inst.mount('kut:' + inst.key)
+    })
+    document.body.dataset.kutid = 'kut'
+    document.body.innerHTML = markup
+    const patches = diff(instList, getListEleArr([5, 1, 2, 3]))
+
+    expect(patches.dir).toBe('backward')
+    expect(patches.ops.length).toBe(2)
+    expect(patches.ops[0].type).toBe('move')
+    expect(patches.ops[0].inst.key).toBe('k_5')
+    expect(patches.ops[0].index).toBe(0)
+    expect(patches.ops[1].type).toBe('remove')
+    expect(patches.ops[1].inst.key).toBe('k_4')
+    expect(patches.ops[1].index).toBeUndefined()
+
+    patch('kut', patches)
+    const childNodes = document.body.childNodes
+
+    expect(childNodes.length).toBe(4)
+    expect((childNodes[0] as any).dataset.kutid).toBe('kut:k_5')
+    expect((childNodes[1] as any).dataset.kutid).toBe('kut:k_1')
+    expect((childNodes[2] as any).dataset.kutid).toBe('kut:k_2')
+    expect((childNodes[3] as any).dataset.kutid).toBe('kut:k_3')
 
     delete document.body.dataset.kutid
     document.body.innerHTML = null
