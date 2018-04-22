@@ -19,12 +19,17 @@ describe('test/render.test.js', () => {
   })
 
   it('should render a text', () => {
-    expect(render('a')).toBe('<span data-kutid="kut" >a</span>')
-    expect(render(1)).toBe('<span data-kutid="kut" >1</span>')
+    render('a', document.body)
+    expect(document.body.innerHTML).toBe('<span data-kutid="kut">a</span>')
+    render(1, document.body)
+    expect(document.body.innerHTML).toBe('<span data-kutid="kut">1</span>')
+    document.body.innerHTML = null
   })
 
   it('should render a dom', () => {
-    expect(render(<div></div>)).toBe('<div data-kutid="kut" ><span data-kutid="kut:0" ></span></div>')
+    render(<div></div>, document.body)
+    expect(document.body.innerHTML).toBe('<div data-kutid="kut"><span data-kutid="kut:0"></span></div>')
+    document.body.innerHTML = null
   })
 
   it('should render dom excuting component.render', () => {
@@ -33,6 +38,8 @@ describe('test/render.test.js', () => {
         return <div>hello world</div>
       }
     }
-    expect(render(<Comp></Comp>)).toBe('<div data-kutid="kut" ><span data-kutid="kut:0" >hello world</span></div>')
+    render(<Comp></Comp>, document.body)
+    expect(document.body.innerHTML).toBe('<div data-kutid="kut"><span data-kutid="kut:0">hello world</span></div>')
+    document.body.innerHTML = null
   })
 })

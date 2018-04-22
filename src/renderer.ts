@@ -28,16 +28,11 @@ export function instantiate(element: KutChild) {
  */
 export function render(
   element: KutChild,
-  container?: HTMLElement,
-): void | string {
+  container: HTMLElement,
+): void {
   const instance: KutInstance = instantiate(element)
   const markup: string = instance.mount('kut')
-  if (container) {
-    container.innerHTML = markup
-    // 调用所有componentDidMount方法
-    didMountSet.exec()
-  } else {
-    didMountSet.clear()
-    return markup
-  }
+  container.innerHTML = markup
+  // 调用所有componentDidMount方法
+  didMountSet.exec()
 }

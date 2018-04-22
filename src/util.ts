@@ -107,9 +107,6 @@ export class DidMountSet {
   add(handler: () => void) {
     this._didMountHandlers.push(handler)
   }
-  clear() {
-    this._didMountHandlers = []
-  }
   exec() {
     while (this._didMountHandlers.length) {
       const handler = this._didMountHandlers.shift()
