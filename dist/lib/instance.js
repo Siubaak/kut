@@ -218,11 +218,11 @@ var ComponentInstance = (function () {
         enumerable: true,
         configurable: true
     });
-    ComponentInstance.prototype.mount = function (kutId) {
+    ComponentInstance.prototype.mount = function (kutId, context) {
         var _this = this;
         this.kutId = kutId;
         var ComponentSubclass = this._element.type;
-        this._component = new ComponentSubclass(this._element.props);
+        this._component = new ComponentSubclass(this._element.props, context);
         this._component._updater = {
             enqueueSetState: function (partialState, callback) {
                 _this._stateQueue.push({ partialState: partialState, callback: callback });
@@ -279,7 +279,7 @@ var ComponentInstance = (function () {
         var shouldUpdate = true;
         if (typeof this._component.shouldComponentUpdate === 'function'
             && !this._skipShouldUpdate) {
-            shouldUpdate = this._component.shouldComponentUpdate(nextProps, nextState);
+            shouldUpdate = this._component.shouldComponentUpdate(nextProps, nextState, null);
         }
         if (shouldUpdate) {
             this._skipShouldUpdate = false;

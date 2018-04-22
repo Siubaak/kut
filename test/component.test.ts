@@ -1,5 +1,3 @@
-import './env-setup'
-import * as assert from 'power-assert'
 import { Component } from '../src/component'
 
 describe('test/component.test.js', () => {
@@ -7,14 +5,13 @@ describe('test/component.test.js', () => {
     const Comp = class extends Component {}
     const inst = new Comp({ test: 'hello', children: [] })
     
-    assert(typeof inst.state === 'object')
-    assert(typeof inst.props === 'object')
+    expect(typeof inst.state).toBe('object')
+    expect(typeof inst.props).toBe('object')
 
-    assert(typeof inst._updater === 'object')
-    assert(typeof inst._updater.enqueueSetState === 'function')
-    assert(typeof inst._updater.enqueueForceUpdate === 'function')
+    expect(typeof inst._updater).toBe('object')
+    expect(typeof inst._updater.enqueueSetState).toBe('function')
+    expect(typeof inst._updater.enqueueForceUpdate).toBe('function')
 
-
-    assert(typeof inst.render === 'function')
+    expect(typeof inst.render).toBe('function')
   })
 })

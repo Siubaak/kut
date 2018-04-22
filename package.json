@@ -3,8 +3,22 @@
   "version": "0.2.1",
   "description": "A simple react-like web-view rendering library",
   "main": "index.js",
+  "jest": {
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ]
+  },
   "scripts": {
-    "test": "mocha --require espower-typescript/guess test/**.test.ts",
+    "test": "jest --colors --coverage",
     "start": "tsc --declaration --watch",
     "webpack": "webpack --config config/webpack.dev.js --watch --progress",
     "build": "npm test && tsc --declaration && webpack --config config/webpack.prod.js --progress"
@@ -25,12 +39,9 @@
   },
   "homepage": "https://github.com/Siubaak/kut#readme",
   "devDependencies": {
-    "@types/mocha": "^2.2.48",
-    "@types/node": "^9.4.7",
-    "espower-typescript": "^8.1.3",
-    "jsdom": "^11.6.2",
-    "mocha": "^5.0.4",
-    "power-assert": "^1.4.4",
+    "@types/jest": "^22.2.3",
+    "jest": "^22.4.3",
+    "ts-jest": "^22.4.4",
     "ts-loader": "^3.4.0",
     "typescript": "^2.7.1",
     "uglifyjs-webpack-plugin": "^1.1.8",

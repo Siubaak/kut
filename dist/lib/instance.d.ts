@@ -36,7 +36,7 @@ export declare class ComponentInstance {
     constructor(element: KutChild);
     readonly key: string;
     readonly node: HTMLElement;
-    mount(kutId: string): string;
+    mount(kutId: string, context?: any): string;
     shouldReceive(nextElement: KutChild): boolean;
     update(nextElement: KutChild): void;
     unmount(): void;

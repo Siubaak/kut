@@ -1,13 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var Component = (function () {
-    function Component(props) {
+    function Component(props, context) {
         this.state = {};
         this._updater = {
             enqueueSetState: function (partialState, callback) { },
             enqueueForceUpdate: function (callback) { },
         };
         this.props = props;
+        this.context = context;
     }
     Component.prototype.setState = function (partialState, callback) {
         if (typeof partialState === 'function') {
