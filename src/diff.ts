@@ -47,13 +47,9 @@ export function diff(
     // 然后均按序存在nextInstance中
     if (prevInstance && prevInstance.shouldReceive(nextChild)) {
       reconciler.enqueueUpdate(prevInstance, nextChild)
-      // 更新index
-      prevInstance.index = index
       nextInstances.push(prevInstance)
     } else {
       const nextInstance = instantiate(nextChild)
-      // 赋予默认index
-      nextInstance.index = index
       nextInstances.push(nextInstance)
     }
   })
