@@ -41,7 +41,6 @@ export class TextInstance {
     }
   }
   unmount() {
-    eventListenerSet.delAll(this.kutId)
     this.node.remove()
     delete this.kutId
     delete this.index
@@ -198,7 +197,7 @@ export class DOMInstance {
           )
         } else {
           // 去除属性
-          node.removeAttribute(prop)
+          node.removeAttribute(prop !== 'className' ? prop : 'class')
         }
       }
     }
@@ -381,7 +380,6 @@ export class ComponentInstance {
     if (typeof this._component.componentWillUnmount === 'function') {
       this._component.componentWillUnmount()
     }
-    eventListenerSet.delAll(this.kutId)
     this._renderedInstance.unmount()
     this.node.remove()
     delete this.kutId
