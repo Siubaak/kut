@@ -64,7 +64,7 @@ export function diff(
   for(let index: number = 0; index < nextInstances.length; ++index) {
     // 前向diff
     const forwardNextInstance = nextInstances[index]
-    const forwardPrevInstance: KutInstance = prevInstanceMap[forwardNextInstance.key]
+    const forwardPrevInstance = prevInstanceMap[forwardNextInstance.key]
     // 判断是否为复用节点
     if (forwardPrevInstance === forwardNextInstance) {
       // 为复用节点，如果在固定位置前则需要move到固定位置后
@@ -93,7 +93,7 @@ export function diff(
     }
     // 后向diff
     const backwardNextInstance = nextInstances[nextInstances.length - index - 1]
-    const backwardPrevInstance: KutInstance = prevInstanceMap[backwardNextInstance.key]
+    const backwardPrevInstance = prevInstanceMap[backwardNextInstance.key]
     // 过程同前向diff，但固定位置判断以及更新与前向相反
     if (backwardPrevInstance === backwardNextInstance) {
       if (backwardPrevInstance.index > lastBackwardIndex) {

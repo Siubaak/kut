@@ -20,7 +20,9 @@ export class TextInstance {
     this._element = '' + element as (number | string)
   }
   get key(): string {
-    return '' + this.index
+    return this.index != null
+      ? '' + this.index
+      : null
   }
   get node(): HTMLElement {
     return getNode(this.kutId)
@@ -60,9 +62,11 @@ export class DOMInstance {
     this._element = element as KutElement
   }
   get key(): string {
-    return this._element.key != null
+    return this._element && this._element.key != null
       ? 'k_' + this._element.key
-      : '' + this.index
+      : this.index != null
+        ? '' + this.index
+        : null
   }
   get node(): HTMLElement {
     return getNode(this.kutId)
@@ -253,9 +257,11 @@ export class ComponentInstance {
     this._element = element as KutElement
   }
   get key(): string {
-    return this._element.key != null
+    return this._element && this._element.key != null
       ? 'k_' + this._element.key
-      : '' + this.index
+      : this.index != null
+        ? '' + this.index
+        : null
   }
   get node(): HTMLElement {
     return getNode(this.kutId)
