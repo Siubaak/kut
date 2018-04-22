@@ -2,6 +2,8 @@
 
 [![npm](https://img.shields.io/npm/v/kut.svg?style=flat-square)](https://www.npmjs.com/package/kut)
 [![travis-ci](https://img.shields.io/travis/Siubaak/kut.svg?style=flat-square)](https://travis-ci.org/Siubaak/kut)
+[![coveralls](https://img.shields.io/coveralls/github/Siubaak/kut.svg?style=flat-square)](https://coveralls.io/github/Siubaak/kut)
+
 
 This is a simple React-like web-view rendering library, developed when I learnt the source codes of React. Currently Kut supports two top-level methods, that's createElement and render, and also supports component-based development with class Component. Already cover some development requirements, and the [home page](https://siubaak.github.io/kut) was built based on Kut with acceptable performance. Kut improved the diff algorithm of React.
 

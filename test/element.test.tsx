@@ -2,7 +2,6 @@ import React from '../src/kut'
 import { KutElement, KutChild } from '../src/element'
 
 describe('test/element.test.js', () => {
-
   const className = { height: '100px' }
 
   it('should create a native kut element', () => {
@@ -29,8 +28,6 @@ describe('test/element.test.js', () => {
   })
 
   it('should create a kut element with children', () => {
-    const className = { height: '100px' }
-
     const Comp = class extends React.Component {}
     const element: KutElement = (
       <div className={className}>
