@@ -54,9 +54,8 @@ export class Component {
 
   /**
    * Component渲染函数，返回其包含element
-   * @param props 
    */
-  render(props: KutProps = this.props): KutElement {
+  render(): KutElement {
     return null
   }
 

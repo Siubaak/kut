@@ -15,7 +15,7 @@ describe('test/element.test.js', () => {
   })
 
   it('should create a component kut element', () => {
-    const Comp = class extends React.Component {}
+    class Comp extends React.Component {}
     Comp.defaultProps = { test: 'hello' }
     const element: KutElement = <Comp className={className}></Comp>
 
@@ -28,7 +28,7 @@ describe('test/element.test.js', () => {
   })
 
   it('should create a kut element with children', () => {
-    const Comp = class extends React.Component {}
+    class Comp extends React.Component {}
     const element: KutElement = (
       <div className={className}>
         test
