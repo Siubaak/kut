@@ -5,10 +5,13 @@ var instance_1 = require("./instance");
 var util_1 = require("./util");
 function instantiate(element) {
     var instance = null;
-    if (typeof element === 'number' || typeof element === 'string') {
+    if (util_1.is.undefined(element)
+        || util_1.is.null(element)
+        || util_1.is.number(element)
+        || util_1.is.string(element)) {
         instance = new instance_1.TextInstance(element);
     }
-    else if (typeof element.type === 'string') {
+    else if (util_1.is.string(element.type)) {
         instance = new instance_1.DOMInstance(element);
     }
     else if (typeof element.type === typeof component_1.Component) {

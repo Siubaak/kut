@@ -4,7 +4,7 @@ import { Component } from './component'
 import { Patches, diff, patch } from './diff'
 import { KUT_ID, KUT_SUPPORTED_EVENT_HANDLERS, CUT_ON_REGEX } from './constant'
 import { eventListenerSet } from './event'
-import { getNode, getClassString, getStyleString, didMountSet } from './util'
+import { getNode, getClassString, getStyleString, didMountSet, is } from './util'
 import { reconciler } from './reconciler'
 
 export type KutInstance = TextInstance | DOMInstance | ComponentInstance
@@ -32,11 +32,13 @@ export class TextInstance {
     return `<span ${KUT_ID}="${kutId}" >${this._element}</span>`
   }
   shouldReceive(nextElement: KutChild): boolean {
-    return (typeof nextElement === 'number' || typeof nextElement === 'string')
+    return is.number(nextElement) || is.string(nextElement)
   }
   update(nextElement: KutChild): void {
-    // 使用==以判断undefined和null
-    nextElement = nextElement == null ? this._element : '' + (nextElement as (number | string))
+    nextElement = is.undefined(nextElement) || is.null(nextElement)
+      ? this._element
+      : '' + (nextElement as (number | string))
+    
     if (this._element !== nextElement) {
       this._element = nextElement
       this.node.innerText = this._element as string
@@ -92,7 +94,7 @@ export class DOMInstance {
         markup += `style="${getStyleString(props.style)}" `
       } else if (
         KUT_SUPPORTED_EVENT_HANDLERS[prop.toLowerCase()]
-        && typeof props[prop] === 'function'
+        && is.function(props[prop])
       ) {
         // 如果是事件监听函数，则进行委托
         eventListenerSet.set(
@@ -120,20 +122,21 @@ export class DOMInstance {
     markup += `</${this._element.type}>`
 
     // 等挂载完统一返回ref
-    if (typeof this._element.ref === 'function') {
+    if (is.function(this._element.ref)) {
       didMountSet.add(() => this._element.ref(this.node))
     }
 
     return markup
   }
   shouldReceive(nextElement: KutChild): boolean {
-    return typeof nextElement === 'object'
-      && nextElement.type === this._element.type
-      && nextElement.key === this._element.key
+    return is.object(nextElement)
+      && (nextElement as KutElement).type === this._element.type
+      && (nextElement as KutElement).key === this._element.key
   }
   update(nextElement: KutChild): void {
-    // 使用==以判断undefined和null
-    nextElement = nextElement == null ? this._element : (nextElement as KutElement)
+    nextElement = is.undefined(nextElement) || is.null(nextElement)
+      ? this._element
+      : (nextElement as KutElement)
 
     const node = this.node
     const prevProps = this._element.props
@@ -168,7 +171,7 @@ export class DOMInstance {
         }
       } else if (
         KUT_SUPPORTED_EVENT_HANDLERS[prop.toLowerCase()]
-        && typeof nextProps[prop] === 'function'
+        && is.function(nextProps[prop])
       ) {
         const event: string = prop.toLowerCase().replace(CUT_ON_REGEX, '')
         const prevEventListener = eventListenerSet.get(this.kutId, event)
@@ -189,10 +192,10 @@ export class DOMInstance {
 
     // 去除多余属性
     for (const prop in prevProps) {
-      if (nextProps[prop] == null) {
+      if (is.undefined(nextProps[prop]) || is.null(nextProps[prop])) {
         if (
           KUT_SUPPORTED_EVENT_HANDLERS[prop.toLowerCase()]
-          && typeof nextProps[prop] === 'function'
+          && is.function(nextProps[prop])
         ) {
           // 去除事件委托
           eventListenerSet.del(
@@ -286,7 +289,7 @@ export class ComponentInstance {
     }
 
     // 调用static getDerivedStateFromProps
-    if (typeof ComponentSubclass.getDerivedStateFromProps === 'function') {
+    if (is.function(ComponentSubclass.getDerivedStateFromProps)) {
       this._component.state = (Object as any).assign(
         {},
         this._component.state,
@@ -300,20 +303,21 @@ export class ComponentInstance {
     const markup = this._renderedInstance.mount(kutId)
 
     // 等挂载完统一调用componentDidMount方法
-    if (typeof this._component.componentDidMount === 'function') {
+    if (is.function(this._component.componentDidMount)) {
       didMountSet.add(this._component.componentDidMount.bind(this._component))
     }
 
     return markup
   }
   shouldReceive(nextElement: KutChild): boolean {
-    return typeof nextElement === 'object'
-      && nextElement.type === this._element.type
-      && nextElement.key === this._element.key
+    return is.object(nextElement)
+      && (nextElement as KutElement).type === this._element.type
+      && (nextElement as KutElement).key === this._element.key
   }
   update(nextElement: KutChild): void {
-    // 使用==以判断undefined和null
-    nextElement = nextElement == null ? this._element : (nextElement as KutElement)
+    nextElement = is.undefined(nextElement) || is.null(nextElement)
+      ? this._element
+      : (nextElement as KutElement)
 
     // 保存旧props和state
     const prevProps = this._component.props
@@ -322,8 +326,8 @@ export class ComponentInstance {
     // 更新props和state
     if (this._element !== nextElement) {
       // 如果不同，证明是父组件触发更新，传入props，调用static getDerivedStateFromProps
-      const ComponentSubclass =((this._element as KutElement).type as typeof Component)
-      if (typeof ComponentSubclass.getDerivedStateFromProps === 'function') {
+      const ComponentSubclass = ((this._element as KutElement).type as typeof Component)
+      if (is.function(ComponentSubclass.getDerivedStateFromProps)) {
         this._component.state = (Object as any).assign(
           {},
           this._component.state,
@@ -335,16 +339,16 @@ export class ComponentInstance {
     while (this._stateQueue.length) {
       const state = this._stateQueue.shift()
       let { partialState, callback } = state
-      if (typeof partialState === 'function') {
+      if (is.function(partialState)) {
         partialState = partialState(this._component.state)
       }
-      if (typeof partialState === 'object') {
+      if (is.object(partialState)) {
         this._component.state = (Object as any).assign(
           {},
           this._component.state,
           partialState,
         )
-        if (typeof callback === 'function') {
+        if (is.function(callback)) {
           callback(this._component.state)
         }
       }
@@ -356,7 +360,7 @@ export class ComponentInstance {
     // 判断是否需要触发更新
     let shouldUpdate = true
     if (
-      typeof this._component.shouldComponentUpdate === 'function'
+      is.function(this._component.shouldComponentUpdate)
       && !this._skipShouldUpdate
     ) {
       shouldUpdate = this._component.shouldComponentUpdate(nextProps, nextState, null)
@@ -367,13 +371,13 @@ export class ComponentInstance {
       this._skipShouldUpdate = false
       
       let snapshot: any
-      if (typeof this._component.getSnapshotBeforeUpdate === 'function') {
+      if (is.function(this._component.getSnapshotBeforeUpdate)) {
         snapshot = this._component.getSnapshotBeforeUpdate(prevProps, prevState)
       }
 
       const nextRenderedElement: KutElement = this._component.render()
       let didUpdate: () => void
-      if (typeof this._component.componentDidUpdate === 'function') {
+      if (is.function(this._component.componentDidUpdate)) {
         didUpdate = () => this._component.componentDidUpdate(prevProps, prevState, snapshot)
       }
 
@@ -383,11 +387,10 @@ export class ComponentInstance {
     this._element = nextElement
   }
   unmount() {
-    if (typeof this._component.componentWillUnmount === 'function') {
+    if (is.function(this._component.componentWillUnmount)) {
       this._component.componentWillUnmount()
     }
     this._renderedInstance.unmount()
-    this.node.remove()
     delete this.kutId
     delete this.index
     delete this._element

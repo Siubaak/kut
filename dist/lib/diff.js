@@ -20,7 +20,6 @@ function diff(prevInstances, nextChildren) {
         }
         else {
             var nextInstance = renderer_1.instantiate(nextChild);
-            nextInstance.index = index;
             nextInstances.push(nextInstance);
         }
     });

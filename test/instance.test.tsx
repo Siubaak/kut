@@ -1,7 +1,8 @@
 import React from '../src/kut'
+import { KutElement } from '../src/element'
 import { TextInstance, DOMInstance, ComponentInstance } from '../src/instance'
 
-describe('test/component.test.js', () => {
+describe('test/instance.test.js', () => {
   it('should create a normal text instance', () => {
     const textInst = new TextInstance(1)
 
@@ -72,6 +73,53 @@ describe('test/component.test.js', () => {
     expect((domInst as any)._childInstances).toBeUndefined()
     expect(domInst.key).toBeNull()
     expect(domInst.node).toBeNull()
+
+    document.body.innerHTML = null
+  })
+
+  it('should create a component instance', () => {
+    class App extends React.Component {
+      state = { text: 'hello' }
+      static getDerivedStateFromProps() {
+
+      }
+      render(): KutElement {
+        return <div>{this.state.text} {this.props.text}</div>
+      }
+    }
+    const element = <App></App>
+    const compInst = new ComponentInstance(element)
+
+    expect(compInst.index).toBe(0)
+    expect((compInst as any)._element).toBe(element)
+
+    const markup = compInst.mount('kut')
+
+    expect(compInst.kutId).toBe('kut')
+    expect(compInst.key).toBe('0')
+    expect(compInst.node).toBeNull()
+    expect(markup).toBe('<div data-kutid="kut" ><span data-kutid="kut:0" >hello</span><span data-kutid="kut:1" > </span><span data-kutid="kut:2" >undefined</span></div>')
+
+    document.body.innerHTML = markup
+
+    expect(compInst.shouldReceive(<App></App>)).toBeTruthy()
+    expect(compInst.shouldReceive(<div></div>)).toBeFalsy()
+    expect(compInst.shouldReceive(<App key="a"></App>)).toBeFalsy()
+
+    const nextElement = <App text="world!"></App>
+    compInst.update(nextElement)
+
+    // 异步更新
+    // expect(compInst.node.outerHTML).toBe('<div data-kutid="kut"><span data-kutid="kut:0">hello world!</span></div>')
+    expect(compInst.node.outerHTML).toBe('<div data-kutid=\"kut\"><span data-kutid=\"kut:0\">hello</span><span data-kutid=\"kut:1\"> </span><span data-kutid=\"kut:2\">undefined</span></div>')
+    expect((compInst as any)._element).toBe(nextElement)
+    compInst.unmount()
+
+    expect(compInst.kutId).toBeUndefined()
+    expect(compInst.index).toBeUndefined()
+    expect((compInst as any)._element).toBeUndefined()
+    expect(compInst.key).toBeNull()
+    expect(compInst.node).toBeNull()
 
     document.body.innerHTML = null
   })

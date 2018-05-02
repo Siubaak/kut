@@ -1,6 +1,6 @@
 import { KutChild } from './element'
 import { KutInstance, ComponentInstance } from './instance'
-import { Heap } from './util'
+import { Heap, is } from './util'
 
 interface DirtyInstance {
   instance: KutInstance
@@ -64,7 +64,7 @@ export class Reconciler {
         if (instance.kutId) {
           instance.update(element)
           // 如果有componentDidUpdate则调用
-          if (typeof didUpdate === 'function') {
+          if (is.function(didUpdate)) {
             didUpdate()
           }
         }

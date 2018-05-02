@@ -13,7 +13,9 @@ var TextInstance = (function () {
     }
     Object.defineProperty(TextInstance.prototype, "key", {
         get: function () {
-            return '' + this.index;
+            return this.index != null
+                ? '' + this.index
+                : null;
         },
         enumerable: true,
         configurable: true
@@ -30,17 +32,18 @@ var TextInstance = (function () {
         return "<span " + constant_1.KUT_ID + "=\"" + kutId + "\" >" + this._element + "</span>";
     };
     TextInstance.prototype.shouldReceive = function (nextElement) {
-        return (typeof nextElement === 'number' || typeof nextElement === 'string');
+        return util_1.is.number(nextElement) || util_1.is.string(nextElement);
     };
     TextInstance.prototype.update = function (nextElement) {
-        nextElement = nextElement == null ? this._element : '' + nextElement;
+        nextElement = util_1.is.undefined(nextElement) || util_1.is.null(nextElement)
+            ? this._element
+            : '' + nextElement;
         if (this._element !== nextElement) {
             this._element = nextElement;
             this.node.innerText = this._element;
         }
     };
     TextInstance.prototype.unmount = function () {
-        event_1.eventListenerSet.delAll(this.kutId);
         this.node.remove();
         delete this.kutId;
         delete this.index;
@@ -56,9 +59,11 @@ var DOMInstance = (function () {
     }
     Object.defineProperty(DOMInstance.prototype, "key", {
         get: function () {
-            return this._element.key != null
+            return this._element && this._element.key != null
                 ? 'k_' + this._element.key
-                : '' + this.index;
+                : this.index != null
+                    ? '' + this.index
+                    : null;
         },
         enumerable: true,
         configurable: true
@@ -89,7 +94,7 @@ var DOMInstance = (function () {
                 markup += "style=\"" + util_1.getStyleString(props.style) + "\" ";
             }
             else if (constant_1.KUT_SUPPORTED_EVENT_HANDLERS[prop.toLowerCase()]
-                && typeof props[prop] === 'function') {
+                && util_1.is.function(props[prop])) {
                 event_1.eventListenerSet.set(kutId, prop.toLowerCase().replace(constant_1.CUT_ON_REGEX, ''), props[prop]);
             }
             else {
@@ -105,18 +110,20 @@ var DOMInstance = (function () {
             _this._childInstances.push(instance);
         });
         markup += "</" + this._element.type + ">";
-        if (typeof this._element.ref === 'function') {
+        if (util_1.is.function(this._element.ref)) {
             util_1.didMountSet.add(function () { return _this._element.ref(_this.node); });
         }
         return markup;
     };
     DOMInstance.prototype.shouldReceive = function (nextElement) {
-        return typeof nextElement === 'object'
+        return util_1.is.object(nextElement)
             && nextElement.type === this._element.type
             && nextElement.key === this._element.key;
     };
     DOMInstance.prototype.update = function (nextElement) {
-        nextElement = nextElement == null ? this._element : nextElement;
+        nextElement = util_1.is.undefined(nextElement) || util_1.is.null(nextElement)
+            ? this._element
+            : nextElement;
         var node = this.node;
         var prevProps = this._element.props;
         var nextProps = nextElement.props;
@@ -144,7 +151,7 @@ var DOMInstance = (function () {
                 }
             }
             else if (constant_1.KUT_SUPPORTED_EVENT_HANDLERS[prop.toLowerCase()]
-                && typeof nextProps[prop] === 'function') {
+                && util_1.is.function(nextProps[prop])) {
                 var event_2 = prop.toLowerCase().replace(constant_1.CUT_ON_REGEX, '');
                 var prevEventListener = event_1.eventListenerSet.get(this.kutId, event_2);
                 var nextEventListener = nextProps[prop];
@@ -160,13 +167,13 @@ var DOMInstance = (function () {
             }
         }
         for (var prop in prevProps) {
-            if (nextProps[prop] == null) {
+            if (util_1.is.undefined(nextProps[prop]) || util_1.is.null(nextProps[prop])) {
                 if (constant_1.KUT_SUPPORTED_EVENT_HANDLERS[prop.toLowerCase()]
-                    && typeof nextProps[prop] === 'function') {
+                    && util_1.is.function(nextProps[prop])) {
                     event_1.eventListenerSet.del(this.kutId, prop.toLowerCase().replace(constant_1.CUT_ON_REGEX, ''));
                 }
                 else {
-                    node.removeAttribute(prop);
+                    node.removeAttribute(prop !== 'className' ? prop : 'class');
                 }
             }
         }
@@ -204,9 +211,11 @@ var ComponentInstance = (function () {
     }
     Object.defineProperty(ComponentInstance.prototype, "key", {
         get: function () {
-            return this._element.key != null
+            return this._element && this._element.key != null
                 ? 'k_' + this._element.key
-                : '' + this.index;
+                : this.index != null
+                    ? '' + this.index
+                    : null;
         },
         enumerable: true,
         configurable: true
@@ -234,42 +243,44 @@ var ComponentInstance = (function () {
                 reconciler_1.reconciler.enqueueUpdate(_this);
             },
         };
-        if (typeof ComponentSubclass.getDerivedStateFromProps === 'function') {
+        if (util_1.is.function(ComponentSubclass.getDerivedStateFromProps)) {
             this._component.state = Object.assign({}, this._component.state, ComponentSubclass.getDerivedStateFromProps(this._element.props, this._component.state));
         }
         var renderedElement = this._component.render();
         this._renderedInstance = renderer_1.instantiate(renderedElement);
         var markup = this._renderedInstance.mount(kutId);
-        if (typeof this._component.componentDidMount === 'function') {
+        if (util_1.is.function(this._component.componentDidMount)) {
             util_1.didMountSet.add(this._component.componentDidMount.bind(this._component));
         }
         return markup;
     };
     ComponentInstance.prototype.shouldReceive = function (nextElement) {
-        return typeof nextElement === 'object'
+        return util_1.is.object(nextElement)
             && nextElement.type === this._element.type
             && nextElement.key === this._element.key;
     };
     ComponentInstance.prototype.update = function (nextElement) {
         var _this = this;
-        nextElement = nextElement == null ? this._element : nextElement;
+        nextElement = util_1.is.undefined(nextElement) || util_1.is.null(nextElement)
+            ? this._element
+            : nextElement;
         var prevProps = this._component.props;
         var prevState = this._component.state;
         if (this._element !== nextElement) {
             var ComponentSubclass = this._element.type;
-            if (typeof ComponentSubclass.getDerivedStateFromProps === 'function') {
+            if (util_1.is.function(ComponentSubclass.getDerivedStateFromProps)) {
                 this._component.state = Object.assign({}, this._component.state, ComponentSubclass.getDerivedStateFromProps(nextElement.props, prevState));
             }
         }
         while (this._stateQueue.length) {
             var state = this._stateQueue.shift();
             var partialState = state.partialState, callback = state.callback;
-            if (typeof partialState === 'function') {
+            if (util_1.is.function(partialState)) {
                 partialState = partialState(this._component.state);
             }
-            if (typeof partialState === 'object') {
+            if (util_1.is.object(partialState)) {
                 this._component.state = Object.assign({}, this._component.state, partialState);
-                if (typeof callback === 'function') {
+                if (util_1.is.function(callback)) {
                     callback(this._component.state);
                 }
             }
@@ -277,19 +288,19 @@ var ComponentInstance = (function () {
         var nextProps = this._component.props = nextElement.props;
         var nextState = this._component.state;
         var shouldUpdate = true;
-        if (typeof this._component.shouldComponentUpdate === 'function'
+        if (util_1.is.function(this._component.shouldComponentUpdate)
             && !this._skipShouldUpdate) {
             shouldUpdate = this._component.shouldComponentUpdate(nextProps, nextState, null);
         }
         if (shouldUpdate) {
             this._skipShouldUpdate = false;
             var snapshot_1;
-            if (typeof this._component.getSnapshotBeforeUpdate === 'function') {
+            if (util_1.is.function(this._component.getSnapshotBeforeUpdate)) {
                 snapshot_1 = this._component.getSnapshotBeforeUpdate(prevProps, prevState);
             }
             var nextRenderedElement = this._component.render();
             var didUpdate = void 0;
-            if (typeof this._component.componentDidUpdate === 'function') {
+            if (util_1.is.function(this._component.componentDidUpdate)) {
                 didUpdate = function () { return _this._component.componentDidUpdate(prevProps, prevState, snapshot_1); };
             }
             reconciler_1.reconciler.enqueueUpdate(this._renderedInstance, nextRenderedElement, didUpdate);
@@ -297,12 +308,10 @@ var ComponentInstance = (function () {
         this._element = nextElement;
     };
     ComponentInstance.prototype.unmount = function () {
-        if (typeof this._component.componentWillUnmount === 'function') {
+        if (util_1.is.function(this._component.componentWillUnmount)) {
             this._component.componentWillUnmount();
         }
-        event_1.eventListenerSet.delAll(this.kutId);
         this._renderedInstance.unmount();
-        this.node.remove();
         delete this.kutId;
         delete this.index;
         delete this._element;

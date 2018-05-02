@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var constant_1 = require("./constant");
+var util_1 = require("./util");
 function createElement(type, config) {
     var children = [];
     for (var _i = 2; _i < arguments.length; _i++) {
@@ -14,7 +15,7 @@ function createElement(type, config) {
         if (config.key != null) {
             key = ('' + config.key).replace(/:/g, '_');
         }
-        if (config.ref && typeof config.ref === 'function') {
+        if (config.ref && util_1.is.function(config.ref)) {
             ref = config.ref;
         }
         for (var prop in config) {
@@ -28,7 +29,7 @@ function createElement(type, config) {
             for (var prop in defaultProps) {
                 if (Object.hasOwnProperty.call(defaultProps, prop)
                     && !constant_1.KUT_RESERVED_PROPS[prop]
-                    && props[prop] == null) {
+                    && (util_1.is.undefined(props[prop]) || util_1.is.null(props[prop]))) {
                     props[prop] = defaultProps[prop];
                 }
             }

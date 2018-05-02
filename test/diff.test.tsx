@@ -3,7 +3,7 @@ import { KutElement } from '../src/element'
 import { diff, patch } from '../src/diff'
 import { DOMInstance } from '../src/instance'
 
-describe('test/render.test.js', () => {
+describe('test/diff.test.js', () => {
   function getListEleArr(list: number[]): KutElement[] {
     return list.map(i => <div key={i}>{i}</div>)
   }

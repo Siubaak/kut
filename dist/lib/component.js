@@ -25,8 +25,7 @@ var Component = (function () {
         }
         this._updater.enqueueForceUpdate(callback);
     };
-    Component.prototype.render = function (props) {
-        if (props === void 0) { props = this.props; }
+    Component.prototype.render = function () {
         return null;
     };
     return Component;

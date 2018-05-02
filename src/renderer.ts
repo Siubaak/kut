@@ -1,7 +1,7 @@
 import { Component } from './component'
 import { KutChild, KutElement } from './element'
 import { KutInstance, TextInstance, DOMInstance, ComponentInstance } from './instance'
-import { didMountSet } from './util'
+import { didMountSet, is } from './util'
 
 /**
  * element实例化工厂函数
@@ -9,10 +9,15 @@ import { didMountSet } from './util'
  */
 export function instantiate(element: KutChild) {
   let instance: KutInstance = null
-  if (typeof element === 'number' || typeof element === 'string') {
+  if (
+    is.undefined(element)
+    || is.null(element)
+    || is.number(element)
+    || is.string(element)
+  ) {
     // 如果是number或string，证明VDOM树到根节点了
     instance = new TextInstance(element as string)
-  } else if (typeof (element as KutElement).type === 'string') {
+  } else if (is.string((element as KutElement).type)) {
     // 如果element.type是string，证明是div、p等内置DOM节点类型
     instance = new DOMInstance(element as KutElement)
   } else if (typeof (element as KutElement).type === typeof Component) {

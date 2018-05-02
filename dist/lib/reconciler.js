@@ -50,7 +50,7 @@ var Reconciler = (function () {
                 var _a = _this._dirtyInstanceSet.shift(), instance = _a.instance, element = _a.element, didUpdate = _a.didUpdate;
                 if (instance.kutId) {
                     instance.update(element);
-                    if (typeof didUpdate === 'function') {
+                    if (util_1.is.function(didUpdate)) {
                         didUpdate();
                     }
                 }

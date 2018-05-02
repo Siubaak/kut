@@ -6,8 +6,10 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "parcel index.html",
-    "copy": "cp dist/kut-demo.css dist/kut-demo.js dist/kut-demo.map ../docs",
-    "build": "parcel build index.html && npm run copy"
+    "copy:css": "cp dist/*.css ../docs/kut-demo.css",
+    "copy:js": "cp dist/*.js ../docs/kut-demo.js",
+    "copy:map": "cp dist/*.map ../docs/kut-demo.map",
+    "build": "parcel build index.html && npm run copy:css && npm run copy:js && npm run copy:map"
   },
   "repository": {
     "type": "git",
@@ -29,9 +31,5 @@
     "babel-preset-react": "^6.24.1",
     "less": "^3.0.1",
     "parcel-bundler": "^1.5.1"
-  },
-  "dependencies": {
-    "react": "^16.3.0",
-    "react-dom": "^16.3.0"
   }
 }

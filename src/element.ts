@@ -1,5 +1,6 @@
 import { Component } from './component'
 import { KUT_RESERVED_PROPS } from './constant'
+import { is } from './util'
 
 export type KutChild = number | string | KutElement
 
@@ -34,7 +35,7 @@ export function createElement(
     if (config.key != null) {
       key = ('' + (config.key as string)).replace(/:/g, '_')
     }
-    if (config.ref && typeof config.ref === 'function') {
+    if (config.ref && is.function(config.ref)) {
       ref = config.ref
     }
     for (const prop in config) {
@@ -51,7 +52,7 @@ export function createElement(
         if (
           Object.hasOwnProperty.call(defaultProps, prop)
           && !KUT_RESERVED_PROPS[prop]
-          && props[prop] == null
+          && (is.undefined(props[prop]) || is.null(props[prop]))
         ) {
           props[prop] = defaultProps[prop]
         }

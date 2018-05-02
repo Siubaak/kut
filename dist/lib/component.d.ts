@@ -11,7 +11,7 @@ export declare class Component {
     constructor(props: KutProps, context?: any);
     protected setState(partialState: any, callback?: () => void): void;
     protected forceUpdate(callback?: () => void): void;
-    render(props?: KutProps): KutElement;
+    render(): KutElement;
     static getDerivedStateFromProps?(nextProps: KutProps, prevState: any): any;
     componentDidMount?(): void;
     shouldComponentUpdate?(nextProps: KutProps, nextState: any, nextContext: any): boolean;

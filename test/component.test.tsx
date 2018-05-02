@@ -4,10 +4,7 @@ import { KutElement } from '../src/element'
 
 describe('test/component.test.js', () => {
   class Comp extends Component {
-    constructor(props) {
-      super(props)
-      this.state = { test: 'world' }
-    }
+    state = { test: 'world' }
     render(): KutElement {
       return <div></div>
     }
